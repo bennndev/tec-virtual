@@ -4,6 +4,7 @@ import Ground from './Ground';
 import Obstacles from './Obstacles';
 import Player from '../character/Player';
 import CameraRig from '../character/CameraRig';
+import PointerLock from '../controls/PointerLock';
 
 export default function Scene() {
   return (
@@ -35,6 +36,7 @@ export default function Scene() {
       </Suspense>
 
       <CameraRig />
+      <PointerLock />
     </>
   );
 }
