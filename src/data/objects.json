@@ -1,0 +1,22 @@
+{
+  "torre-purpura": {
+    "name": "Torre Púrpura",
+    "description": "Una antigua torre de energía que emite un tenue resplandor. Se dice que contiene conocimientos olvidados de los antiguos arquitectos."
+  },
+  "bloque-azul": {
+    "name": "Bloque Azul",
+    "description": "Un bloque estabilizador de flujo energético. Su superficie emite un frío constante y vibra con una frecuencia apenas perceptible."
+  },
+  "pilar-rosado": {
+    "name": "Pilar Rosado",
+    "description": "Una columna de carga que sostiene el campo de contención del área. Es recomendable no permanecer cerca por mucho tiempo."
+  },
+  "losa-verde": {
+    "name": "Losa Verde",
+    "description": "Un panel de acceso sellado que protege el subsuelo de la instalación. Parece ocultar niveles inferiores inexplorados."
+  },
+  "rampa": {
+    "name": "Rampa de Acceso",
+    "description": "Una rampa inclinada de la plataforma principal. Conecta diferentes niveles y permite ganar altura rápidamente."
+  }
+}
