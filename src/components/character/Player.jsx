@@ -50,6 +50,8 @@ function Character() {
       camMinDis={-0.7}
       camMoveSpeed={1}
       camZoomSpeed={1}
+      camFollowMult={80}
+      camLerpMult={100}
     >
       <group ref={posRef}>
         <EcctrlAnimation

@@ -10,26 +10,45 @@ export default function CameraRig() {
   const { camera } = useThree();
   const cameraMode = useStore((s) => s.cameraMode);
   const setCameraMode = useStore((s) => s.setCameraMode);
-  const playerPosition = useStore((s) => s.playerPosition);
 
   const isTransitioning = useRef(false);
   const gsapRef = useRef(null);
 
-  // En overview, la cámara sigue al jugador con ángulo fijo
-  useFrame(() => {
+  // Ref en vez de Zustand subscription: evita 60 re-renders/s
+  const playerPosRef = useRef({ x: 0, y: 0, z: 0 });
+
+  // Vectores reutilizables para no alocar en cada frame
+  const tmpVec = useRef(new THREE.Vector3());
+  const tmpTarget = useRef(new THREE.Vector3());
+  const tmpQuat = useRef(new THREE.Quaternion());
+  const tmpMatrix = useRef(new THREE.Matrix4());
+
+  // Overview: seguimiento continuo del jugador
+  useFrame((_state, delta) => {
+    // Leer última posición SIN subscription (no causa re-render)
+    const pos = useStore.getState().playerPosition;
+    playerPosRef.current = pos;
+
     if (cameraMode !== 'overview' || isTransitioning.current) return;
 
-    const targetPos = new THREE.Vector3(
-      playerPosition.x + OVERVIEW_OFFSET.x,
-      playerPosition.y + OVERVIEW_OFFSET.y,
-      playerPosition.z + OVERVIEW_OFFSET.z,
+    const targetPos = tmpTarget.current.set(
+      pos.x + OVERVIEW_OFFSET.x,
+      pos.y + OVERVIEW_OFFSET.y,
+      pos.z + OVERVIEW_OFFSET.z,
     );
 
-    camera.position.lerp(targetPos, 0.08);
-    camera.lookAt(playerPosition.x, 1, playerPosition.z);
+    // Frame-rate independent lerp (ecctrl usa esta misma fórmula)
+    const smoothFactor = 1 - Math.exp(-10 * delta);
+    camera.position.lerp(targetPos, smoothFactor);
+
+    // Quaternion slerp para lookAt estable (evita micro-oscilaciones)
+    const lookTarget = tmpVec.current.set(pos.x, 1, pos.z);
+    tmpMatrix.current.lookAt(camera.position, lookTarget, camera.up);
+    tmpQuat.current.setFromRotationMatrix(tmpMatrix.current);
+    camera.quaternion.slerp(tmpQuat.current, smoothFactor);
   });
 
-  // Animación con GSAP para transiciones entre modos
+  // Animación GSAP para transiciones entre modos
   const animateCamera = useCallback((targetPos, lookAtFn, onComplete) => {
     if (gsapRef.current) gsapRef.current.kill();
 
@@ -48,41 +67,43 @@ export default function CameraRig() {
     });
   }, [camera]);
 
-  // Tecla M: toggle thirdPerson ↔ overview
+  // Toggle M: usa ref en vez de playerPosition del store
   const toggleCamera = useCallback(() => {
     if (isTransitioning.current) return;
     isTransitioning.current = true;
 
+    const pos = playerPosRef.current;
+
     if (cameraMode === 'thirdPerson') {
-      // → Overview: ecctrl suelta, GSAP anima a vista aérea
+      // → Overview
       setCameraMode('overview');
 
       const target = new THREE.Vector3(
-        playerPosition.x + OVERVIEW_OFFSET.x,
-        playerPosition.y + OVERVIEW_OFFSET.y,
-        playerPosition.z + OVERVIEW_OFFSET.z,
+        pos.x + OVERVIEW_OFFSET.x,
+        pos.y + OVERVIEW_OFFSET.y,
+        pos.z + OVERVIEW_OFFSET.z,
       );
 
       animateCamera(target, () => {
-        camera.lookAt(playerPosition.x, 1, playerPosition.z);
+        camera.lookAt(pos.x, 1, pos.z);
       });
     } else {
-      // → ThirdPerson: GSAP vuelve detrás del jugador, ecctrl retoma
+      // → ThirdPerson
       const behind = new THREE.Vector3(
-        playerPosition.x,
-        playerPosition.y + 1.5,
-        playerPosition.z + 4,
+        pos.x,
+        pos.y + 1.5,
+        pos.z + 4,
       );
 
       animateCamera(behind, () => {
-        camera.lookAt(playerPosition.x, 1, playerPosition.z);
+        camera.lookAt(pos.x, 1, pos.z);
       }, () => {
         setCameraMode('thirdPerson');
       });
     }
-  }, [cameraMode, camera, playerPosition, setCameraMode, animateCamera]);
+  }, [cameraMode, camera, setCameraMode, animateCamera]);
 
-  // Escucha de teclado
+  // Escucha de teclado — toggleCamera ya no se recrea cada frame
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.code === 'KeyM') toggleCamera();
