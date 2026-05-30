@@ -21,6 +21,7 @@ function Character() {
   const setPlayerPosition = useStore((s) => s.setPlayerPosition);
   const activeCharacter = useStore((s) => s.activeCharacter);
   const cameraMode = useStore((s) => s.cameraMode);
+  const controlsDisabled = useStore((s) => s.controlsDisabled);
 
   const vec = useRef(new THREE.Vector3());
 
@@ -39,6 +40,7 @@ function Character() {
     <Ecctrl
       animated
       disableFollowCam={disableFollowCam}
+      disableControl={controlsDisabled}
       capsuleHalfHeight={0.35}
       capsuleRadius={0.3}
       floatHeight={0.08}

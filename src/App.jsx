@@ -2,6 +2,7 @@ import { Canvas } from '@react-three/fiber';
 import Scene from './components/world/Scene';
 import HUD from './components/ui/HUD';
 import InfoCard from './components/ui/InfoCard';
+import CharacterSelector from './components/ui/CharacterSelector';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
       {/* HUD de Coordenadas y FPS */}
       <HUD />
       <InfoCard />
+      <CharacterSelector />
     </div>
   );
 }

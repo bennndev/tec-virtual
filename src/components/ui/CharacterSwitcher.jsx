@@ -1,31 +1,37 @@
-import { useCallback, useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import useStore from '../../store/useStore';
 import CHARACTERS from '../../data/characterConfig';
 
-const characterIds = Object.keys(CHARACTERS);
-
 export default function CharacterSwitcher() {
   const activeCharacter = useStore((s) => s.activeCharacter);
-  const setActiveCharacter = useStore((s) => s.setActiveCharacter);
+  const setSelectorOpen = useStore((s) => s.setSelectorOpen);
+  const setPreviewCharacter = useStore((s) => s.setPreviewCharacter);
 
-  const handleSwitch = useCallback(() => {
-    const currentIndex = characterIds.indexOf(activeCharacter);
-    const nextIndex = (currentIndex + 1) % characterIds.length;
-    setActiveCharacter(characterIds[nextIndex]);
-  }, [activeCharacter, setActiveCharacter]);
-
-  // Tecla O para cambiar de personaje
+  // Tecla O: toggle del selector (único handler, evita conflicto con CharacterSelector)
   useEffect(() => {
     const onKeyDown = (e) => {
-      if (e.code === 'KeyO') handleSwitch();
+      if (e.code !== 'KeyO') return;
+
+      const state = useStore.getState();
+      if (state.isSelectorOpen) {
+        state.setSelectorOpen(false);
+      } else {
+        state.setPreviewCharacter(state.activeCharacter);
+        state.setSelectorOpen(true);
+      }
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [handleSwitch]);
+  }, [setSelectorOpen, setPreviewCharacter]);
+
+  const openSelector = useCallback(() => {
+    setPreviewCharacter(activeCharacter);
+    setSelectorOpen(true);
+  }, [activeCharacter, setPreviewCharacter, setSelectorOpen]);
 
   return (
     <button
-      onClick={handleSwitch}
+      onClick={openSelector}
       style={{
         position: 'absolute',
         bottom: 140,

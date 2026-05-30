@@ -337,6 +337,73 @@ const handleSwitch = useCallback(() => {
 - **ALWAYS add `key={activeCharacter}` to EcctrlAnimation** — without it, EcctrlAnimation doesn't reinitialize its internal AnimationMixer when the URL changes. The visual model updates but animations stay frozen on the first character's clips.
 - Switching characters is instant: Zustand re-render → new config → new key forces remount → EcctrlAnimation initializes fresh
 
+### Pattern 8: Character Selector Overlay (Display Data)
+
+The project includes a **character selector overlay** (press `O`) that shows a 3D preview of each character before selecting. When adding a new character, you MUST register it in all three places:
+
+#### 8a. Display data — `src/store/characters.json`
+
+Contains the human-readable display info for the selector UI:
+
+```json
+[
+  {
+    "id": "character1",
+    "name": "Personaje 1",
+    "description": "An agile explorer trained to move with dexterity on any terrain."
+  },
+  {
+    "id": "character2",
+    "name": "Personaje 2",
+    "description": "A sturdy fighter with great physical resistance."
+  }
+]
+```
+
+**Fields**: `id` (matches the key in `characterConfig.js`), `name`, `description`.
+
+Add a new entry with the same `id` from characterConfig when registering a new character.
+
+#### 8b. Technical config — `src/data/characterConfig.js`
+
+Already covered in Pattern 7. Must have the same `id` as the JSON entry.
+
+#### 8c. Store state — `src/store/useStore.js`
+
+The store includes selector-related state:
+
+```js
+// Character selector overlay
+isSelectorOpen: false,
+setSelectorOpen: (open) => set({ isSelectorOpen: open, controlsDisabled: open }),
+
+// Character currently browsed in the selector
+previewCharacter: 'character1',
+setPreviewCharacter: (id) => set({ previewCharacter: id }),
+
+// Blocks in-game actions while selector is open (synced with isSelectorOpen)
+controlsDisabled: false,
+setControlsDisabled: (disabled) => set({ controlsDisabled: disabled }),
+```
+
+No changes needed when adding a new character — these are already dynamic.
+
+#### 8d. Selector UI — `src/components/ui/CharacterSelector.jsx`
+
+Renders an overlay with:
+- **Left**: 3D preview of the character model loaded fresh via `GLTFLoader` + `DRACOLoader` (bypasses drei's `useGLTF` cache to avoid in-game modifications)
+- **Right**: Name, description, `◄ X/Y ►` navigation, Select/Cancel buttons
+- Auto-centers the model using bounding box (traverses `isMesh` children only)
+- Handles keyboard: `ArrowLeft`/`ArrowRight` to browse, `Enter` to select, `Escape` to cancel
+
+No code changes needed in this file when adding a character — it reads dynamically from `characters.json` and `characterConfig.js`.
+
+#### 8e. Toggle — `src/components/ui/CharacterSwitcher.jsx`
+
+The `O` key toggles the selector (open/close). The button shows the current character's name.
+
+No changes needed when adding a character.
+
 ---
 
 ## Decision Tree
@@ -358,11 +425,15 @@ Playable character integration?
 │   ├── Verify animationSet names match GLB clip names exactly
 │   └── Check CharacterModel doesn't call useAnimations inside EcctrlAnimation
 ├── Multiple characters?
-│   ├── Create characterConfig.js with all characters' data
+│   ├── Create/update characterConfig.js with all characters' data
+│   ├── Add entry to src/store/characters.json with name and description
 │   ├── Add activeCharacter to Zustand store
 │   ├── Make CharacterModel accept modelUrl prop
 │   ├── Preload ALL models at module scope
-│   └── Create CharacterSwitcher UI component
+│   ├── Create CharacterSwitcher UI component (opens selector on O)
+│   └── Create CharacterSelector overlay (3D preview + navigation)
+├── Selector preview shows wrong position/inherits in-game state?
+│   └── Preview uses independent GLTFLoader + DRACOLoader (not useGLTF cache)
 └── Model not visible?
     ├── Check public/ directory placement
     ├── Check URL path (/models/...)
@@ -388,14 +459,18 @@ studio-web/
 │   │   │   ├── CharacterModel.jsx   # Dynamic model loader (modelUrl prop)
 │   │   │   ├── Player.jsx           # ecctrl + EcctrlAnimation integration
 │   │   │   └── CameraRig.jsx
+│   │   ├── controls/
+│   │   │   └── PointerLock.jsx      # Pointer lock for continuous camera rotation
 │   │   ├── ui/
 │   │   │   ├── HUD.jsx
-│   │   │   ├── CharacterSwitcher.jsx # Toggle between characters
+│   │   │   ├── CharacterSwitcher.jsx # Toggle selector with O key
+│   │   │   ├── CharacterSelector.jsx # Overlay with 3D preview + navigation
 │   │   │   └── InfoCard.jsx
 │   │   └── world/
 │   │       └── Scene.jsx
 │   └── store/
-│       └── useStore.js              # activeCharacter state
+│       ├── useStore.js              # activeCharacter, controlsDisabled, selector state
+│       └── characters.json          # Display data (name, description) for selector
 └── .opencode/skills/character-model/
     └── SKILL.md                     # This file
 ```
@@ -494,14 +569,17 @@ When integrating a NEW character model:
 
 1. [ ] Place `.glb` file in `public/models/` with kebab-case name
 2. [ ] Add entry to `src/data/characterConfig.js` (modelUrl, animationSet, offsetY)
-3. [ ] Add `useGLTF.preload()` in `CharacterModel.jsx`
-4. [ ] Run dev server → check console for clip names
-5. [ ] Fill `animationSet` in characterConfig mapping all 7 required keys
-6. [ ] Adjust `offsetY` so feet touch the ground
-7. [ ] Tweak capsule size (`capsuleHalfHeight`, `capsuleRadius`) if model clips or feels wrong
-8. [ ] Tweak `floatHeight` for desired ground feel
-9. [ ] Run dev server → test WASD movement, jump, sprint, camera transitions
-10. [ ] Test CharacterSwitcher toggles between characters
+3. [ ] Add entry to `src/store/characters.json` (id, name, description — same id as step 2)
+4. [ ] Add `useGLTF.preload()` in `CharacterModel.jsx`
+5. [ ] Run dev server → check console for clip names
+6. [ ] Fill `animationSet` in characterConfig mapping all 7 required keys
+7. [ ] Adjust `offsetY` so feet touch the ground
+8. [ ] Tweak capsule size (`capsuleHalfHeight`, `capsuleRadius`) if model clips or feels wrong
+9. [ ] Tweak `floatHeight` for desired ground feel
+10. [ ] Run dev server → test WASD movement, jump, sprint, camera transitions
+11. [ ] Press O → verify selector shows 3D preview correctly centered
+12. [ ] Test ◄/► navigation, Enter to select, Escape to cancel
+13. [ ] Verify in-game controls are blocked while selector is open
 
 ---
 
@@ -518,10 +596,12 @@ npm run preview     # Serve build locally
 ## Resources
 
 - **Character Config**: `src/data/characterConfig.js`
+- **Character Display Data**: `src/store/characters.json` (name, description for selector)
 - **Character Model Component**: `src/components/character/CharacterModel.jsx`
 - **ecctrl Player Integration**: `src/components/character/Player.jsx`
 - **Character Switcher UI**: `src/components/ui/CharacterSwitcher.jsx`
-- **Zustand Store**: `src/store/useStore.js` (activeCharacter)
+- **Character Selector Overlay**: `src/components/ui/CharacterSelector.jsx`
+- **Zustand Store**: `src/store/useStore.js` (activeCharacter, controlsDisabled, isSelectorOpen, previewCharacter)
 - **Scene with player**: `src/components/world/Scene.jsx`
 - **drei useGLTF docs**: https://github.com/pmndrs/drei#usegltf
 - **drei useAnimations docs**: https://github.com/pmndrs/drei#useanimations

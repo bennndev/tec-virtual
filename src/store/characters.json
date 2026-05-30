@@ -1,0 +1,12 @@
+[
+  {
+    "id": "character1",
+    "name": "Personaje 1",
+    "description": "Un ágil explorador entrenado para moverse con destreza en cualquier terreno. Su ligereza le permite cambiar de dirección al instante y sortear obstáculos con fluidez."
+  },
+  {
+    "id": "character2",
+    "name": "Personaje 2",
+    "description": "Un fornido luchador de gran resistencia física. Capaz de soportar los combates más exigentes, su complexión le da una presencia imponente en el campo de batalla."
+  }
+]
