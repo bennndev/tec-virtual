@@ -1,4 +1,60 @@
+import { useEffect, useState, useRef } from 'react';
+import * as THREE from 'three';
+import { GLTFLoader } from 'three-stdlib';
+
+const ASSETS = [
+  { type: 'model', path: '/models/test-character.glb' },
+  { type: 'model', path: '/models/test-character2.glb' },
+  { type: 'model', path: '/models/Alejandro.glb' },
+  { type: 'model', path: '/models/Felipe.glb' },
+  { type: 'model', path: '/models/Isabella.glb' },
+  { type: 'model', path: '/models/Sofia.glb' },
+  { type: 'audio', path: '/audio/background.ogg' },
+];
+
+const TOTAL = ASSETS.length;
+
 export default function StartScreen({ onStart }) {
+  const [progress, setProgress] = useState(0);
+  const [ready, setReady] = useState(false);
+  const startedRef = useRef(false);
+
+  useEffect(() => {
+    if (startedRef.current) return;
+    startedRef.current = true;
+
+    let loaded = 0;
+
+    const onLoad = () => {
+      loaded++;
+      setProgress(Math.round((loaded / TOTAL) * 100));
+
+      if (loaded === TOTAL) {
+        // Esperar 1 segundo antes de mostrar el botón
+        setTimeout(() => setReady(true), 1000);
+      }
+    };
+
+    // Cargar modelos GLB
+    const modelLoader = new GLTFLoader();
+    ASSETS.filter((a) => a.type === 'model').forEach(({ path }) => {
+      modelLoader.load(path, onLoad, undefined, (err) => {
+        console.error(`Error cargando modelo ${path}:`, err);
+        onLoad(); // Igual contamos para no bloquear
+      });
+    });
+
+    // Cargar audio
+    const audioLoader = new THREE.AudioLoader();
+    const audioAsset = ASSETS.find((a) => a.type === 'audio');
+    if (audioAsset) {
+      audioLoader.load(audioAsset.path, onLoad, undefined, (err) => {
+        console.error('Error cargando audio:', err);
+        onLoad();
+      });
+    }
+  }, []);
+
   return (
     <div
       style={{
@@ -60,32 +116,78 @@ export default function StartScreen({ onStart }) {
         }}
       />
 
-      <button
-        onClick={onStart}
-        style={{
-          padding: '14px 48px',
-          fontSize: '16px',
-          fontWeight: 600,
-          fontFamily: 'inherit',
-          letterSpacing: '1px',
-          color: '#fff',
-          background: '#e94560',
-          border: 'none',
-          borderRadius: '8px',
-          cursor: 'pointer',
-          transition: 'transform 0.2s, box-shadow 0.2s, background 0.2s',
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'scale(1.05)';
-          e.currentTarget.style.boxShadow = '0 0 24px rgba(233, 69, 96, 0.5)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'scale(1)';
-          e.currentTarget.style.boxShadow = 'none';
-        }}
-      >
-        INICIAR
-      </button>
+      {!ready ? (
+        <div style={{ textAlign: 'center' }}>
+          {/* Barra de progreso */}
+          <div
+            style={{
+              width: 'clamp(240px, 40vw, 400px)',
+              height: '4px',
+              background: 'rgba(255, 255, 255, 0.1)',
+              borderRadius: '2px',
+              overflow: 'hidden',
+            }}
+          >
+            <div
+              style={{
+                width: `${progress}%`,
+                height: '100%',
+                background: '#e94560',
+                borderRadius: '2px',
+                transition: 'width 0.3s ease',
+              }}
+            />
+          </div>
+          <p
+            style={{
+              marginTop: '16px',
+              fontSize: 'clamp(20px, 3vw, 32px)',
+              fontWeight: 600,
+              color: '#e94560',
+              letterSpacing: '1px',
+            }}
+          >
+            {progress}%
+          </p>
+          <p
+            style={{
+              marginTop: '4px',
+              fontSize: '13px',
+              opacity: 0.4,
+              letterSpacing: '0.5px',
+            }}
+          >
+            Cargando recursos...
+          </p>
+        </div>
+      ) : (
+        <button
+          onClick={onStart}
+          style={{
+            padding: '14px 48px',
+            fontSize: '16px',
+            fontWeight: 600,
+            fontFamily: 'inherit',
+            letterSpacing: '1px',
+            color: '#fff',
+            background: '#e94560',
+            border: 'none',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            transition: 'transform 0.2s, box-shadow 0.2s, background 0.2s',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'scale(1.05)';
+            e.currentTarget.style.boxShadow = '0 0 24px rgba(233, 69, 96, 0.5)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'scale(1)';
+            e.currentTarget.style.boxShadow = 'none';
+          }}
+        >
+          INICIAR
+        </button>
+      )}
     </div>
   );
 }
