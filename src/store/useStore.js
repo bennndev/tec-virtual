@@ -31,6 +31,11 @@ const useStore = create((set) => ({
   // Audio de fondo
   musicMuted: false,
   toggleMusic: () => set((state) => ({ musicMuted: !state.musicMuted })),
+
+  // Intro animación inicial
+  isIntro: false,
+  setIntro: () => set({ isIntro: true }),
+  setEndIntro: () => set({ isIntro: false }),
 }));
 
 export default useStore;

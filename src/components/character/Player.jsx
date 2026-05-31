@@ -21,12 +21,13 @@ function Character() {
   const setPlayerPosition = useStore((s) => s.setPlayerPosition);
   const activeCharacter = useStore((s) => s.activeCharacter);
   const cameraMode = useStore((s) => s.cameraMode);
+  const isIntro = useStore((s) => s.isIntro);
   const controlsDisabled = useStore((s) => s.controlsDisabled);
 
   const vec = useRef(new THREE.Vector3());
 
-  // En overview, ecctrl suelta la cámara para que CameraRig la controle
-  const disableFollowCam = cameraMode === 'overview';
+  // En overview o intro, ecctrl suelta la cámara
+  const disableFollowCam = cameraMode === 'overview' || isIntro;
   const config = CHARACTERS[activeCharacter];
 
   useFrame(() => {

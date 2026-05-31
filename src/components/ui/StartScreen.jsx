@@ -1,6 +1,9 @@
 import { useEffect, useState, useRef } from 'react';
 import * as THREE from 'three';
-import { GLTFLoader } from 'three-stdlib';
+import { GLTFLoader, DRACOLoader, MeshoptDecoder } from 'three-stdlib';
+import { preload as cachePreload } from 'suspend-react';
+
+const DRACO_DECODER_PATH = 'https://www.gstatic.com/draco/versioned/decoders/1.5.5/';
 
 const ASSETS = [
   { type: 'model', path: '/models/test-character.glb' },
@@ -35,13 +38,30 @@ export default function StartScreen({ onStart }) {
       }
     };
 
-    // Cargar modelos GLB
+    // Loader reutilizable para modelos (con Draco + Meshopt, igual que useGLTF)
     const modelLoader = new GLTFLoader();
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath(DRACO_DECODER_PATH);
+    modelLoader.setDRACOLoader(dracoLoader);
+    modelLoader.setMeshoptDecoder(
+      typeof MeshoptDecoder === 'function' ? MeshoptDecoder() : MeshoptDecoder,
+    );
+
+    // Cargar modelos GLB y cachearlos en el cache de R3F (useLoader / useGLTF)
     ASSETS.filter((a) => a.type === 'model').forEach(({ path }) => {
-      modelLoader.load(path, onLoad, undefined, (err) => {
-        console.error(`Error cargando modelo ${path}:`, err);
-        onLoad(); // Igual contamos para no bloquear
-      });
+      modelLoader.load(
+        path,
+        (gltf) => {
+          // Almacenar en el cache de suspend-react para que useGLTF lo encuentre
+          cachePreload(() => Promise.resolve(gltf), [GLTFLoader, path]);
+          onLoad();
+        },
+        undefined,
+        (err) => {
+          console.error(`Error cargando modelo ${path}:`, err);
+          onLoad(); // Igual contamos para no bloquear
+        },
+      );
     });
 
     // Cargar audio

@@ -11,6 +11,7 @@ export default function CameraRig() {
   const cameraMode = useStore((s) => s.cameraMode);
   const setCameraMode = useStore((s) => s.setCameraMode);
 
+  const isIntro = useStore((s) => s.isIntro);
   const isTransitioning = useRef(false);
   const gsapRef = useRef(null);
 
@@ -66,6 +67,52 @@ export default function CameraRig() {
       },
     });
   }, [camera]);
+
+  // Animación de introducción: cámara desde arriba → detrás del personaje
+  useEffect(() => {
+    if (!isIntro) return;
+
+    let cancelled = false;
+
+    // Posicionar cámara arriba del escenario ANTES del primer render
+    camera.position.set(0, 12, -8);
+    camera.lookAt(0, 0, 0);
+
+    // Pequeña espera para que el personaje aparezca y la escena se estabilice
+    const timer = setTimeout(() => {
+      if (cancelled) return;
+
+      const pos = useStore.getState().playerPosition;
+      const target = new THREE.Vector3(pos.x, pos.y + 1.5, pos.z + 4);
+
+      if (gsapRef.current) gsapRef.current.kill();
+      isTransitioning.current = true;
+
+      gsapRef.current = gsap.to(camera.position, {
+        x: target.x,
+        y: target.y,
+        z: target.z,
+        duration: 2.5,
+        ease: 'power2.inOut',
+        onUpdate: () => {
+          const p = useStore.getState().playerPosition;
+          camera.lookAt(p.x, 1, p.z);
+        },
+        onComplete: () => {
+          if (cancelled) return;
+          isTransitioning.current = false;
+          gsapRef.current = null;
+          useStore.getState().setEndIntro();
+        },
+      });
+    }, 300);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+      if (gsapRef.current) gsapRef.current.kill();
+    };
+  }, [camera, isIntro]);
 
   // Toggle M: usa ref en vez de playerPosition del store
   const toggleCamera = useCallback(() => {
