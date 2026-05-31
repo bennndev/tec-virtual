@@ -52,36 +52,39 @@ export default function HUD() {
         fontSize: '14px',
       }}
     >
-      {/* Coordenadas — arriba del joystick táctil en mobile */}
-      <div
-        style={{
-          position: 'absolute',
-          bottom: 180,
-          left: 20,
-          background: 'rgba(0,0,0,0.6)',
-          padding: '8px 14px',
-          borderRadius: '6px',
-          lineHeight: 1.6,
-        }}
-      >
-        <div>X: {playerPosition.x.toFixed(2)}</div>
-        <div>Y: {playerPosition.y.toFixed(2)}</div>
-        <div>Z: {playerPosition.z.toFixed(2)}</div>
-      </div>
-
-      {/* FPS */}
+      {/* Columna superior izquierda: FPS + coordenadas */}
       <div
         style={{
           position: 'absolute',
           top: 20,
           left: 20,
-          background: 'rgba(0,0,0,0.6)',
-          padding: '6px 12px',
-          borderRadius: '6px',
-          fontSize: '12px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 8,
         }}
       >
-        <FPS />
+        <div
+          style={{
+            background: 'rgba(0,0,0,0.6)',
+            padding: '6px 12px',
+            borderRadius: '6px',
+            fontSize: '12px',
+          }}
+        >
+          <FPS />
+        </div>
+        <div
+          style={{
+            background: 'rgba(0,0,0,0.6)',
+            padding: '8px 14px',
+            borderRadius: '6px',
+            lineHeight: 1.6,
+          }}
+        >
+          <div>X: {playerPosition.x.toFixed(2)}</div>
+          <div>Y: {playerPosition.y.toFixed(2)}</div>
+          <div>Z: {playerPosition.z.toFixed(2)}</div>
+        </div>
       </div>
 
       {/* Selector de personaje */}
@@ -113,7 +116,7 @@ export default function HUD() {
         {musicMuted ? '🔇' : '🔊'}
       </button>
 
-      {/* Cambio de modo de camara — arriba de los botones táctiles en mobile */}
+      {/* Cambio de modo de camara — extremo derecho inferior */}
       <button
         onClick={handleToggle}
         style={{

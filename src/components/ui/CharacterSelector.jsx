@@ -93,6 +93,11 @@ export default function CharacterSelector() {
   const setPreviewCharacter = useStore((s) => s.setPreviewCharacter);
   const setActiveCharacter = useStore((s) => s.setActiveCharacter);
 
+  // Detectar mobile para layout responsive
+  const [isMobile] = useState(
+    () => window.matchMedia('(max-width: 768px)').matches
+  );
+
   const characterIds = Object.keys(CHARACTERS);
 
   const goPrev = useCallback(() => {
@@ -203,34 +208,55 @@ export default function CharacterSelector() {
           background: '#1a1a2e',
           borderRadius: 16,
           display: 'flex',
-          flexDirection: 'row',
+          flexDirection: isMobile ? 'column' : 'row',
           boxShadow: '0 8px 40px rgba(0,0,0,0.5)',
           overflow: 'hidden',
+          maxWidth: '90vw',
+          maxHeight: '90vh',
         }}
       >
-        {/* Izquierda: Preview 3D — ocupa todo el alto */}
-        <div style={{ width: 340, height: 520 }}>
+        {/* Preview 3D — responsive */}
+        <div
+          style={{
+            width: isMobile ? '100%' : 340,
+            height: isMobile ? 250 : 520,
+          }}
+        >
           <PreviewCanvas modelUrl={charConfig.modelUrl} />
         </div>
 
-        {/* Derecha: Nombre, descripción, navegación, acciones */}
+        {/* Info: Nombre, descripción, navegación, acciones */}
         <div
           style={{
-            width: 300,
-            padding: '40px 36px',
+            width: isMobile ? '100%' : 300,
+            padding: isMobile ? '20px' : '40px 36px',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
-            gap: 16,
+            gap: isMobile ? 12 : 16,
+            boxSizing: 'border-box',
           }}
         >
           {/* Nombre */}
-          <h2 style={{ color: '#fff', fontSize: 22, margin: 0 }}>
+          <h2
+            style={{
+              color: '#fff',
+              fontSize: isMobile ? 18 : 22,
+              margin: 0,
+            }}
+          >
             {charInfo.name}
           </h2>
 
           {/* Descripción */}
-          <p style={{ color: '#999', fontSize: 13, margin: 0, lineHeight: 1.7 }}>
+          <p
+            style={{
+              color: '#999',
+              fontSize: isMobile ? 12 : 13,
+              margin: 0,
+              lineHeight: 1.7,
+            }}
+          >
             {charInfo.description}
           </p>
 

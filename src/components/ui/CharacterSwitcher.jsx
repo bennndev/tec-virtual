@@ -34,7 +34,7 @@ export default function CharacterSwitcher() {
       onClick={openSelector}
       style={{
         position: 'absolute',
-        bottom: 140,
+        bottom: 115,
         right: 20,
         pointerEvents: 'auto',
         background: 'rgba(69, 150, 233, 0.85)',
@@ -48,11 +48,12 @@ export default function CharacterSwitcher() {
         fontWeight: 500,
         letterSpacing: '0.3px',
         transition: 'background 0.2s',
+        whiteSpace: 'nowrap',
       }}
       onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(69, 150, 233, 1)')}
       onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(69, 150, 233, 0.85)')}
     >
-      {CHARACTERS[activeCharacter].name} (O)
+      Personaje (O)
     </button>
   );
 }
