@@ -52,11 +52,11 @@ export default function HUD() {
         fontSize: '14px',
       }}
     >
-      {/* Coordenadas */}
+      {/* Coordenadas — arriba del joystick táctil en mobile */}
       <div
         style={{
           position: 'absolute',
-          bottom: 20,
+          bottom: 180,
           left: 20,
           background: 'rgba(0,0,0,0.6)',
           padding: '8px 14px',
@@ -113,12 +113,12 @@ export default function HUD() {
         {musicMuted ? '🔇' : '🔊'}
       </button>
 
-      {/* Cambio de modo de camara */}
+      {/* Cambio de modo de camara — arriba de los botones táctiles en mobile */}
       <button
         onClick={handleToggle}
         style={{
           position: 'absolute',
-          bottom: 20,
+          bottom: 170,
           right: 20,
           pointerEvents: 'auto',
           background: 'rgba(233, 69, 96, 0.85)',

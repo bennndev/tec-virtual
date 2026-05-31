@@ -2,12 +2,16 @@ import { useEffect } from 'react';
 import { useThree } from '@react-three/fiber';
 
 /**
- * Pointer Lock para rotación continua de cámara.
+ * Pointer Lock para rotación continua de cámara (solo desktop).
  *
  * ecctrl ya detecta `document.pointerLockElement` en su handler onDocumentMouseMove
  * y usa `e.movementX/e.movementY` (valores relativos) cuando está activo.
  * La limitación actual es que SIN pointer lock, movementX/Y deja de actualizarse
  * cuando el cursor llega al borde de la pantalla.
+ *
+ * En dispositivos táctiles este componente se desactiva completamente porque:
+ * - ecctrl ya maneja rotación de cámara con touch (one finger rotate, two finger zoom)
+ * - pointer lock interfiere con gestos táctiles nativos del navegador
  *
  * Este componente:
  * - Pide pointer lock en mousedown (botón izquierdo)
@@ -19,6 +23,10 @@ export default function PointerLock() {
   const { gl } = useThree();
 
   useEffect(() => {
+    // No activar pointer lock en dispositivos táctiles
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    if (isTouchDevice) return;
+
     const canvas = gl.domElement;
 
     const handleMouseDown = (e) => {

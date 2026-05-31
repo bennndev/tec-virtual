@@ -5,6 +5,7 @@ import HUD from './components/ui/HUD';
 import InfoCard from './components/ui/InfoCard';
 import CharacterSelector from './components/ui/CharacterSelector';
 import StartScreen from './components/ui/StartScreen';
+import TouchControls from './components/ui/TouchControls';
 import useStore from './store/useStore';
 
 function App() {
@@ -28,6 +29,9 @@ function App() {
       >
         <Scene />
       </Canvas>
+
+      {/* Controles táctiles — joystick + botones, fuera del Canvas */}
+      <TouchControls />
 
       {/* Overlays — solo visibles después de iniciar */}
       {started && (
