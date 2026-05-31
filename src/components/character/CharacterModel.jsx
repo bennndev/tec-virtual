@@ -1,9 +1,13 @@
 import { useEffect } from 'react';
 import { useGLTF, useAnimations } from '@react-three/drei';
 
-// Preload ambos modelos para que el cambio sea instantáneo
+// Preload de todos los personajes para cambio instantáneo
 useGLTF.preload('/models/test-character.glb');
 useGLTF.preload('/models/test-character2.glb');
+useGLTF.preload('/models/Alejandro.glb');
+useGLTF.preload('/models/Felipe.glb');
+useGLTF.preload('/models/Isabella.glb');
+useGLTF.preload('/models/Sofia.glb');
 
 export default function CharacterModel({ modelUrl = '/models/test-character.glb', ...props }) {
   const { scene, animations } = useGLTF(modelUrl);

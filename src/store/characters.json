@@ -8,5 +8,25 @@
     "id": "character2",
     "name": "Personaje 2",
     "description": "Un fornido luchador de gran resistencia física. Capaz de soportar los combates más exigentes, su complexión le da una presencia imponente en el campo de batalla."
+  },
+  {
+    "id": "alejandro",
+    "name": "Alejandro",
+    "description": "Un explorador nato con paso firme y mirada aguda. Su equilibrio y determinación lo convierten en un compañero confiable en cualquier expedición."
+  },
+  {
+    "id": "felipe",
+    "name": "Felipe",
+    "description": "Un estratega de movimientos calculados. Su temple y precisión al desplazarse lo hacen destacar en terrenos hostiles."
+  },
+  {
+    "id": "isabella",
+    "name": "Isabella",
+    "description": "Una aventurera de espíritu libre y reflejos veloces. Su agilidad le permite sortear obstáculos con una gracia natural."
+  },
+  {
+    "id": "sofia",
+    "name": "Sofía",
+    "description": "Una líder nata con una resistencia envidiable. Su presencia serena pero firme inspira confianza en los momentos más desafiantes."
   }
 ]
