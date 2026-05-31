@@ -30,6 +30,8 @@ function FPS() {
 export default function HUD() {
   const playerPosition = useStore((s) => s.playerPosition);
   const cameraMode = useStore((s) => s.cameraMode);
+  const musicMuted = useStore((s) => s.musicMuted);
+  const toggleMusic = useStore((s) => s.toggleMusic);
 
   const handleToggle = useCallback(() => {
     window.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyM' }));
@@ -84,6 +86,32 @@ export default function HUD() {
 
       {/* Selector de personaje */}
       <CharacterSwitcher />
+
+      {/* Control de música */}
+      <button
+        onClick={toggleMusic}
+        style={{
+          position: 'absolute',
+          top: 20,
+          right: 20,
+          pointerEvents: 'auto',
+          background: 'rgba(255, 255, 255, 0.1)',
+          color: '#fff',
+          border: '1px solid rgba(255, 255, 255, 0.15)',
+          padding: '10px 16px',
+          borderRadius: '6px',
+          cursor: 'pointer',
+          fontFamily: 'ui-monospace, Consolas, monospace',
+          fontSize: '18px',
+          lineHeight: 1,
+          transition: 'background 0.2s',
+        }}
+        onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)')}
+        onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)')}
+        title={musicMuted ? 'Activar música' : 'Silenciar música'}
+      >
+        {musicMuted ? '🔇' : '🔊'}
+      </button>
 
       {/* Cambio de modo de camara */}
       <button

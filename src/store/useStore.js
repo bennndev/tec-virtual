@@ -27,6 +27,10 @@ const useStore = create((set) => ({
   // Bloqueo de controles del personaje (activo mientras el selector está abierto)
   controlsDisabled: false,
   setControlsDisabled: (disabled) => set({ controlsDisabled: disabled }),
+
+  // Audio de fondo
+  musicMuted: false,
+  toggleMusic: () => set((state) => ({ musicMuted: !state.musicMuted })),
 }));
 
 export default useStore;

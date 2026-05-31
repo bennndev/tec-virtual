@@ -5,6 +5,7 @@ import Obstacles from './Obstacles';
 import Player from '../character/Player';
 import CameraRig from '../character/CameraRig';
 import PointerLock from '../controls/PointerLock';
+import BackgroundMusic from '../audio/BackgroundMusic';
 
 export default function Scene() {
   return (
@@ -37,6 +38,7 @@ export default function Scene() {
 
       <CameraRig />
       <PointerLock />
+      <BackgroundMusic />
     </>
   );
 }
