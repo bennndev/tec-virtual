@@ -32,6 +32,7 @@ export default function HUD() {
   const cameraMode = useStore((s) => s.cameraMode);
   const musicMuted = useStore((s) => s.musicMuted);
   const toggleMusic = useStore((s) => s.toggleMusic);
+  const flyMode = useStore((s) => s.flyMode);
 
   const handleToggle = useCallback(() => {
     window.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyM' }));
@@ -75,15 +76,21 @@ export default function HUD() {
         </div>
         <div
           style={{
-            background: 'rgba(0,0,0,0.6)',
+            background: flyMode ? 'rgba(0, 150, 255, 0.2)' : 'rgba(0,0,0,0.6)',
             padding: '8px 14px',
             borderRadius: '6px',
             lineHeight: 1.6,
+            border: flyMode ? '1px solid rgba(0, 150, 255, 0.5)' : 'none',
           }}
         >
           <div>X: {playerPosition.x.toFixed(2)}</div>
           <div>Y: {playerPosition.y.toFixed(2)}</div>
           <div>Z: {playerPosition.z.toFixed(2)}</div>
+          {flyMode && (
+            <div style={{ color: '#4fc3f7', marginTop: 4, fontSize: 11 }}>
+              ✈ VOLANDO — Space ↑ | Shift ↓ | F salir
+            </div>
+          )}
         </div>
       </div>
 

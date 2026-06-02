@@ -36,6 +36,10 @@ const useStore = create((set) => ({
   isIntro: false,
   setIntro: () => set({ isIntro: true }),
   setEndIntro: () => set({ isIntro: false }),
+
+  // Modo vuelo: Space = subir, Shift = bajar, WASD = mover, F = toggle
+  flyMode: false,
+  setFlyMode: (mode) => set({ flyMode: mode }),
 }));
 
 export default useStore;
