@@ -103,6 +103,22 @@ const CHARACTERS = {
       fall: 'Armature|Grounded',
     },
   },
+
+  character3: {
+    id: 'character3',
+    name: 'Personaje 3',
+    modelUrl: '/models/test-character3.glb',
+    offsetY: -0.25,
+    animationSet: {
+      idle: 'Armature|Idle',
+      walk: 'Armature|Walk',
+      run: 'Armature|Sprint',
+      jump: 'Armature|Jump',
+      jumpIdle: 'Armature|Grounded',
+      jumpLand: 'Armature|Grounded',
+      fall: 'Armature|Grounded',
+    },
+  },
 };
 
 export default CHARACTERS;

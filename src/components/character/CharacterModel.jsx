@@ -8,6 +8,7 @@ useGLTF.preload('/models/Alejandro.glb');
 useGLTF.preload('/models/Felipe.glb');
 useGLTF.preload('/models/Isabella.glb');
 useGLTF.preload('/models/Sofia.glb');
+useGLTF.preload('/models/test-character3.glb');
 
 export default function CharacterModel({ modelUrl = '/models/test-character.glb', ...props }) {
   const { scene, animations } = useGLTF(modelUrl);

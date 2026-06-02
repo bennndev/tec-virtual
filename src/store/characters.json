@@ -28,5 +28,10 @@
     "id": "sofia",
     "name": "Sofía",
     "description": "Una líder nata con una resistencia envidiable. Su presencia serena pero firme inspira confianza en los momentos más desafiantes."
+  },
+  {
+    "id": "character3",
+    "name": "Personaje 3",
+    "description": "Un misterioso viajero con una presencia magnética. Su sigilo y rapidez lo convierten en una sombra imparable."
   }
 ]
