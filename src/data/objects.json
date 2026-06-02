@@ -1,22 +1,22 @@
 {
-  "torre-purpura": {
-    "name": "Torre Púrpura",
-    "description": "Una antigua torre de energía que emite un tenue resplandor. Se dice que contiene conocimientos olvidados de los antiguos arquitectos."
+  "stand05": {
+    "name": "Stand de Información",
+    "description": "Punto de información del evento. Aquí puedes encontrar mapas, horarios y resolver dudas sobre las actividades."
   },
-  "bloque-azul": {
-    "name": "Bloque Azul",
-    "description": "Un bloque estabilizador de flujo energético. Su superficie emite un frío constante y vibra con una frecuencia apenas perceptible."
+  "CarrerasAdmision": {
+    "name": "Carreras y Admisión",
+    "description": "Información sobre las carreras profesionales y el proceso de admisión a la institución."
   },
-  "pilar-rosado": {
-    "name": "Pilar Rosado",
-    "description": "Una columna de carga que sostiene el campo de contención del área. Es recomendable no permanecer cerca por mucho tiempo."
+  "Empresas": {
+    "name": "Empresas Participantes",
+    "description": "Directorio de las empresas que participan en la feria tecnológica. Revisa sus propuestas y oportunidades."
   },
-  "losa-verde": {
-    "name": "Losa Verde",
-    "description": "Un panel de acceso sellado que protege el subsuelo de la instalación. Parece ocultar niveles inferiores inexplorados."
+  "Video004": {
+    "name": "Pantalla Multimedia",
+    "description": "Pantalla interactiva con contenido audiovisual sobre los proyectos y logros de la comunidad estudiantil."
   },
-  "rampa": {
-    "name": "Rampa de Acceso",
-    "description": "Una rampa inclinada de la plataforma principal. Conecta diferentes niveles y permite ganar altura rápidamente."
+  "stand01": {
+    "name": "Stand Principal",
+    "description": "Stand de exhibición principal del evento. Muestra los proyectos destacados de la comunidad estudiantil."
   }
 }

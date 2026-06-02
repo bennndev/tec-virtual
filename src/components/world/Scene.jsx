@@ -1,7 +1,6 @@
 import { Suspense } from 'react';
 import { Physics } from '@react-three/rapier';
-import Ground from './Ground';
-import Obstacles from './Obstacles';
+import SceneEnvironment from './SceneEnvironment';
 import Player from '../character/Player';
 import CameraRig from '../character/CameraRig';
 import PointerLock from '../controls/PointerLock';
@@ -30,8 +29,7 @@ export default function Scene() {
 
       <Suspense fallback={null}>
         <Physics gravity={[0, -9.81, 0]} timeStep="vary">
-          <Ground />
-          <Obstacles />
+          <SceneEnvironment />
           <Player />
         </Physics>
       </Suspense>
