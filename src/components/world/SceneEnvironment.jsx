@@ -8,10 +8,10 @@ import useStore from '../../store/useStore';
 const HOVER_COLOR = new THREE.Color('#ffffff');
 
 // Precarga el escenario en el cache de R3F
-useGLTF.preload('/scenes/tecsup2.glb');
+useGLTF.preload('/scenes/tecsup.glb');
 
 export default function SceneEnvironment() {
-  const { scene } = useGLTF('/scenes/tecsup2.glb');
+  const { scene } = useGLTF('/scenes/tecsup.glb');
   const setHoveredObject = useStore((s) => s.setHoveredObject);
   const previousMesh = useRef(null);
 
