@@ -68,6 +68,7 @@ function Character() {
     <Ecctrl
       ref={ecctrlRef}
       animated
+      position={[-41.24, 0, -45.37]}
       disableFollowCam={disableFollowCam}
       disableControl={controlsDisabled}
       capsuleHalfHeight={0.35}
