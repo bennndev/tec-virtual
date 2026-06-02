@@ -28,26 +28,30 @@ src/
 ├── components/
 │   ├── world/           # Elementos del mundo 3D
 │   │   ├── Scene.jsx    # Composición raíz: luces + Physics + todos los elementos
-│   │   ├── Ground.jsx   # Suelo con física estática + BVH
-│   │   └── Obstacles.jsx# Obstáculos con hover detection + BVH
+│   │   ├── SceneEnvironment.jsx # Carga de GLB como escenario con física + hover + BVH
+│   │   ├── Ground.jsx   # (deprecated — reemplazado por SceneEnvironment)
+│   │   └── Obstacles.jsx# (deprecated — reemplazado por SceneEnvironment)
 │   ├── character/       # Personaje y cámara
-│   │   ├── Player.jsx   # Cápsula controlable con ecctrl + WASD
+│   │   ├── Player.jsx   # Cápsula controlable con ecctrl + WASD + fly mode (F)
 │   │   ├── CharacterModel.jsx # Carga de modelo GLB con animaciones
 │   │   └── CameraRig.jsx# Transición de cámara con GSAP (tecla M)
 │   └── ui/              # Overlays HTML sobre el canvas
-│       ├── HUD.jsx      # Coordenadas, FPS, botón toggle
-│       └── InfoCard.jsx # Tarjeta informativa al hacer hover en objetos
+│       ├── HUD.jsx      # Coordenadas, FPS, botón toggle, fly mode indicator
+│       ├── InfoCard.jsx # Tarjeta informativa al hacer hover en objetos
+│       └── StartScreen.jsx# Splash screen con precarga + barra de progreso
 ├── store/
 │   └── useStore.js      # Estado global Zustand
 ├── data/
-│   └── objects.json     # Datos descriptivos de los obstáculos
+│   └── objects.json     # Datos descriptivos de objetos interactivos del escenario
 ├── App.jsx              # Canvas + overlays
 ├── main.jsx             # Entry point + BVH prototype extension
 └── index.css            # Reset full viewport
 
 public/
+├── scenes/
+│   └── tecsup2.glb      # Escenario 3D del campus (compressed GLB)
 └── models/
-    └── hoodie-character.glb  # Modelo del personaje (Draco-compressed)
+    └── *.glb            # Personajes jugables (Draco-compressed)
 ```
 
 ---
@@ -56,30 +60,34 @@ public/
 
 ### 1. Geometrías estáticas → BVH + dispose
 
-Toda geometría estática (suelo, obstáculos) DEBE:
-- Tener un `ref` en la geometría para llamar `computeBoundsTree()` en `useEffect`
-- Llamar `disposeBoundsTree()` y `geometry.dispose()` en el cleanup
+Toda geometría estática (suelo, obstáculos, escenario GLB) DEBE:
+- Llamar `computeBoundsTree()` en `useEffect` después de cargar
+- Llamar SOLO `disposeBoundsTree()` en el cleanup (NUNCA `geometry.dispose()` — las geometrías del GLB son cacheadas por useGLTF)
 
 ```jsx
-const geomRef = useRef();
-
 useEffect(() => {
-  if (geomRef.current) geomRef.current.computeBoundsTree();
-  return () => {
-    if (geomRef.current) {
-      geomRef.current.disposeBoundsTree();
-      geomRef.current.dispose();
+  const meshes = [];
+  scene.traverse((child) => {
+    if (child.isMesh && child.geometry) {
+      child.geometry.computeBoundsTree();
+      meshes.push(child);
     }
+  });
+  return () => {
+    meshes.forEach((mesh) => {
+      if (mesh.geometry) mesh.geometry.disposeBoundsTree();
+    });
   };
-}, []);
+}, [scene]);
 ```
 
 ### 2. Física con Rapier
 
-- `colliders={false}` en RigidBody estáticos y colliders manuales con CuboidCollider
+- Escenario GLB: `RigidBody type="fixed" colliders="trimesh"` sobre el `<primitive object={scene}>`
+- La transformación (scale + position) debe ser **síncrona** en el cuerpo del componente, no en useEffect
 - `timeStep="vary"` en Physics para sincronizar con el framerate
-- Obstáculos: `type="fixed"`, personaje: ecctrl maneja su propio RigidBody dinámico
-- Los eventos pointer events de R3F funcionan dentro de RigidBody con `colliders={false}`
+- Personaje: ecctrl maneja su propio RigidBody dinámico internamente
+- Las coordenadas CAD del GLB se normalizan con `scene.scale` + `scene.position` (NO bakear en vértices)
 
 ### 3. Character Controller (ecctrl)
 
@@ -87,6 +95,7 @@ useEffect(() => {
 - La cámara sigue al personaje automáticamente via ecctrl
 - `disableFollowCam` controla si ecctrl mueve la cámara (útil para transiciones)
 - La posición del personaje se trackea con `getWorldPosition()` en `useFrame` sobre un `group` dentro de ecctrl
+- Fly mode: tecla F togglea, Space sube, Shift baja, WASD horizontal, hover al soltar
 
 ### 4. Transición de cámara (GSAP)
 
@@ -95,13 +104,13 @@ useEffect(() => {
 - **Vuelta** (overview → thirdPerson): GSAP anima primero → al completar `setCameraMode('thirdPerson')` → ecctrl retoma
 - El HUD dispara con `window.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyM' }))` para no acoplar componentes
 
-### 5. Hover Info Cards (pointer events)
+### 5. Hover Info Cards (R3F events sobre el GLB)
 
-- Cada mesh en Obstacles tiene `onPointerOver` y `onPointerOut`
-- El handler lee de `objects.json` por `objectId` y actualiza `hoveredObject` en Zustand
-- `e.stopPropagation()` para evitar burbujeo
+- Se usa `onPointerMove`/`onPointerOut` sobre el `<primitive object={scene}>`
+- `e.object` es el mesh real bajo el cursor — se identifica por `e.object.name`
+- El handler compara el nombre contra `objects.json` y actualiza `hoveredObject` en Zustand
+- El glow emissivo se aplica directamente al material del mesh, guardando/restaurando el estado original via `userData`
 - InfoCard reacciona al store y anima con GSAP (fade in/out)
-- React 18 automatic batching evita flicker entre objetos
 
 ### 6. Modelo 3D con animaciones
 
@@ -109,6 +118,13 @@ useEffect(() => {
 - Los modelos GLB con Draco van en `public/models/`
 - `useGLTF` maneja Draco automáticamente
 - `useAnimations(animations, scene)` — el segundo argumento `scene` es OBLIGATORIO
+
+### 7. Escenario 3D desde GLB
+
+- Ver skill `scene-model` para el detalle completo
+- Los escenarios GLB van en `public/scenes/`
+- Se cargan con `useGLTF`, física trimesh, y transformación síncrona de coordenadas
+- Los objetos interactivos se mapean desde `objects.json` por nombre de mesh del GLB
 
 ---
 
@@ -134,6 +150,8 @@ useEffect(() => {
 | Contexto | Skill |
 |----------|-------|
 | Cargar modelos GLB con Draco, animaciones, useGLTF, useAnimations, integrar con ecctrl | character-model |
+| Cargar escenarios GLB con física Rapier, transformación de coordenadas CAD, hover detection con R3F events, BVH | scene-model |
+| Agregar mecánicas de movimiento (vuelo, dash, etc.) usando useKeyboardControls + ecctrlRef + setLinvel | game-mechanics |
 
 ---
 
