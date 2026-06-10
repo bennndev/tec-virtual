@@ -1,0 +1,87 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a0a1a 100%);
+  font-family: 'N27', ui-monospace, sans-serif;
+  color: #fff;
+}
+
+.decoLineTop {
+  width: 60px;
+  height: 2px;
+  background: #0ea5e9;
+  margin-bottom: 32px;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(28px, 5vw, 52px);
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-align: center;
+}
+
+.brandName {
+  color: #0ea5e9;
+}
+
+.subtitle {
+  margin-top: 16px;
+  font-size: clamp(14px, 2vw, 18px);
+  opacity: 0.6;
+  letter-spacing: 0.5px;
+}
+
+.decoLineBottom {
+  width: 60px;
+  height: 2px;
+  background: #0ea5e9;
+  margin-top: 32px;
+  margin-bottom: 48px;
+}
+
+.loaderContainer {
+  text-align: center;
+}
+
+.progressBarContainer {
+  width: clamp(240px, 40vw, 400px);
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progressBarFill {
+  height: 100%;
+  background: #0ea5e9;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.progressText {
+  margin-top: 16px;
+  font-size: clamp(20px, 3vw, 32px);
+  font-weight: 600;
+  color: #0ea5e9;
+  letter-spacing: 1px;
+}
+
+.loadingText {
+  margin-top: 4px;
+  font-size: 13px;
+  opacity: 0.4;
+  letter-spacing: 0.5px;
+}
+
+.startBtn {
+  padding: 14px 48px;
+  font-size: 16px;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}

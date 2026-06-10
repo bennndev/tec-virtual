@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import useStore from '../../store/useStore';
 import CharacterSwitcher from './CharacterSwitcher';
+import ClayButton from './ClayButton';
 import styles from './HUD.module.css';
 
 function FPS() {
@@ -99,21 +100,22 @@ export default function HUD() {
       <CharacterSwitcher />
 
       {/* Control de música */}
-      <button
+      <ClayButton
         onClick={toggleMusic}
-        className={`clay-btn ${styles.musicBtn}`}
+        className={styles.musicBtn}
         title={musicMuted ? 'Activar música' : 'Silenciar música'}
       >
         {musicMuted ? '🔇' : '🔊'}
-      </button>
+      </ClayButton>
 
       {/* Cambio de modo de camara — extremo derecho inferior */}
-      <button
+      <ClayButton
         onClick={handleToggle}
-        className={`clay-btn clay-red-solid ${styles.cameraBtn}`}
+        variant="cyan-solid"
+        className={styles.cameraBtn}
       >
         {cameraMode === 'overview' ? 'Tercera persona (M)' : 'Vista general (M)'}
-      </button>
+      </ClayButton>
     </div>
   );
 }

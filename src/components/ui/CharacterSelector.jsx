@@ -5,6 +5,8 @@ import * as THREE from 'three';
 import useStore from '../../store/useStore';
 import CHARACTERS from '../../data/characterConfig';
 import CHAR_DATA from '../../store/characters.json';
+import ClayButton from './ClayButton';
+import styles from './CharacterSelector.module.css';
 
 /** Modelo 3D giratorio dentro del preview */
 function PreviewModel({ modelUrl }) {
@@ -93,11 +95,6 @@ export default function CharacterSelector() {
   const setPreviewCharacter = useStore((s) => s.setPreviewCharacter);
   const setActiveCharacter = useStore((s) => s.setActiveCharacter);
 
-  // Detectar mobile para layout responsive
-  const [isMobile] = useState(
-    () => window.matchMedia('(max-width: 768px)').matches
-  );
-
   const characterIds = Object.keys(CHARACTERS);
 
   const goPrev = useCallback(() => {
@@ -156,159 +153,68 @@ export default function CharacterSelector() {
   const charInfo = CHAR_DATA[currentIdx] || CHAR_DATA[0];
   const charConfig = CHARACTERS[previewCharacter];
 
-  const txtBtn = {
-    background: 'rgba(233, 69, 96, 0.85)',
-    color: '#fff',
-    border: 'none',
-    padding: '10px 24px',
-    borderRadius: '6px',
-    cursor: 'pointer',
-    fontFamily: 'ui-monospace, Consolas, monospace',
-    fontSize: '14px',
-    fontWeight: 500,
-    letterSpacing: '0.3px',
-    transition: 'background 0.2s',
-    pointerEvents: 'auto',
-  };
-
-  const secBtn = {
-    ...txtBtn,
-    background: 'rgba(255,255,255,0.1)',
-  };
-
-  const navBtn = {
-    background: 'none',
-    color: '#fff',
-    border: 'none',
-    fontSize: 22,
-    cursor: 'pointer',
-    padding: '4px 8px',
-    borderRadius: 4,
-    transition: 'background 0.2s',
-    pointerEvents: 'auto',
-    lineHeight: 1,
-  };
-
   return (
-    <div
-      style={{
-        position: 'absolute',
-        inset: 0,
-        background: 'rgba(0, 0, 0, 0.75)',
-        zIndex: 20,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        pointerEvents: 'auto',
-        fontFamily: 'ui-monospace, Consolas, monospace',
-      }}
-    >
-      <div
-        style={{
-          background: '#1a1a2e',
-          borderRadius: 16,
-          display: 'flex',
-          flexDirection: isMobile ? 'column' : 'row',
-          boxShadow: '0 8px 40px rgba(0,0,0,0.5)',
-          overflow: 'hidden',
-          maxWidth: '90vw',
-          maxHeight: '90vh',
-        }}
-      >
+    <div className={styles.overlay}>
+      <div className={styles.modal}>
         {/* Preview 3D — responsive */}
-        <div
-          style={{
-            width: isMobile ? '100%' : 340,
-            height: isMobile ? 250 : 520,
-          }}
-        >
+        <div className={styles.previewContainer}>
           <PreviewCanvas modelUrl={charConfig.modelUrl} />
         </div>
 
         {/* Info: Nombre, descripción, navegación, acciones */}
-        <div
-          style={{
-            width: isMobile ? '100%' : 300,
-            padding: isMobile ? '20px' : '40px 36px',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            gap: isMobile ? 12 : 16,
-            boxSizing: 'border-box',
-          }}
-        >
+        <div className={styles.infoContainer}>
           {/* Nombre */}
-          <h2
-            style={{
-              color: '#fff',
-              fontSize: isMobile ? 18 : 22,
-              margin: 0,
-            }}
-          >
+          <h2 className={styles.title}>
             {charInfo.name}
           </h2>
 
           {/* Descripción */}
-          <p
-            style={{
-              color: '#999',
-              fontSize: isMobile ? 12 : 13,
-              margin: 0,
-              lineHeight: 1.7,
-            }}
-          >
+          <p className={styles.desc}>
             {charInfo.description}
           </p>
 
           {/* Separador */}
-          <div style={{ height: 1, background: 'rgba(255,255,255,0.08)' }} />
+          <div className={styles.separator} />
 
           {/* Navegación: ◄  X / Y  ► */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <button
-              style={navBtn}
+          <div className={styles.navRow}>
+            <ClayButton
               onClick={goPrev}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.1)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'none')}
+              className={styles.navBtn}
               aria-label="Anterior"
             >
               ◀
-            </button>
-            <span style={{ color: '#666', fontSize: 13, minWidth: 50, textAlign: 'center' }}>
+            </ClayButton>
+            <span className={styles.navText}>
               {currentIdx + 1} / {characterIds.length}
             </span>
-            <button
-              style={navBtn}
+            <ClayButton
               onClick={goNext}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.1)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'none')}
+              className={styles.navBtn}
               aria-label="Siguiente"
             >
               ▶
-            </button>
+            </ClayButton>
           </div>
 
           {/* Separador */}
-          <div style={{ height: 1, background: 'rgba(255,255,255,0.08)' }} />
+          <div className={styles.separator} />
 
           {/* Acciones */}
-          <div style={{ display: 'flex', gap: 10 }}>
-            <button
-              style={txtBtn}
+          <div className={styles.actionsRow}>
+            <ClayButton
               onClick={selectAndClose}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(233, 69, 96, 1)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(233, 69, 96, 0.85)')}
+              variant="cyan-solid"
+              className={styles.actionBtn}
             >
               Seleccionar
-            </button>
-            <button
-              style={secBtn}
+            </ClayButton>
+            <ClayButton
               onClick={close}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.2)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.1)')}
+              className={styles.actionBtn}
             >
               Cancelar
-            </button>
+            </ClayButton>
           </div>
         </div>
       </div>

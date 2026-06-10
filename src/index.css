@@ -97,13 +97,3 @@ canvas {
   --clay-shadow-inner-dark: rgba(2, 53, 94, 0.45); /* Sombra interior inferior azul profundo para dar volumen */
   color: #ffffff;
 }
-
-/* Tema Rojo sólido (Igual que el cian pero adaptado a rojo oscuro) */
-.clay-red-solid {
-  --clay-bg: rgba(239, 68, 68, 0.95);
-  --clay-border: rgba(255, 255, 255, 0.35);
-  --clay-shadow-outer: rgba(60, 10, 10, 0.35); /* Sombra exterior roja muy oscura */
-  --clay-shadow-inner-light: rgba(255, 255, 255, 0.35);
-  --clay-shadow-inner-dark: rgba(90, 10, 10, 0.45);
-  color: #ffffff;
-}

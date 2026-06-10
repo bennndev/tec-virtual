@@ -1,5 +1,6 @@
 import { useEffect, useCallback } from 'react';
 import useStore from '../../store/useStore';
+import ClayButton from './ClayButton';
 import styles from './CharacterSwitcher.module.css';
 
 export default function CharacterSwitcher() {
@@ -30,11 +31,12 @@ export default function CharacterSwitcher() {
   }, [activeCharacter, setPreviewCharacter, setSelectorOpen]);
 
   return (
-    <button
+    <ClayButton
       onClick={openSelector}
-      className={`clay-btn clay-cyan-solid ${styles.switcherBtn}`}
+      variant="cyan-solid"
+      className={styles.switcherBtn}
     >
       Personaje (O)
-    </button>
+    </ClayButton>
   );
 }

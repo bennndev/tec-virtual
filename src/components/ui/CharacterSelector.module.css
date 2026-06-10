@@ -1,0 +1,106 @@
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 20;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: auto;
+  font-family: 'N27', ui-monospace, sans-serif;
+}
+
+.modal {
+  background: #1a1a2e;
+  border-radius: 16px;
+  display: flex;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+  overflow: hidden;
+  max-width: 90vw;
+  max-height: 90vh;
+}
+
+.previewContainer {
+  width: 340px;
+  height: 520px;
+}
+
+.infoContainer {
+  width: 300px;
+  padding: 40px 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  box-sizing: border-box;
+}
+
+.title {
+  color: #fff;
+  font-size: 22px;
+  margin: 0;
+}
+
+.desc {
+  color: #999;
+  font-size: 13px;
+  margin: 0;
+  line-height: 1.7;
+}
+
+.separator {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.navRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.navBtn {
+  padding: 8px 14px;
+  font-size: 14px;
+}
+
+.navText {
+  color: #666;
+  font-size: 13px;
+  min-width: 50px;
+  text-align: center;
+}
+
+.actionsRow {
+  display: flex;
+  gap: 10px;
+}
+
+.actionBtn {
+  flex: 1;
+  padding: 10px 24px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+/* Layout responsive */
+@media (max-width: 768px) {
+  .modal {
+    flex-direction: column;
+  }
+  .previewContainer {
+    width: 100%;
+    height: 250px;
+  }
+  .infoContainer {
+    width: 100%;
+    padding: 20px;
+    gap: 12px;
+  }
+  .title {
+    font-size: 18px;
+  }
+  .desc {
+    font-size: 12px;
+  }
+}

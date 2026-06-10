@@ -2,6 +2,8 @@ import { useEffect, useState, useRef } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader, DRACOLoader, MeshoptDecoder } from 'three-stdlib';
 import { preload as cachePreload } from 'suspend-react';
+import ClayButton from './ClayButton';
+import styles from './StartScreen.module.css';
 
 const DRACO_DECODER_PATH = 'https://www.gstatic.com/draco/versioned/decoders/1.5.5/';
 
@@ -77,137 +79,47 @@ export default function StartScreen({ onStart }) {
   }, []);
 
   return (
-    <div
-      style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 9999,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: 'linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a0a1a 100%)',
-        fontFamily: 'ui-monospace, Consolas, monospace',
-        color: '#fff',
-      }}
-    >
+    <div className={styles.overlay}>
       {/* Línea decorativa superior */}
-      <div
-        style={{
-          width: '60px',
-          height: '2px',
-          background: '#e94560',
-          marginBottom: '32px',
-        }}
-      />
+      <div className={styles.decoLineTop} />
 
-      <h1
-        style={{
-          margin: 0,
-          fontSize: 'clamp(28px, 5vw, 52px)',
-          fontWeight: 700,
-          letterSpacing: '2px',
-          textAlign: 'center',
-        }}
-      >
+      <h1 className={styles.title}>
         ¡Bienvenido a{' '}
-        <span style={{ color: '#e94560' }}>Tec-Virtual</span>
+        <span className={styles.brandName}>Tec-Virtual</span>
         !
       </h1>
 
-      <p
-        style={{
-          marginTop: '16px',
-          fontSize: 'clamp(14px, 2vw, 18px)',
-          opacity: 0.6,
-          letterSpacing: '0.5px',
-        }}
-      >
+      <p className={styles.subtitle}>
         Explora el mundo virtual de la Tecnología
       </p>
 
       {/* Línea decorativa inferior */}
-      <div
-        style={{
-          width: '60px',
-          height: '2px',
-          background: '#e94560',
-          marginTop: '32px',
-          marginBottom: '48px',
-        }}
-      />
+      <div className={styles.decoLineBottom} />
 
       {!ready ? (
-        <div style={{ textAlign: 'center' }}>
+        <div className={styles.loaderContainer}>
           {/* Barra de progreso */}
-          <div
-            style={{
-              width: 'clamp(240px, 40vw, 400px)',
-              height: '4px',
-              background: 'rgba(255, 255, 255, 0.1)',
-              borderRadius: '2px',
-              overflow: 'hidden',
-            }}
-          >
+          <div className={styles.progressBarContainer}>
             <div
-              style={{
-                width: `${progress}%`,
-                height: '100%',
-                background: '#e94560',
-                borderRadius: '2px',
-                transition: 'width 0.3s ease',
-              }}
+              className={styles.progressBarFill}
+              style={{ width: `${progress}%` }}
             />
           </div>
-          <p
-            style={{
-              marginTop: '16px',
-              fontSize: 'clamp(20px, 3vw, 32px)',
-              fontWeight: 600,
-              color: '#e94560',
-              letterSpacing: '1px',
-            }}
-          >
+          <p className={styles.progressText}>
             {progress}%
           </p>
-          <p
-            style={{
-              marginTop: '4px',
-              fontSize: '13px',
-              opacity: 0.4,
-              letterSpacing: '0.5px',
-            }}
-          >
+          <p className={styles.loadingText}>
             Cargando recursos...
           </p>
         </div>
       ) : (
-        <button
+        <ClayButton
           onClick={onStart}
-          style={{
-            padding: '14px 48px',
-            fontSize: '16px',
-            fontWeight: 600,
-            fontFamily: 'inherit',
-            letterSpacing: '1px',
-            color: '#fff',
-            background: '#e94560',
-            border: 'none',
-            borderRadius: '8px',
-            cursor: 'pointer',
-            transition: 'transform 0.2s, box-shadow 0.2s, background 0.2s',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'scale(1.05)';
-            e.currentTarget.style.boxShadow = '0 0 24px rgba(233, 69, 96, 0.5)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'scale(1)';
-            e.currentTarget.style.boxShadow = 'none';
-          }}
+          variant="cyan-solid"
+          className={styles.startBtn}
         >
           INICIAR
-        </button>
+        </ClayButton>
       )}
     </div>
   );
