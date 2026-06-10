@@ -115,7 +115,7 @@ export default function StartScreen({ onStart }) {
       ) : (
         <ClayButton
           onClick={onStart}
-          variant="cyan-solid"
+          variant="cyan-light"
           className={styles.startBtn}
         >
           INICIAR

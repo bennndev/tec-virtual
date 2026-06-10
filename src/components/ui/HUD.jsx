@@ -102,6 +102,7 @@ export default function HUD() {
       {/* Control de música */}
       <ClayButton
         onClick={toggleMusic}
+        variant="cyan-light"
         className={styles.musicBtn}
         title={musicMuted ? 'Activar música' : 'Silenciar música'}
       >
@@ -111,7 +112,7 @@ export default function HUD() {
       {/* Cambio de modo de camara — extremo derecho inferior */}
       <ClayButton
         onClick={handleToggle}
-        variant="cyan-solid"
+        variant="cyan-light"
         className={styles.cameraBtn}
       >
         {cameraMode === 'overview' ? 'Tercera persona (M)' : 'Vista general (M)'}

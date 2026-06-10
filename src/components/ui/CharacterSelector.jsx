@@ -204,7 +204,7 @@ export default function CharacterSelector() {
           <div className={styles.actionsRow}>
             <ClayButton
               onClick={selectAndClose}
-              variant="cyan-solid"
+              variant="cyan-light"
               className={styles.actionBtn}
             >
               Seleccionar

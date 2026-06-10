@@ -33,7 +33,7 @@ export default function CharacterSwitcher() {
   return (
     <ClayButton
       onClick={openSelector}
-      variant="cyan-solid"
+      variant="cyan-light"
       className={styles.switcherBtn}
     >
       Personaje (O)
