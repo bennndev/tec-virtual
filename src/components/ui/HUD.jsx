@@ -57,40 +57,25 @@ export default function HUD() {
       }}
     >
       {/* Columna superior izquierda: FPS + coordenadas */}
-      <div
-        style={{
-          position: 'absolute',
-          top: 20,
-          left: 20,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 8,
-        }}
-      >
-        <div
-          style={{
-            background: 'rgba(0,0,0,0.6)',
-            padding: '6px 12px',
-            borderRadius: '6px',
-            fontSize: '12px',
-          }}
-        >
+      <div className={styles.statsContainer}>
+        <div className={styles.fpsWidget}>
           <FPS />
         </div>
-        <div
-          style={{
-            background: flyMode ? 'rgba(0, 150, 255, 0.2)' : 'rgba(0,0,0,0.6)',
-            padding: '8px 14px',
-            borderRadius: '6px',
-            lineHeight: 1.6,
-            border: flyMode ? '1px solid rgba(0, 150, 255, 0.5)' : 'none',
-          }}
-        >
-          <div>X: {playerPosition.x.toFixed(2)}</div>
-          <div>Y: {playerPosition.y.toFixed(2)}</div>
-          <div>Z: {playerPosition.z.toFixed(2)}</div>
+        <div className={`${styles.coordsWidget} ${flyMode ? styles.coordsWidgetActive : ''}`.trim()}>
+          <div className={styles.coordLine}>
+            <span className={styles.coordLabel}>X:</span>
+            <span className={styles.coordValue}>{playerPosition.x.toFixed(2)}</span>
+          </div>
+          <div className={styles.coordLine}>
+            <span className={styles.coordLabel}>Y:</span>
+            <span className={styles.coordValue}>{playerPosition.y.toFixed(2)}</span>
+          </div>
+          <div className={styles.coordLine}>
+            <span className={styles.coordLabel}>Z:</span>
+            <span className={styles.coordValue}>{playerPosition.z.toFixed(2)}</span>
+          </div>
           {flyMode && (
-            <div style={{ color: '#4fc3f7', marginTop: 4, fontSize: 11 }}>
+            <div className={styles.flyModeHelp}>
               ✈ VOLANDO — Space ↑ | Shift ↓ | F salir
             </div>
           )}
