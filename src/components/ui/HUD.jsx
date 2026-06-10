@@ -37,6 +37,20 @@ export default function HUD() {
   const toggleMusic = useStore((s) => s.toggleMusic);
   const flyMode = useStore((s) => s.flyMode);
 
+  const [showStats, setShowStats] = useState(false);
+
+  // Toggle de estadísticas (F3 es el estándar de depuración)
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.code === 'F3') {
+        e.preventDefault(); // Evita abrir la barra de búsqueda nativa del navegador
+        setShowStats((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   const handleToggle = useCallback(() => {
     window.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyM' }));
   }, []);
@@ -56,31 +70,33 @@ export default function HUD() {
         fontSize: '14px',
       }}
     >
-      {/* Columna superior izquierda: FPS + coordenadas */}
-      <div className={styles.statsContainer}>
-        <div className={styles.fpsWidget}>
-          <FPS />
-        </div>
-        <div className={`${styles.coordsWidget} ${flyMode ? styles.coordsWidgetActive : ''}`.trim()}>
-          <div className={styles.coordLine}>
-            <span className={styles.coordLabel}>X:</span>
-            <span className={styles.coordValue}>{playerPosition.x.toFixed(2)}</span>
+      {/* Columna superior izquierda: FPS + coordenadas (solo si showStats está activo) */}
+      {showStats && (
+        <div className={styles.statsContainer}>
+          <div className={styles.fpsWidget}>
+            <FPS />
           </div>
-          <div className={styles.coordLine}>
-            <span className={styles.coordLabel}>Y:</span>
-            <span className={styles.coordValue}>{playerPosition.y.toFixed(2)}</span>
-          </div>
-          <div className={styles.coordLine}>
-            <span className={styles.coordLabel}>Z:</span>
-            <span className={styles.coordValue}>{playerPosition.z.toFixed(2)}</span>
-          </div>
-          {flyMode && (
-            <div className={styles.flyModeHelp}>
-              ✈ VOLANDO — Space ↑ | Shift ↓ | F salir
+          <div className={`${styles.coordsWidget} ${flyMode ? styles.coordsWidgetActive : ''}`.trim()}>
+            <div className={styles.coordLine}>
+              <span className={styles.coordLabel}>X:</span>
+              <span className={styles.coordValue}>{playerPosition.x.toFixed(2)}</span>
             </div>
-          )}
+            <div className={styles.coordLine}>
+              <span className={styles.coordLabel}>Y:</span>
+              <span className={styles.coordValue}>{playerPosition.y.toFixed(2)}</span>
+            </div>
+            <div className={styles.coordLine}>
+              <span className={styles.coordLabel}>Z:</span>
+              <span className={styles.coordValue}>{playerPosition.z.toFixed(2)}</span>
+            </div>
+            {flyMode && (
+              <div className={styles.flyModeHelp}>
+                ✈ VOLANDO — Space ↑ | Shift ↓ | F salir
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Selector de personaje */}
       <CharacterSwitcher />
