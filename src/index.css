@@ -56,14 +56,14 @@ canvas {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 9999px; /* Forma de píldora perfecta como en la captura */
+  border-radius: 16px;
   font-family: 'N27', system-ui, sans-serif;
   font-weight: 700;
   cursor: pointer;
   user-select: none;
   transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   outline: none;
-  
+
   /* Valores base (blanco traslúcido sutil para HUD) */
   --clay-bg: rgba(255, 255, 255, 0.15);
   --clay-border: rgba(255, 255, 255, 0.25);
@@ -72,11 +72,13 @@ canvas {
   --clay-shadow-inner-dark: rgba(0, 0, 0, 0.1);
 
   background: var(--clay-bg);
-  border: none; /* Quitamos el trazo blanco duro */
+  border: none;
+  /* Quitamos el trazo blanco duro */
   box-shadow:
     0 8px 16px var(--clay-shadow-outer),
     inset 3px 3px 6px var(--clay-shadow-inner-light),
-    inset -3px -3px 6px var(--clay-shadow-inner-dark); /* Sombras finas pegadas al borde */
+    inset -3px -3px 6px var(--clay-shadow-inner-dark);
+  /* Sombras finas pegadas al borde */
   color: #ffffff;
 }
 
@@ -90,11 +92,15 @@ canvas {
 
 /* Tema Cyan sólido (Igual a tu captura, usando el cian existente de InfoCard) */
 .clay-cyan-solid {
-  --clay-bg: rgba(14, 165, 233, 0.95); /* El cian existente de InfoCard */
+  --clay-bg: rgba(14, 165, 233, 0.95);
+  /* El cian existente de InfoCard */
   --clay-border: rgba(255, 255, 255, 0.35);
-  --clay-shadow-outer: rgba(3, 30, 60, 0.35); /* Sombra exterior azul marino oscuro (no emite luz, oscurece el fondo) */
-  --clay-shadow-inner-light: rgba(255, 255, 255, 0.35); /* Brillo superior muy tenue */
-  --clay-shadow-inner-dark: rgba(2, 53, 94, 0.45); /* Sombra interior inferior azul profundo para dar volumen */
+  --clay-shadow-outer: rgba(3, 30, 60, 0.35);
+  /* Sombra exterior azul marino oscuro (no emite luz, oscurece el fondo) */
+  --clay-shadow-inner-light: rgba(255, 255, 255, 0.35);
+  /* Brillo superior muy tenue */
+  --clay-shadow-inner-dark: rgba(2, 53, 94, 0.45);
+  /* Sombra interior inferior azul profundo para dar volumen */
   color: #ffffff;
 }
 
