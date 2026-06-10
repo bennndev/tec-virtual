@@ -1,0 +1,11 @@
+.switcherBtn {
+  position: absolute;
+  bottom: 115px;
+  right: 20px;
+  pointer-events: auto;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}

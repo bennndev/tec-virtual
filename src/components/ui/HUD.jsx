@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import useStore from '../../store/useStore';
 import CharacterSwitcher from './CharacterSwitcher';
+import styles from './HUD.module.css';
 
 function FPS() {
   const [fps, setFps] = useState(0);
@@ -100,24 +101,7 @@ export default function HUD() {
       {/* Control de música */}
       <button
         onClick={toggleMusic}
-        style={{
-          position: 'absolute',
-          top: 20,
-          right: 20,
-          pointerEvents: 'auto',
-          background: 'rgba(255, 255, 255, 0.1)',
-          color: '#fff',
-          border: '1px solid rgba(255, 255, 255, 0.15)',
-          padding: '10px 16px',
-          borderRadius: '6px',
-          cursor: 'pointer',
-          fontFamily: 'ui-monospace, Consolas, monospace',
-          fontSize: '18px',
-          lineHeight: 1,
-          transition: 'background 0.2s',
-        }}
-        onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)')}
-        onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)')}
+        className={`clay-btn ${styles.musicBtn}`}
         title={musicMuted ? 'Activar música' : 'Silenciar música'}
       >
         {musicMuted ? '🔇' : '🔊'}
@@ -126,25 +110,7 @@ export default function HUD() {
       {/* Cambio de modo de camara — extremo derecho inferior */}
       <button
         onClick={handleToggle}
-        style={{
-          position: 'absolute',
-          bottom: 170,
-          right: 20,
-          pointerEvents: 'auto',
-          background: 'rgba(233, 69, 96, 0.85)',
-          color: '#fff',
-          border: 'none',
-          padding: '10px 20px',
-          borderRadius: '6px',
-          cursor: 'pointer',
-          fontFamily: 'ui-monospace, Consolas, monospace',
-          fontSize: '14px',
-          fontWeight: 500,
-          letterSpacing: '0.3px',
-          transition: 'background 0.2s',
-        }}
-        onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(233, 69, 96, 1)')}
-        onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(233, 69, 96, 0.85)')}
+        className={`clay-btn clay-red-solid ${styles.cameraBtn}`}
       >
         {cameraMode === 'overview' ? 'Tercera persona (M)' : 'Vista general (M)'}
       </button>

@@ -1,6 +1,6 @@
 import { useEffect, useCallback } from 'react';
 import useStore from '../../store/useStore';
-import CHARACTERS from '../../data/characterConfig';
+import styles from './CharacterSwitcher.module.css';
 
 export default function CharacterSwitcher() {
   const activeCharacter = useStore((s) => s.activeCharacter);
@@ -32,26 +32,7 @@ export default function CharacterSwitcher() {
   return (
     <button
       onClick={openSelector}
-      style={{
-        position: 'absolute',
-        bottom: 115,
-        right: 20,
-        pointerEvents: 'auto',
-        background: 'rgba(69, 150, 233, 0.85)',
-        color: '#fff',
-        border: 'none',
-        padding: '10px 20px',
-        borderRadius: '6px',
-        cursor: 'pointer',
-        fontFamily: 'ui-monospace, Consolas, monospace',
-        fontSize: '14px',
-        fontWeight: 500,
-        letterSpacing: '0.3px',
-        transition: 'background 0.2s',
-        whiteSpace: 'nowrap',
-      }}
-      onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(69, 150, 233, 1)')}
-      onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(69, 150, 233, 0.85)')}
+      className={`clay-btn clay-cyan-solid ${styles.switcherBtn}`}
     >
       Personaje (O)
     </button>

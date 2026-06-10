@@ -48,3 +48,62 @@ body {
 canvas {
   display: block;
 }
+
+/* ========================================
+   Claymorphism Design System Buttons
+   ======================================== */
+.clay-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px; /* Forma de píldora perfecta como en la captura */
+  font-family: 'N27', system-ui, sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  outline: none;
+  
+  /* Valores base (blanco traslúcido sutil para HUD) */
+  --clay-bg: rgba(255, 255, 255, 0.15);
+  --clay-border: rgba(255, 255, 255, 0.25);
+  --clay-shadow-outer: rgba(0, 0, 0, 0.08);
+  --clay-shadow-inner-light: rgba(255, 255, 255, 0.3);
+  --clay-shadow-inner-dark: rgba(0, 0, 0, 0.1);
+
+  background: var(--clay-bg);
+  border: none; /* Quitamos el trazo blanco duro */
+  box-shadow:
+    0 8px 16px var(--clay-shadow-outer),
+    inset 3px 3px 6px var(--clay-shadow-inner-light),
+    inset -3px -3px 6px var(--clay-shadow-inner-dark); /* Sombras finas pegadas al borde */
+  color: #ffffff;
+}
+
+.clay-btn:hover {
+  transform: scale(1.04);
+}
+
+.clay-btn:active {
+  transform: scale(0.98);
+}
+
+/* Tema Cyan sólido (Igual a tu captura, usando el cian existente de InfoCard) */
+.clay-cyan-solid {
+  --clay-bg: rgba(14, 165, 233, 0.95); /* El cian existente de InfoCard */
+  --clay-border: rgba(255, 255, 255, 0.35);
+  --clay-shadow-outer: rgba(3, 30, 60, 0.35); /* Sombra exterior azul marino oscuro (no emite luz, oscurece el fondo) */
+  --clay-shadow-inner-light: rgba(255, 255, 255, 0.35); /* Brillo superior muy tenue */
+  --clay-shadow-inner-dark: rgba(2, 53, 94, 0.45); /* Sombra interior inferior azul profundo para dar volumen */
+  color: #ffffff;
+}
+
+/* Tema Rojo sólido (Igual que el cian pero adaptado a rojo oscuro) */
+.clay-red-solid {
+  --clay-bg: rgba(239, 68, 68, 0.95);
+  --clay-border: rgba(255, 255, 255, 0.35);
+  --clay-shadow-outer: rgba(60, 10, 10, 0.35); /* Sombra exterior roja muy oscura */
+  --clay-shadow-inner-light: rgba(255, 255, 255, 0.35);
+  --clay-shadow-inner-dark: rgba(90, 10, 10, 0.45);
+  color: #ffffff;
+}
