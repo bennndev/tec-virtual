@@ -8,12 +8,13 @@ import CHAR_DATA from '../../store/characters.json';
 import ClayButton from './ClayButton';
 import styles from './CharacterSelector.module.css';
 
-/** Modelo 3D individual adaptado al carrusel horizontal */
-function CarouselModel({ modelUrl, active, targetX }) {
+/** Modelo 3D giratorio dentro del preview */
+function PreviewModel({ modelUrl }) {
   const [scene, setScene] = useState(null);
   const groupRef = useRef();
-  const materialsRef = useRef([]);
 
+  // Cargar el GLB independientemente, sin usar el caché de useGLTF
+  // (que ecctrl modifica in-game con animaciones y transformaciones)
   useEffect(() => {
     let cancelled = false;
 
@@ -26,36 +27,21 @@ function CarouselModel({ modelUrl, active, targetX }) {
       modelUrl,
       (gltf) => {
         if (cancelled) return;
-        // Reiniciar transformaciones base
+        // Forzar el modelo a origen: crudo, sin modificaciones
         gltf.scene.position.set(0, 0, 0);
         gltf.scene.rotation.set(0, 0, 0);
         gltf.scene.scale.set(1, 1, 1);
         gltf.scene.updateMatrix();
-
-        // Clonar materiales de forma individual para modificar la opacidad sin interferencias
-        const mats = [];
-        gltf.scene.traverse((child) => {
-          if (child.isMesh) {
-            child.material = child.material.clone();
-            child.material.transparent = true;
-            child.material.opacity = active ? 1.0 : 0.25;
-            mats.push(child.material);
-          }
-        });
-        materialsRef.current = mats;
-
         setScene(gltf.scene);
       },
       undefined,
-      () => { /* ignorar errores silenciosamente */ },
+      () => { /* ignore load errors silently */ },
     );
 
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, [modelUrl]);
 
-  // Centrar el modelo sobre el eje Y basándose en meshes visibles
+  // Calcular el centro del modelo mirando SOLO mallas visibles
   const centerY = useMemo(() => {
     if (!scene) return 0;
     const box = new THREE.Box3();
@@ -69,32 +55,16 @@ function CarouselModel({ modelUrl, active, targetX }) {
   }, [scene]);
 
   useFrame((_, delta) => {
-    if (!groupRef.current) return;
-
-    // 1. Giro constante en eje Y
-    groupRef.current.rotation.y += delta * 0.4;
-
-    // 2. Interpolación suave de posición X (desplazamiento horizontal del carrusel)
-    groupRef.current.position.x = THREE.MathUtils.lerp(groupRef.current.position.x, targetX, 0.1);
-
-    // 3. Interpolación suave de escala (grande si está seleccionado, pequeño si no)
-    const targetScale = active ? 1.3 : 0.75;
-    const currentScale = groupRef.current.scale.x;
-    const newScale = THREE.MathUtils.lerp(currentScale, targetScale, 0.1);
-    groupRef.current.scale.setScalar(newScale);
-
-    // 4. Interpolación suave de la opacidad (claro si está activo, difuminado/translúcido si no)
-    const targetOpacity = active ? 1.0 : 0.25;
-    materialsRef.current.forEach((mat) => {
-      mat.opacity = THREE.MathUtils.lerp(mat.opacity, targetOpacity, 0.1);
-    });
+    if (groupRef.current) {
+      groupRef.current.rotation.y += delta * 0.5;
+    }
   });
 
+  // No mostrar nada hasta que el modelo esté cargado
   if (!scene) return null;
 
   return (
-    <group ref={groupRef} position={[targetX, 0, 0]}>
-      {/* Centrado del pivot */}
+    <group ref={groupRef}>
       <group position={[0, -centerY, 0]}>
         <primitive object={scene} />
       </group>
@@ -102,35 +72,18 @@ function CarouselModel({ modelUrl, active, targetX }) {
   );
 }
 
-/** Canvas del carrusel de personajes */
-function PreviewCanvas({ characterIds, previewCharacter, isMobile }) {
-  const activeIndex = characterIds.indexOf(previewCharacter);
-
+/** Mini Canvas de previsualización del personaje */
+function PreviewCanvas({ modelUrl }) {
   return (
     <Canvas
       camera={{ position: [0, 0, 5], fov: 40 }}
       gl={{ alpha: true }}
       style={{ width: '100%', height: '100%' }}
     >
-      <ambientLight intensity={0.7} />
-      <directionalLight position={[0, 8, 5]} intensity={1.5} />
-      <pointLight position={[0, 2, 2]} intensity={0.5} distance={10} />
-      
-      {characterIds.map((charId, idx) => {
-        const charConfig = CHARACTERS[charId];
-        // En móviles, achicar el gap de los lados para que quepan en pantalla
-        const stepX = isMobile ? 1.6 : 2.3;
-        const targetX = (idx - activeIndex) * stepX;
-
-        return (
-          <CarouselModel
-            key={charId}
-            modelUrl={charConfig.modelUrl}
-            active={idx === activeIndex}
-            targetX={targetX}
-          />
-        );
-      })}
+      <ambientLight intensity={0.6} />
+      <directionalLight position={[5, 5, 5]} intensity={1.2} />
+      <directionalLight position={[-5, -3, -5]} intensity={0.4} />
+      <PreviewModel key={modelUrl} modelUrl={modelUrl} />
     </Canvas>
   );
 }
@@ -142,18 +95,7 @@ export default function CharacterSelector() {
   const setPreviewCharacter = useStore((s) => s.setPreviewCharacter);
   const setActiveCharacter = useStore((s) => s.setActiveCharacter);
 
-  const [isMobile, setIsMobile] = useState(false);
   const characterIds = Object.keys(CHARACTERS);
-
-  // Monitorizar tamaño de ventana para ajustar espaciado responsive
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
   const goPrev = useCallback(() => {
     const currentIdx = characterIds.indexOf(previewCharacter);
@@ -176,7 +118,7 @@ export default function CharacterSelector() {
     setSelectorOpen(false);
   }, [setSelectorOpen]);
 
-  // Navegación por teclado
+  // Teclado: solo activo cuando el selector está abierto
   useEffect(() => {
     if (!isSelectorOpen) return;
 
@@ -209,38 +151,33 @@ export default function CharacterSelector() {
 
   const currentIdx = characterIds.indexOf(previewCharacter);
   const charInfo = CHAR_DATA[currentIdx] || CHAR_DATA[0];
+  const charConfig = CHARACTERS[previewCharacter];
 
   return (
     <div className={styles.overlay}>
       <div className={styles.modal}>
-        {/* Título superior */}
-        <h2 className={styles.title}>
-          Seleccioná tu Personaje
-        </h2>
-
-        {/* Carrusel 3D horizontal */}
+        {/* Preview 3D — responsive */}
         <div className={styles.previewContainer}>
-          <PreviewCanvas
-            characterIds={characterIds}
-            previewCharacter={previewCharacter}
-            isMobile={isMobile}
-          />
+          <PreviewCanvas modelUrl={charConfig.modelUrl} />
         </div>
 
-        {/* Nombre del personaje seleccionado (sin descripción) */}
-        <div className={styles.nameContainer}>
-          <span className={styles.characterName}>
-            {charInfo.name}
-          </span>
-        </div>
+        {/* Info: Nombre, descripción, navegación, acciones */}
+        <div className={styles.infoContainer}>
+          {/* Bloque de texto con scroll interno si desborda */}
+          <div className={styles.textBlock}>
+            <h2 className={styles.title}>
+              {charInfo.name}
+            </h2>
+            <p className={styles.desc}>
+              {charInfo.description}
+            </p>
+          </div>
 
-        {/* Separador */}
-        <div className={styles.separator} />
+          {/* Separador */}
+          <div className={styles.separator} />
 
-        {/* Fila de controles e interacción */}
-        <div className={styles.controlsContainer}>
+          {/* Navegación: ◄  X / Y  ► */}
           <div className={styles.navRow}>
-            {/* Navegación izquierda */}
             <ClayButton
               onClick={goPrev}
               variant="cyan-light"
@@ -249,26 +186,9 @@ export default function CharacterSelector() {
             >
               ◀
             </ClayButton>
-
-            {/* Confirmar Selección */}
-            <ClayButton
-              onClick={selectAndClose}
-              variant="cyan-solid"
-              className={styles.actionBtn}
-            >
-              Seleccionar
-            </ClayButton>
-
-            {/* Cancelar y salir */}
-            <ClayButton
-              onClick={close}
-              variant="cyan-light"
-              className={styles.actionBtn}
-            >
-              Cancelar
-            </ClayButton>
-
-            {/* Navegación derecha */}
+            <span className={styles.navText}>
+              {currentIdx + 1} / {characterIds.length}
+            </span>
             <ClayButton
               onClick={goNext}
               variant="cyan-light"
@@ -276,6 +196,27 @@ export default function CharacterSelector() {
               aria-label="Siguiente"
             >
               ▶
+            </ClayButton>
+          </div>
+
+          {/* Separador */}
+          <div className={styles.separator} />
+
+          {/* Acciones */}
+          <div className={styles.actionsRow}>
+            <ClayButton
+              onClick={selectAndClose}
+              variant="cyan-solid"
+              className={styles.actionBtn}
+            >
+              Seleccionar
+            </ClayButton>
+            <ClayButton
+              onClick={close}
+              variant="cyan-light"
+              className={styles.actionBtn}
+            >
+              Cancelar
             </ClayButton>
           </div>
         </div>
