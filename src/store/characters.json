@@ -1,15 +1,5 @@
 [
   {
-    "id": "character1",
-    "name": "Personaje 1",
-    "description": "Un ágil explorador entrenado para moverse con destreza en cualquier terreno. Su ligereza le permite cambiar de dirección al instante y sortear obstáculos con fluidez."
-  },
-  {
-    "id": "character2",
-    "name": "Personaje 2",
-    "description": "Un fornido luchador de gran resistencia física. Capaz de soportar los combates más exigentes, su complexión le da una presencia imponente en el campo de batalla."
-  },
-  {
     "id": "alejandro",
     "name": "Alejandro",
     "description": "Un explorador nato con paso firme y mirada aguda. Su equilibrio y determinación lo convierten en un compañero confiable en cualquier expedición."
@@ -28,10 +18,5 @@
     "id": "sofia",
     "name": "Sofía",
     "description": "Una líder nata con una resistencia envidiable. Su presencia serena pero firme inspira confianza en los momentos más desafiantes."
-  },
-  {
-    "id": "character3",
-    "name": "Personaje 3",
-    "description": "Un misterioso viajero con una presencia magnética. Su sigilo y rapidez lo convierten en una sombra imparable."
   }
 ]

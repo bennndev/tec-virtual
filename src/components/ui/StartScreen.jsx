@@ -9,8 +9,6 @@ const DRACO_DECODER_PATH = 'https://www.gstatic.com/draco/versioned/decoders/1.5
 
 const ASSETS = [
   { type: 'model', path: '/scenes/tecsup.glb' },
-  { type: 'model', path: '/models/test-character.glb' },
-  { type: 'model', path: '/models/test-character2.glb' },
   { type: 'model', path: '/models/Alejandro.glb' },
   { type: 'model', path: '/models/Felipe.glb' },
   { type: 'model', path: '/models/Isabella.glb' },

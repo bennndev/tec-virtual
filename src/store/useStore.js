@@ -9,7 +9,7 @@ const useStore = create((set) => ({
   setHoveredObject: (obj) => set({ hoveredObject: obj }),
 
   // Personaje jugable activo
-  activeCharacter: 'character1',
+  activeCharacter: 'alejandro',
   setActiveCharacter: (id) => set({ activeCharacter: id }),
 
   // Camera mode: thirdPerson (cerca) | overview (vista aguila)
@@ -21,7 +21,7 @@ const useStore = create((set) => ({
   setSelectorOpen: (open) => set({ isSelectorOpen: open, controlsDisabled: open }),
 
   // Personaje seleccionado actualmente en el selector (no necesariamente el activo)
-  previewCharacter: 'character1',
+  previewCharacter: 'alejandro',
   setPreviewCharacter: (id) => set({ previewCharacter: id }),
 
   // Bloqueo de controles del personaje (activo mientras el selector está abierto)
