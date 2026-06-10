@@ -77,7 +77,7 @@ function PreviewModel({ modelUrl }) {
 function PreviewCanvas({ modelUrl }) {
   return (
     <Canvas
-      camera={{ position: [0, 0, 5], fov: 40 }}
+      camera={{ position: [0, 0, 3.5], fov: 40 }}
       gl={{ alpha: true }}
       style={{ width: '100%', height: '100%' }}
     >
