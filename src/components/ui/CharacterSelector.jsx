@@ -6,6 +6,7 @@ import useStore from '../../store/useStore';
 import CHARACTERS from '../../data/characterConfig';
 import CHAR_DATA from '../../store/characters.json';
 import ClayButton from './ClayButton';
+import ClayIcon from './ClayIcon';
 import styles from './CharacterSelector.module.css';
 
 /** Modelo 3D giratorio dentro del preview */
@@ -181,7 +182,7 @@ export default function CharacterSelector() {
               className={styles.navBtn}
               aria-label="Anterior"
             >
-              ◀
+              <ClayIcon name="chevron_left" />
             </ClayButton>
             <span className={styles.navText}>
               {currentIdx + 1} / {characterIds.length}
@@ -192,7 +193,7 @@ export default function CharacterSelector() {
               className={styles.navBtn}
               aria-label="Siguiente"
             >
-              ▶
+              <ClayIcon name="chevron_right" />
             </ClayButton>
           </div>
 

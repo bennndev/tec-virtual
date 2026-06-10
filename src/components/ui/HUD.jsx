@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import useStore from '../../store/useStore';
 import CharacterSwitcher from './CharacterSwitcher';
 import ClayButton from './ClayButton';
+import ClayIcon from './ClayIcon';
 import styles from './HUD.module.css';
 
 function FPS() {
@@ -106,7 +107,7 @@ export default function HUD() {
         className={styles.musicBtn}
         title={musicMuted ? 'Activar música' : 'Silenciar música'}
       >
-        {musicMuted ? '🔇' : '🔊'}
+        <ClayIcon name={musicMuted ? 'volume_off' : 'volume_up'} />
       </ClayButton>
 
       {/* Cambio de modo de camara — extremo derecho inferior */}
