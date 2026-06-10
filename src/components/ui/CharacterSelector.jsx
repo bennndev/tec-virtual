@@ -173,9 +173,6 @@ export default function CharacterSelector() {
             </p>
           </div>
 
-          {/* Separador */}
-          <div className={styles.separator} />
-
           {/* Navegación: ◄  X / Y  ► */}
           <div className={styles.navRow}>
             <ClayButton
@@ -198,9 +195,6 @@ export default function CharacterSelector() {
               ▶
             </ClayButton>
           </div>
-
-          {/* Separador */}
-          <div className={styles.separator} />
 
           {/* Acciones */}
           <div className={styles.actionsRow}>
