@@ -48,8 +48,8 @@
   padding: 40px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* Alinea los elementos superior, medio e inferior fijos */
-  gap: 20px;
+  justify-content: flex-start; /* Apilar elementos superiores de forma compacta */
+  gap: 16px; /* Gap reducido entre la información y las flechas */
   box-sizing: border-box;
 }
 
@@ -132,6 +132,7 @@
   display: flex;
   gap: 12px;
   width: 100%;
+  margin-top: auto; /* Empuja las acciones al final de la modal */
 }
 
 .actionBtn {
