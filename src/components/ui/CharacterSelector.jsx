@@ -180,6 +180,7 @@ export default function CharacterSelector() {
           <div className={styles.navRow}>
             <ClayButton
               onClick={goPrev}
+              variant="cyan-light"
               className={styles.navBtn}
               aria-label="Anterior"
             >
@@ -190,6 +191,7 @@ export default function CharacterSelector() {
             </span>
             <ClayButton
               onClick={goNext}
+              variant="cyan-light"
               className={styles.navBtn}
               aria-label="Siguiente"
             >
@@ -204,13 +206,14 @@ export default function CharacterSelector() {
           <div className={styles.actionsRow}>
             <ClayButton
               onClick={selectAndClose}
-              variant="cyan-light"
+              variant="cyan-solid"
               className={styles.actionBtn}
             >
               Seleccionar
             </ClayButton>
             <ClayButton
               onClick={close}
+              variant="cyan-light"
               className={styles.actionBtn}
             >
               Cancelar
