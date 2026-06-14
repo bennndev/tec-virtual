@@ -39,8 +39,42 @@ export default function Minimap() {
   const playerPos2D = mapCoord(playerPosition.x, playerPosition.z);
 
   // El rotationY de Three.js es en radianes. Convertir a grados.
-  // Ajuste: Dependiendo de cómo mira la cámara, podrías necesitar sumar un offset (ej. -90)
   const rotationDeg = -(playerRotation * 180) / Math.PI;
+
+  // Navigation State
+  const navigationTarget = useStore((s) => s.navigationTarget);
+  const isNavigating = useStore((s) => s.isNavigating);
+
+  // 1. Zoom dinámico: Se aleja si el destino está lejos, se acerca al aproximarse
+  const zoom = useMemo(() => {
+    if (!isNavigating || !navigationTarget) return 1.6; // Zoom cómodo estándar
+
+    const dx = navigationTarget.x - playerPosition.x;
+    const dz = navigationTarget.z - playerPosition.z;
+    const distance = Math.sqrt(dx * dx + dz * dz);
+
+    // Si la distancia es > 60m, zoom alejado (1.2) para ver la ruta
+    // Si la distancia es < 10m, zoom de precisión (2.6) para ver la llegada
+    if (distance > 60) return 1.2;
+    if (distance < 10) return 2.6;
+
+    // Interpolación lineal entre 1.2 y 2.6
+    const t = (60 - distance) / (60 - 10);
+    return 1.2 + t * (2.6 - 1.2);
+  }, [isNavigating, navigationTarget, playerPosition.x, playerPosition.z]);
+
+  // 2. ViewBox dinámico centrado en el jugador
+  const viewBox = useMemo(() => {
+    const size = 100 / zoom;
+    let minX = playerPos2D.x - size / 2;
+    let minY = playerPos2D.y - size / 2;
+
+    // Clampear límites para que el minimapa no muestre vacío fuera del SVG (0-100)
+    minX = Math.max(0, Math.min(100 - size, minX));
+    minY = Math.max(0, Math.min(100 - size, minY));
+
+    return `${minX} ${minY} ${size} ${size}`;
+  }, [playerPos2D.x, playerPos2D.y, zoom]);
 
   // Renderizar la polyline SVG para la ruta si hay una activa
   const renderPathLine = () => {
@@ -58,8 +92,8 @@ export default function Minimap() {
         points={pointsString}
         fill="none"
         stroke="#0ea5e9"
-        strokeWidth="1.5"
-        strokeDasharray="2, 2"
+        strokeWidth="1.2"
+        strokeDasharray="1.5, 1.5"
         className={styles.pathLine}
       />
     );
@@ -75,7 +109,7 @@ export default function Minimap() {
         pointerEvents: isMapModalOpen ? 'none' : 'auto' 
       }}
     >
-      <svg viewBox="0 0 100 100" className={styles.minimapSvg}>
+      <svg viewBox={viewBox} className={styles.minimapSvg}>
         {/* Fondo abstracto (grilla sutil) */}
         <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
           <path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(14, 165, 233, 0.15)" strokeWidth="0.5" />
