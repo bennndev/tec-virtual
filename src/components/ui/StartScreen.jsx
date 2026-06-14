@@ -143,13 +143,15 @@ export default function StartScreen({ onStart }) {
             </p>
           </div>
         ) : (
-          <ClayButton
-            onClick={onStart}
-            variant="cyan-light"
-            className={styles.startBtn}
-          >
-            INICIAR
-          </ClayButton>
+          <div className={styles.btnWrapper}>
+            <ClayButton
+              onClick={onStart}
+              variant="cyan-light"
+              className={styles.startBtn}
+            >
+              INICIAR
+            </ClayButton>
+          </div>
         )}
       </div>
     </div>
