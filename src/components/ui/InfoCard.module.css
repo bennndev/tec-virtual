@@ -24,7 +24,7 @@
 
   padding: 24px;
   max-width: 380px;
-  min-width: 320px;
+  width: fit-content;
 
   /* Opacity/transform inicial — GSAP lo anima */
   opacity: 0;
@@ -80,6 +80,7 @@
   line-height: 1.2;
   color: #0ea5e9;
   /* sky-500 */
+  white-space: nowrap;
 }
 
 /* --- Descripción --- */
@@ -120,5 +121,28 @@
 
   .desc {
     font-size: 0.8125rem;
+  }
+}
+
+/* --- Variación de llegada (centrada y fija) --- */
+.arrival {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  top: auto;
+  transform: translate(-50%, 0) scale(1) !important;
+  opacity: 1 !important;
+  pointer-events: auto;
+  animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes slideUp {
+  from {
+    transform: translate(-50%, 40px) scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, 0) scale(1);
+    opacity: 1;
   }
 }

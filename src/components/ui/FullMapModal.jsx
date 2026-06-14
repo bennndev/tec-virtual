@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import useStore from '../../store/useStore';
 import ClayButton from './ClayButton';
 import styles from './FullMapModal.module.css';
+import { pathfinder } from '../../services/pathfinding';
 
 // Importar SVG como componentes de React
 import AlmacenIcon from '../../assets/icons/almacen.svg?react';
@@ -19,6 +20,11 @@ import LockersIcon from '../../assets/icons/lockers.svg?react';
 
 // Lista estática de íconos que el usuario subió
 const LEGEND_ITEMS = [
+  // Hardcoded areas provistas por el usuario
+  { id: 'CarrerasAdmision', label: 'Carreras y Admisión', Icon: Laboratorio1Icon, x: 96.92, y: 2.37, z: -114.39 },
+  { id: 'Empresas', label: 'Empresas Participantes', Icon: EstacionamientoIcon, x: 103.98, y: 2.26, z: -107.10 },
+  { id: 'stand01', label: 'Stand Principal', Icon: Laboratorio2Icon, x: 101.84, y: 2.57, z: -116.95 },
+  // Resto de la leyenda
   { id: 'almacen', label: 'Almacén', Icon: AlmacenIcon },
   { id: 'auditorio-a', label: 'Auditorio A', Icon: AuditorioAIcon },
   { id: 'auditorio-b', label: 'Auditorio B', Icon: AuditorioBIcon },
@@ -36,12 +42,17 @@ export default function FullMapModal() {
   const isMapModalOpen = useStore((s) => s.isMapModalOpen);
   const setMapModalOpen = useStore((s) => s.setMapModalOpen);
   
-  // Reutilizamos el estado del mapa
   const playerPosition = useStore((s) => s.playerPosition);
   const playerRotation = useStore((s) => s.playerRotation);
   const mapBounds = useStore((s) => s.mapBounds);
   const mapMarkers = useStore((s) => s.mapMarkers);
   const setHoveredObject = useStore((s) => s.setHoveredObject);
+  
+  // Navigation State
+  const navigationTarget = useStore((s) => s.navigationTarget);
+  const setNavigationTarget = useStore((s) => s.setNavigationTarget);
+  const clearNavigation = useStore((s) => s.clearNavigation);
+  const navigationPath = useStore((s) => s.navigationPath);
 
   const overlayRef = useRef(null);
   const modalRef = useRef(null);
@@ -71,6 +82,21 @@ export default function FullMapModal() {
     });
   };
 
+  const startNavigation = (target) => {
+    if (target.x !== undefined && target.z !== undefined) {
+      // Si ya estábamos navegando a este mismo lugar, lo desactivamos (Toggle)
+      if (navigationTarget && navigationTarget.id === target.id) {
+        clearNavigation();
+        return;
+      }
+
+      const path = pathfinder.calculatePath(playerPosition, target);
+      setNavigationTarget({ id: target.id, name: target.label || target.name, x: target.x, y: target.y || 0, z: target.z }, path);
+    } else {
+      console.warn('Esta área no tiene coordenadas asignadas todavía.');
+    }
+  };
+
   const PADDING = 10;
   
   const mapCoord = useMemo(() => {
@@ -91,6 +117,31 @@ export default function FullMapModal() {
   const playerPos2D = mapCoord(playerPosition.x, playerPosition.z);
   const rotationDeg = -(playerRotation * 180) / Math.PI;
 
+  // Renderizar la polyline SVG para la ruta si hay una activa
+  const renderPathLine = () => {
+    if (!navigationPath || navigationPath.length < 2) return null;
+    // Agregar la posición actual del jugador al inicio de la línea para que sea dinámica
+    const points = [playerPos2D];
+    
+    // Convertir waypoints 3D a coordenadas 2D del SVG
+    for (let i = 1; i < navigationPath.length; i++) {
+      points.push(mapCoord(navigationPath[i].x, navigationPath[i].z));
+    }
+
+    const pointsString = points.map(p => `${p.x},${p.y}`).join(' ');
+
+    return (
+      <polyline
+        points={pointsString}
+        fill="none"
+        stroke="#0ea5e9"
+        strokeWidth="1.5"
+        strokeDasharray="2, 2"
+        className={styles.pathLine}
+      />
+    );
+  };
+
   return (
     <div className={styles.overlay} ref={overlayRef}>
       <div className={styles.modal} ref={modalRef}>
@@ -103,12 +154,17 @@ export default function FullMapModal() {
         {/* Panel Izquierdo: Leyenda */}
         <div className={styles.legendPanel}>
           <h2 className={styles.legendTitle}>Leyenda del Mapa</h2>
-          {LEGEND_ITEMS.map(({ id, label, Icon }) => (
-            <ClayButton key={id} variant="translucent" className={styles.legendItemButton}>
+          {LEGEND_ITEMS.map((item) => (
+            <ClayButton 
+              key={item.id} 
+              variant="translucent" 
+              className={styles.legendItemButton}
+              onClick={() => startNavigation(item)}
+            >
               <div className={styles.legendIcon}>
-                <Icon />
+                <item.Icon />
               </div>
-              <span className={styles.legendLabel}>{label}</span>
+              <span className={styles.legendLabel}>{item.label}</span>
             </ClayButton>
           ))}
         </div>
@@ -121,11 +177,18 @@ export default function FullMapModal() {
             </pattern>
             <rect width="100" height="100" fill="url(#gridLarge)" />
 
+            {/* Dibujar ruta actual */}
+            {renderPathLine()}
+
             {/* Marcadores de POI */}
             {mapMarkers.map((marker) => {
               const pos = mapCoord(marker.x, marker.z);
               return (
-                <g key={marker.id} transform={`translate(${pos.x}, ${pos.y})`}>
+                <g 
+                  key={marker.id} 
+                  transform={`translate(${pos.x}, ${pos.y})`}
+                  onClick={() => startNavigation(marker)}
+                >
                   <g
                     className={styles.poiMarker}
                     onMouseEnter={() => setHoveredObject({ id: marker.id, name: marker.name, description: 'Ubicado en el campus' })}

@@ -11,6 +11,9 @@ export default function Minimap() {
   const setHoveredObject = useStore((s) => s.setHoveredObject);
   const setMapModalOpen = useStore((s) => s.setMapModalOpen);
   const isMapModalOpen = useStore((s) => s.isMapModalOpen);
+  
+  // Navigation State
+  const navigationPath = useStore((s) => s.navigationPath);
 
   // Agregar padding interno para que no corte en los bordes
   const PADDING = 10;
@@ -39,6 +42,29 @@ export default function Minimap() {
   // Ajuste: Dependiendo de cómo mira la cámara, podrías necesitar sumar un offset (ej. -90)
   const rotationDeg = -(playerRotation * 180) / Math.PI;
 
+  // Renderizar la polyline SVG para la ruta si hay una activa
+  const renderPathLine = () => {
+    if (!navigationPath || navigationPath.length < 2) return null;
+    const points = [playerPos2D];
+    
+    for (let i = 1; i < navigationPath.length; i++) {
+      points.push(mapCoord(navigationPath[i].x, navigationPath[i].z));
+    }
+
+    const pointsString = points.map(p => `${p.x},${p.y}`).join(' ');
+
+    return (
+      <polyline
+        points={pointsString}
+        fill="none"
+        stroke="#0ea5e9"
+        strokeWidth="1.5"
+        strokeDasharray="2, 2"
+        className={styles.pathLine}
+      />
+    );
+  };
+
   return (
     <div 
       className={styles.minimapContainer} 
@@ -55,6 +81,9 @@ export default function Minimap() {
           <path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(14, 165, 233, 0.15)" strokeWidth="0.5" />
         </pattern>
         <rect width="100" height="100" fill="url(#grid)" />
+
+        {/* Ruta de Navegación */}
+        {renderPathLine()}
 
         {/* Puntos de interés (POI) */}
         {mapMarkers.map((marker) => {

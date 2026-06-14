@@ -5,6 +5,7 @@ import ClayButton from './ClayButton';
 import ClayIcon from './ClayIcon';
 import Minimap from './Minimap';
 import FullMapModal from './FullMapModal';
+import NavigationHUD from './NavigationHUD';
 import styles from './HUD.module.css';
 
 function FPS() {

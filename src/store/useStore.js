@@ -54,6 +54,26 @@ const useStore = create((set) => ({
   // Modo vuelo: Space = subir, Shift = bajar, WASD = mover, F = toggle
   flyMode: false,
   setFlyMode: (mode) => set({ flyMode: mode }),
+
+  // --- NAVEGACIÓN 3D ---
+  navigationTarget: null, // { id, name, x, y, z }
+  navigationPath: [], // [Vector3, Vector3, ...]
+  isNavigating: false,
+  arrivalTargetName: null, // Nombre del destino al que se llegó
+  
+  setNavigationTarget: (target, path) => set({ 
+    navigationTarget: target,
+    navigationPath: path,
+    isNavigating: true,
+  }),
+  
+  clearNavigation: () => set({
+    navigationTarget: null,
+    navigationPath: [],
+    isNavigating: false,
+  }),
+
+  setArrivalTargetName: (name) => set({ arrivalTargetName: name }),
 }));
 
 export default useStore;

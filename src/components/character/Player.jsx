@@ -29,6 +29,11 @@ function Character() {
   const controlsDisabled = useStore((s) => s.controlsDisabled);
   const flyMode = useStore((s) => s.flyMode);
 
+  // Navegación
+  const navigationTarget = useStore((s) => s.navigationTarget);
+  const isNavigating = useStore((s) => s.isNavigating);
+  const clearNavigation = useStore((s) => s.clearNavigation);
+
   const vec = useRef(new THREE.Vector3());
 
   // Estado en vivo de las teclas
@@ -56,6 +61,27 @@ function Character() {
       // Ajuste de offset: el modelo en ecctrl suele tener la cara apuntando a +Z local,
       // y Math.PI lo alinea correctamente con la flecha del minimapa.
       setPlayerRotation(euler.current.y + Math.PI);
+
+      // Detección de llegada al destino
+      if (isNavigating && navigationTarget) {
+        const dx = navigationTarget.x - vec.current.x;
+        const dz = navigationTarget.z - vec.current.z;
+        const distSq = dx * dx + dz * dz;
+        // Si está a menos de 3.5 metros (12.25 = 3.5^2), consideramos que llegó
+        if (distSq < 12.25) {
+          console.log('¡Destino alcanzado!');
+          
+          const targetName = navigationTarget.name;
+          useStore.getState().setArrivalTargetName(targetName);
+          
+          clearNavigation();
+
+          // Quitar la tarjeta después de 4 segundos
+          setTimeout(() => {
+            useStore.getState().setArrivalTargetName(null);
+          }, 4000);
+        }
+      }
     }
 
     // --- MECÁNICA DE VUELO ---

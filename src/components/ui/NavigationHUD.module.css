@@ -1,0 +1,96 @@
+.container {
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  border-radius: 40px;
+  padding: 12px 24px;
+  box-shadow:
+    0 8px 16px rgba(166, 180, 200, 0.25),
+    inset 3px 3px 6px rgba(255, 255, 255, 0.9),
+    inset -3px -3px 6px rgba(166, 180, 200, 0.35);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  pointer-events: auto;
+  z-index: 100;
+  animation: slideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes slideDown {
+  from {
+    transform: translate(-50%, -40px);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+}
+
+.compassBox {
+  width: 40px;
+  height: 40px;
+  background: #f1f5f9;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 2px 2px 5px rgba(166, 180, 200, 0.3);
+  position: relative;
+}
+
+.arrow {
+  color: #0ea5e9;
+  font-size: 24px;
+  line-height: 1;
+  transform-origin: center center;
+  transition: transform 0.1s linear;
+  filter: drop-shadow(0 2px 2px rgba(14, 165, 233, 0.3));
+}
+
+.infoBox {
+  display: flex;
+  flex-direction: column;
+}
+
+.targetName {
+  font-size: 0.9rem;
+  color: #64748b;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.distance {
+  font-size: 1.5rem;
+  color: #0f172a;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.cancelBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: none;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-left: 8px;
+}
+
+.cancelBtn:hover {
+  background: #ef4444;
+  color: white;
+  transform: scale(1.1);
+}

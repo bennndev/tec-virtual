@@ -6,6 +6,8 @@ import styles from './InfoCard.module.css';
 
 export default function InfoCard() {
   const hoveredObject = useStore((s) => s.hoveredObject);
+  const arrivalTargetName = useStore((s) => s.arrivalTargetName);
+  
   const cardRef = useRef(null);
   const tlRef = useRef(null);
   const xTo = useRef(null);
@@ -60,6 +62,24 @@ export default function InfoCard() {
       if (tlRef.current) tlRef.current.kill();
     };
   }, [hoveredObject]);
+
+  // Si hay un mensaje de llegada activo, renderizamos una tarjeta fija
+  if (arrivalTargetName) {
+    return (
+      <div className={`${styles.card} ${styles.arrival}`}>
+        <div className={styles.body}>
+          <div className={styles.content}>
+            <h4 className={styles.title}>
+              ¡Llegaste a tu destino!
+            </h4>
+            <p className={styles.desc}>
+              Has llegado correctamente a: <strong>{arrivalTargetName}</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div ref={cardRef} className={styles.card}>
