@@ -62,9 +62,33 @@ function Character() {
       return;
     }
 
+    // Congelar físicas si los controles están deshabilitados (diálogos o modales activos)
+    // Esto previene que el jugador atraviese el escenario por picos de lag ("jank") de React
+    if (controlsDisabled) {
+      if (ecctrlRef.current?.group) {
+        const rb = ecctrlRef.current.group;
+        rb.setLinvel({ x: 0, y: 0, z: 0 }, true);
+        rb.setAngvel({ x: 0, y: 0, z: 0 }, true);
+      }
+    }
+
     // Sincronizar posición al store (siempre, para HUD y CameraRig)
     if (posRef.current) {
       posRef.current.getWorldPosition(vec.current);
+
+      // --- RESPAWNER DE SEGURIDAD (Red contra caídas al vacío) ---
+      if (vec.current.y < -15) {
+        console.warn('¡Jugador fuera de límites! Reposicionando en zona segura...');
+        if (ecctrlRef.current?.group) {
+          const rb = ecctrlRef.current.group;
+          rb.setTranslation({ x: 62.12, y: 10.10, z: -98.97 }, true);
+          rb.setLinvel({ x: 0, y: 0, z: 0 }, true);
+          rb.setAngvel({ x: 0, y: 0, z: 0 }, true);
+          // Actualizamos vec para que la sincronización inmediata del store no registre la Y rota
+          vec.current.set(62.12, 10.10, -98.97);
+        }
+      }
+      
       setPlayerPosition({ x: vec.current.x, y: vec.current.y, z: vec.current.z });
       
       // Obtener la rotación física real del modelo (orientación de WASD)
