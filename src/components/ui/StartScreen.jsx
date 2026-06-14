@@ -4,6 +4,7 @@ import { GLTFLoader, DRACOLoader, MeshoptDecoder } from 'three-stdlib';
 import { preload as cachePreload } from 'suspend-react';
 import ClayButton from './ClayButton';
 import styles from './StartScreen.module.css';
+import logoImg from '../../assets/tec-virtual.png';
 
 const DRACO_DECODER_PATH = 'https://www.gstatic.com/draco/versioned/decoders/1.5.5/';
 
@@ -78,21 +79,8 @@ export default function StartScreen({ onStart }) {
 
   return (
     <div className={styles.overlay}>
-      {/* Línea decorativa superior */}
-      <div className={styles.decoLineTop} />
-
-      <h1 className={styles.title}>
-        ¡Bienvenido a{' '}
-        <span className={styles.brandName}>Tec-Virtual</span>
-        !
-      </h1>
-
-      <p className={styles.subtitle}>
-        Explora el mundo virtual de la Tecnología
-      </p>
-
-      {/* Línea decorativa inferior */}
-      <div className={styles.decoLineBottom} />
+      <img src={logoImg} alt="TecVirtual" className={styles.logo} />
+      <p className={styles.slogan}>Vive Tecsup a tu manera</p>
 
       {!ready ? (
         <div className={styles.loaderContainer}>
