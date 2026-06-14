@@ -1,4 +1,4 @@
-import { useEffect, useRef, useMemo } from 'react';
+import { useEffect, useRef, useMemo, useState } from 'react';
 import gsap from 'gsap';
 import useStore from '../../store/useStore';
 import ClayButton from './ClayButton';
@@ -54,11 +54,21 @@ export default function FullMapModal() {
   const clearNavigation = useStore((s) => s.clearNavigation);
   const navigationPath = useStore((s) => s.navigationPath);
 
+  // Zoom & Pan State para el mapa expandido (estilo GTA V)
+  const [zoom, setZoom] = useState(1);
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStart = useRef({ x: 0, y: 0 });
+
   const overlayRef = useRef(null);
   const modalRef = useRef(null);
 
   useEffect(() => {
     if (isMapModalOpen) {
+      // Resetear zoom al abrir
+      setZoom(1);
+      setPan({ x: 0, y: 0 });
+
       gsap.fromTo(
         overlayRef.current,
         { opacity: 0 },
@@ -97,6 +107,54 @@ export default function FullMapModal() {
     }
   };
 
+  // Manejadores de eventos de zoom y arrastre (Pan)
+  const handleWheel = (e) => {
+    const zoomFactor = 0.25;
+    let newZoom = zoom + (e.deltaY < 0 ? zoomFactor : -zoomFactor);
+    newZoom = Math.max(1, Math.min(4, newZoom)); // Clampeado de 1x a 4x de zoom
+    
+    if (newZoom === 1) {
+      setPan({ x: 0, y: 0 });
+    }
+    setZoom(newZoom);
+  };
+
+  const handleMouseDown = (e) => {
+    if (zoom > 1) {
+      setIsDragging(true);
+      dragStart.current = { x: e.clientX, y: e.clientY };
+    }
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging || zoom <= 1) return;
+    
+    const dx = e.clientX - dragStart.current.x;
+    const dy = e.clientY - dragStart.current.y;
+    
+    // El SVG mide 100 en su escala nativa. Ajustamos el factor de arrastre segun el zoom
+    const svgSize = 100 / zoom;
+    const dragScale = svgSize / 400; // Asumiendo un viewport de ~400px de alto/ancho
+    
+    setPan(prev => {
+      let newX = prev.x - dx * dragScale;
+      let newY = prev.y - dy * dragScale;
+      
+      // Clampear pan para no salirse de los límites del mapa
+      const limit = (100 - svgSize) / 2;
+      newX = Math.max(-limit, Math.min(limit, newX));
+      newY = Math.max(-limit, Math.min(limit, newY));
+      
+      return { x: newX, y: newY };
+    });
+    
+    dragStart.current = { x: e.clientX, y: e.clientY };
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
   const PADDING = 10;
   
   const mapCoord = useMemo(() => {
@@ -111,6 +169,22 @@ export default function FullMapModal() {
       return { x: svgX, y: svgZ };
     };
   }, [mapBounds]);
+
+  // ViewBox dinámico aplicando el zoom y el pan actual
+  const viewBox = useMemo(() => {
+    const size = 100 / zoom;
+    const centerX = 50 + pan.x;
+    const centerY = 50 + pan.y;
+    
+    let minX = centerX - size / 2;
+    let minY = centerY - size / 2;
+    
+    // Clampear límites del viewBox de 0 a 100
+    minX = Math.max(0, Math.min(100 - size, minX));
+    minY = Math.max(0, Math.min(100 - size, minY));
+    
+    return `${minX} ${minY} ${size} ${size}`;
+  }, [zoom, pan]);
 
   if (!isMapModalOpen) return null;
 
@@ -170,8 +244,16 @@ export default function FullMapModal() {
         </div>
 
         {/* Panel Derecho: Mapa Expandido */}
-        <div className={styles.mapPanel}>
-          <svg viewBox="0 0 100 100" className={styles.minimapSvg}>
+        <div 
+          className={styles.mapPanel}
+          onWheel={handleWheel}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+          style={{ cursor: zoom > 1 ? (isDragging ? 'grabbing' : 'grab') : 'crosshair' }}
+        >
+          <svg viewBox={viewBox} className={styles.minimapSvg}>
             <pattern id="gridLarge" width="5" height="5" patternUnits="userSpaceOnUse">
               <path d="M 5 0 L 0 0 0 5" fill="none" stroke="rgba(14, 165, 233, 0.2)" strokeWidth="0.2" />
             </pattern>
