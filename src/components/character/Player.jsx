@@ -35,6 +35,7 @@ function Character() {
   const isNavigating = useStore((s) => s.isNavigating);
   const clearNavigation = useStore((s) => s.clearNavigation);
 
+  const spawnFrames = useRef(0);
   const vec = useRef(new THREE.Vector3());
 
   // Estado en vivo de las teclas
@@ -50,6 +51,17 @@ function Character() {
   const euler = useRef(new THREE.Euler(0, 0, 0, 'YXZ'));
 
   useFrame(({ camera }) => {
+    // Estabilizar el RigidBody al inicio para dar tiempo a cargar el trimesh físico del campus
+    if (spawnFrames.current < 60) {
+      spawnFrames.current++;
+      if (ecctrlRef.current?.group) {
+        const rb = ecctrlRef.current.group;
+        rb.setTranslation({ x: 62.12, y: 10.10, z: -98.97 }, true);
+        rb.setLinvel({ x: 0, y: 0, z: 0 }, true);
+      }
+      return;
+    }
+
     // Sincronizar posición al store (siempre, para HUD y CameraRig)
     if (posRef.current) {
       posRef.current.getWorldPosition(vec.current);
