@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useThree } from '@react-three/fiber';
 
 /**
@@ -17,10 +17,12 @@ import { useThree } from '@react-three/fiber';
  * - Pide pointer lock en mousedown (botón izquierdo)
  * - Libera pointer lock en mouseup
  * - Previene el menú contextual en el canvas (right-click)
+ * - Intercepta eventos basura (saltos bruscos) del mouse al salir del pointer lock
  * - Limpia todo al desmontar
  */
 export default function PointerLock() {
   const { gl } = useThree();
+  const isTransitioningLock = useRef(false);
 
   useEffect(() => {
     // No activar pointer lock en dispositivos táctiles
@@ -28,6 +30,29 @@ export default function PointerLock() {
     if (isTouchDevice) return;
 
     const canvas = gl.domElement;
+
+    // Listener global en fase de CAPTURA para bloquear deltas gigantes generados por el navegador
+    // al salir del pointer lock (cuando el cursor vuelve a su posición original)
+    const handleMouseMoveCapture = (e) => {
+      if (isTransitioningLock.current) {
+        e.stopImmediatePropagation();
+        e.stopPropagation();
+      }
+    };
+
+    // Listener para detectar cambios en el estado del pointer lock
+    const handlePointerLockChange = () => {
+      if (!document.pointerLockElement) {
+        isTransitioningLock.current = true;
+        // 50ms es suficiente para que el navegador procese el mousemove basura del reposicionamiento
+        setTimeout(() => {
+          isTransitioningLock.current = false;
+        }, 50);
+      }
+    };
+
+    document.addEventListener('mousemove', handleMouseMoveCapture, true);
+    document.addEventListener('pointerlockchange', handlePointerLockChange);
 
     const handleMouseDown = (e) => {
       // Solo botón izquierdo (primary)
@@ -37,7 +62,12 @@ export default function PointerLock() {
 
     const handleMouseUp = () => {
       if (document.pointerLockElement) {
+        // Activamos el flag preventivamente en mouseup por si la reacción al pointerlockchange tarda
+        isTransitioningLock.current = true;
         document.exitPointerLock();
+        setTimeout(() => {
+          isTransitioningLock.current = false;
+        }, 50);
       }
     };
 
@@ -50,6 +80,8 @@ export default function PointerLock() {
     canvas.addEventListener('contextmenu', handleContextMenu);
 
     return () => {
+      document.removeEventListener('mousemove', handleMouseMoveCapture, true);
+      document.removeEventListener('pointerlockchange', handlePointerLockChange);
       canvas.removeEventListener('mousedown', handleMouseDown);
       canvas.removeEventListener('mouseup', handleMouseUp);
       canvas.removeEventListener('contextmenu', handleContextMenu);
