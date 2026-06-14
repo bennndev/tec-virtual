@@ -9,6 +9,9 @@ const useStore = create((set) => ({
   setPlayerRotation: (rot) => set({ playerRotation: rot }),
 
   // Minimap data
+  isMapModalOpen: false,
+  setMapModalOpen: (isOpen) => set({ isMapModalOpen: isOpen }),
+
   mapBounds: { minX: -100, maxX: 100, minZ: -100, maxZ: 100 }, // Fallback bounds
   setMapBounds: (bounds) => set({ mapBounds: bounds }),
   

@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import useStore from '../../store/useStore';
+import Laboratorio2Icon from '../../assets/icons/laboratorio-2.svg?react';
 import styles from './Minimap.module.css';
 
 export default function Minimap() {
@@ -8,6 +9,8 @@ export default function Minimap() {
   const mapBounds = useStore((s) => s.mapBounds);
   const mapMarkers = useStore((s) => s.mapMarkers);
   const setHoveredObject = useStore((s) => s.setHoveredObject);
+  const setMapModalOpen = useStore((s) => s.setMapModalOpen);
+  const isMapModalOpen = useStore((s) => s.isMapModalOpen);
 
   // Agregar padding interno para que no corte en los bordes
   const PADDING = 10;
@@ -37,7 +40,15 @@ export default function Minimap() {
   const rotationDeg = -(playerRotation * 180) / Math.PI;
 
   return (
-    <div className={styles.minimapContainer}>
+    <div 
+      className={styles.minimapContainer} 
+      onClick={() => setMapModalOpen(true)}
+      style={{ 
+        cursor: 'pointer', 
+        opacity: isMapModalOpen ? 0 : 1, 
+        pointerEvents: isMapModalOpen ? 'none' : 'auto' 
+      }}
+    >
       <svg viewBox="0 0 100 100" className={styles.minimapSvg}>
         {/* Fondo abstracto (grilla sutil) */}
         <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
@@ -49,17 +60,15 @@ export default function Minimap() {
         {mapMarkers.map((marker) => {
           const pos = mapCoord(marker.x, marker.z);
           return (
-            <image
-              key={marker.id}
-              x={pos.x - 4}
-              y={pos.y - 4}
-              width="8"
-              height="8"
-              href="/icons/laboratorio-2.svg"
-              className={styles.poiMarker}
-              onMouseEnter={() => setHoveredObject({ id: marker.id, name: marker.name, description: 'Ubicado en el campus' })}
-              onMouseLeave={() => setHoveredObject(null)}
-            />
+            <g key={marker.id} transform={`translate(${pos.x}, ${pos.y})`}>
+              <g
+                className={styles.poiMarker}
+                onMouseEnter={() => setHoveredObject({ id: marker.id, name: marker.name, description: 'Ubicado en el campus' })}
+                onMouseLeave={() => setHoveredObject(null)}
+              >
+                <Laboratorio2Icon x="-4" y="-4" width="8" height="8" />
+              </g>
+            </g>
           );
         })}
 

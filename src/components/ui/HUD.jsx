@@ -4,6 +4,7 @@ import CharacterSwitcher from './CharacterSwitcher';
 import ClayButton from './ClayButton';
 import ClayIcon from './ClayIcon';
 import Minimap from './Minimap';
+import FullMapModal from './FullMapModal';
 import styles from './HUD.module.css';
 
 function FPS() {
@@ -101,6 +102,7 @@ export default function HUD() {
 
       {/* Minimapa Dinámico */}
       <Minimap />
+      <FullMapModal />
 
       {/* Selector de personaje */}
       <CharacterSwitcher />
