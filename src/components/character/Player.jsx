@@ -39,11 +39,16 @@ function Character() {
   const disableFollowCam = cameraMode === 'overview' || isIntro;
   const config = CHARACTERS[activeCharacter];
 
-  useFrame(() => {
+  const setPlayerRotation = useStore((s) => s.setPlayerRotation);
+
+  useFrame(({ camera }) => {
     // Sincronizar posición al store (siempre, para HUD y CameraRig)
     if (posRef.current) {
       posRef.current.getWorldPosition(vec.current);
       setPlayerPosition({ x: vec.current.x, y: vec.current.y, z: vec.current.z });
+      
+      // La cámara siempre apunta en la dirección de la visión del jugador, usamos su rotación Y
+      setPlayerRotation(camera.rotation.y);
     }
 
     // --- MECÁNICA DE VUELO ---

@@ -15,14 +15,40 @@ export default function SceneEnvironment() {
   const setHoveredObject = useStore((s) => s.setHoveredObject);
   const previousMesh = useRef(null);
 
-  // BVH en todas las geometrías del escenario + cleanup solo del bounds tree
+  // Bounds y Markers para el Minimapa
+  const setMapBounds = useStore((s) => s.setMapBounds);
+  const setMapMarkers = useStore((s) => s.setMapMarkers);
+
+  // BVH en todas las geometrías del escenario + bounds calculation
   useEffect(() => {
     const meshes = [];
+    const markers = [];
+
+    // Calcular la caja delimitadora real del campus
+    const box = new THREE.Box3().setFromObject(scene);
+    setMapBounds({
+      minX: box.min.x,
+      maxX: box.max.x,
+      minZ: box.min.z,
+      maxZ: box.max.z
+    });
 
     scene.traverse((child) => {
       if (child.isMesh && child.geometry) {
         child.geometry.computeBoundsTree();
         meshes.push(child);
+      }
+
+      // Extraer marcadores si están en objects.json
+      if (child.isMesh && child.name && objectsData[child.name]) {
+        const worldPos = new THREE.Vector3();
+        child.getWorldPosition(worldPos);
+        markers.push({
+          id: child.name,
+          name: objectsData[child.name].name,
+          x: worldPos.x,
+          z: worldPos.z
+        });
       }
 
       // Remover luces y cámaras del GLB para usar las nuestras
@@ -31,6 +57,8 @@ export default function SceneEnvironment() {
       }
     });
 
+    setMapMarkers(markers);
+
     return () => {
       meshes.forEach((mesh) => {
         if (mesh.geometry) {
@@ -38,7 +66,7 @@ export default function SceneEnvironment() {
         }
       });
     };
-  }, [scene]);
+  }, [scene, setMapBounds, setMapMarkers]);
 
   // Guarda el material original antes de modificarlo
   const saveOriginalEmissive = useCallback((mesh) => {

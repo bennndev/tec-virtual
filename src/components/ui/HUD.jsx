@@ -3,6 +3,7 @@ import useStore from '../../store/useStore';
 import CharacterSwitcher from './CharacterSwitcher';
 import ClayButton from './ClayButton';
 import ClayIcon from './ClayIcon';
+import Minimap from './Minimap';
 import styles from './HUD.module.css';
 
 function FPS() {
@@ -97,6 +98,9 @@ export default function HUD() {
           </div>
         </div>
       )}
+
+      {/* Minimapa Dinámico */}
+      <Minimap />
 
       {/* Selector de personaje */}
       <CharacterSwitcher />

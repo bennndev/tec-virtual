@@ -4,6 +4,17 @@ const useStore = create((set) => ({
   playerPosition: { x: 0, y: 0, z: 0 },
   setPlayerPosition: (pos) => set({ playerPosition: pos }),
 
+  // Dirección de la cámara del jugador (yaw) para rotar el ícono en el minimapa
+  playerRotation: 0,
+  setPlayerRotation: (rot) => set({ playerRotation: rot }),
+
+  // Minimap data
+  mapBounds: { minX: -100, maxX: 100, minZ: -100, maxZ: 100 }, // Fallback bounds
+  setMapBounds: (bounds) => set({ mapBounds: bounds }),
+  
+  mapMarkers: [],
+  setMapMarkers: (markers) => set({ mapMarkers: markers }),
+
   // Estado hover para tarjetas de informacion
   hoveredObject: null, // { id, name, description } | null
   setHoveredObject: (obj) => set({ hoveredObject: obj }),
