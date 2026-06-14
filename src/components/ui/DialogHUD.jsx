@@ -39,29 +39,23 @@ export default function DialogHUD() {
       </div>
 
       <div className={styles.actions}>
-        <div className={styles.buttons}>
-          {currentDialogueIndex > 0 && (
-            <ClayButton
-              variant="cyan-light"
-              onClick={previousDialogue}
-              className={styles.actionBtn}
-            >
-              Retroceder
-            </ClayButton>
-          )}
-          
+        {currentDialogueIndex > 0 && (
           <ClayButton
-            variant="cyan-solid"
-            onClick={nextDialogue}
+            variant="cyan-light"
+            onClick={previousDialogue}
             className={styles.actionBtn}
           >
-            {currentDialogueIndex === dialogueQueue.length - 1 ? 'Elegir Personaje' : 'Avanzar'}
+            Retroceder
           </ClayButton>
-        </div>
-
-        <div className={styles.continueHint}>
-          Flechas [← / →] o Click
-        </div>
+        )}
+        
+        <ClayButton
+          variant="cyan-solid"
+          onClick={nextDialogue}
+          className={styles.actionBtn}
+        >
+          {currentDialogueIndex === dialogueQueue.length - 1 ? 'Elegir Personaje' : 'Avanzar'}
+        </ClayButton>
       </div>
     </div>
   );

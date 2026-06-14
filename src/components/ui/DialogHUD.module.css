@@ -51,14 +51,9 @@
 
 .actions {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   margin-top: 16px;
-  gap: 16px;
-}
-
-.buttons {
-  display: flex;
   gap: 12px;
 }
 
@@ -68,28 +63,11 @@
   border-radius: 12px !important;
 }
 
-.continueHint {
-  font-family: 'N27', system-ui, sans-serif;
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: #0ea5e9;
-  animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-  0% { opacity: 0.4; }
-  50% { opacity: 1; }
-  100% { opacity: 0.4; }
-}
-
 @media (max-width: 640px) {
   .actions {
-    flex-direction: column-reverse;
-    align-items: stretch;
-    gap: 12px;
+    justify-content: stretch;
   }
-  
-  .continueHint {
-    text-align: center;
+  .actionBtn {
+    flex: 1;
   }
 }
