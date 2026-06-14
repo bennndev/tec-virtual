@@ -105,6 +105,14 @@ const useStore = create((set) => ({
       };
     }
   }),
+
+  previousDialogue: () => set((state) => {
+    // Retroceder si no estamos en el primer diálogo
+    if (state.currentDialogueIndex > 0) {
+      return { currentDialogueIndex: state.currentDialogueIndex - 1 };
+    }
+    return {};
+  }),
   
   endDialogue: () => set({ 
     isDialogueActive: false, 

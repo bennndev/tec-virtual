@@ -167,10 +167,25 @@ export default function Player() {
         return;
       }
 
-      if (e.code === 'KeyE') {
-        if (state.isDialogueActive) {
+      if (state.isDialogueActive) {
+        if (e.code === 'ArrowRight') {
+          e.preventDefault();
           state.nextDialogue();
-        } else if (state.interactableNPC) {
+          return;
+        }
+        if (e.code === 'ArrowLeft') {
+          e.preventDefault();
+          state.previousDialogue();
+          return;
+        }
+        if (e.code === 'KeyE') {
+          e.preventDefault();
+          state.nextDialogue();
+          return;
+        }
+      } else {
+        if (e.code === 'KeyE' && state.interactableNPC) {
+          e.preventDefault();
           if (state.interactableNPC.id === 'paquito-bot') {
             state.startDialogue([
               "¡Hola! Soy PaquitoBot 🤖",
