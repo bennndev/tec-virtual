@@ -6,23 +6,39 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #ffffff;
+  background-color: #ffffff;
+  background-image: 
+    linear-gradient(rgba(15, 23, 42, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.03) 1px, transparent 1px),
+    radial-gradient(circle at 15% 15%, rgba(14, 165, 233, 0.05) 0%, transparent 45%),
+    radial-gradient(circle at 85% 85%, rgba(14, 165, 233, 0.04) 0%, transparent 45%);
+  background-size: 40px 40px, 40px 40px, 100% 100%, 100% 100%;
+  background-position: center;
   font-family: 'N27', ui-monospace, sans-serif;
   color: #0f172a;
 }
 
 .logo {
-  max-width: 340px;
-  width: 80%;
+  max-width: 700px;
+  width: 100%;
   height: auto;
-  margin-bottom: 8px;
+}
+
+.bottomContent {
+  position: absolute;
+  top: 65%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
 }
 
 .slogan {
-  margin: 0 0 48px 0;
-  font-size: clamp(14px, 2vw, 18px);
-  color: #64748b;
-  font-weight: 500;
+  margin: 0;
+  font-size: clamp(20px, 3vw, 28px);
+  color: #000000;
+  font-weight: 700;
   letter-spacing: 0.5px;
 }
 
@@ -66,4 +82,72 @@
   font-size: 16px;
   letter-spacing: 1px;
   white-space: nowrap;
+}
+
+.wireframes {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.shape {
+  position: absolute;
+  color: #0ea5e9;
+  opacity: 0.35;
+  animation: float 12s ease-in-out infinite;
+}
+
+.shape1 { /* Cubo 1 */
+  top: 15%;
+  left: 8%;
+  width: 140px;
+  height: 140px;
+  transform: rotate(15deg);
+}
+
+.shape2 { /* Cubo 2 */
+  bottom: 20%;
+  right: 15%;
+  width: 100px;
+  height: 100px;
+  animation-duration: 15s;
+  animation-delay: -5s;
+}
+
+.shape3 { /* Piramide 1 */
+  top: 25%;
+  right: 12%;
+  width: 130px;
+  height: 130px;
+  transform: rotate(-10deg);
+  animation-duration: 10s;
+  animation-delay: -2s;
+}
+
+.shape4 { /* Octaedro */
+  bottom: 15%;
+  left: 15%;
+  width: 110px;
+  height: 110px;
+  transform: rotate(20deg);
+  animation-duration: 14s;
+  animation-delay: -7s;
+}
+
+.shape5 { /* Piramide 2 */
+  top: 50%;
+  left: 25%;
+  width: 80px;
+  height: 80px;
+  transform: rotate(-25deg);
+  animation-duration: 18s;
+  animation-delay: -10s;
+  opacity: 0.25;
+}
+
+@keyframes float {
+  0% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(5deg); }
+  100% { transform: translateY(0) rotate(0deg); }
 }

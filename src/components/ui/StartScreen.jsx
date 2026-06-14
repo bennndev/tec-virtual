@@ -79,34 +79,79 @@ export default function StartScreen({ onStart }) {
 
   return (
     <div className={styles.overlay}>
-      <img src={logoImg} alt="TecVirtual" className={styles.logo} />
-      <p className={styles.slogan}>Vive Tecsup a tu manera</p>
+      {/* Floating 3D Wireframes */}
+      <div className={styles.wireframes}>
+        {/* Cubo 1 */}
+        <svg className={`${styles.shape} ${styles.shape1}`} viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round">
+          <polygon points="50,10 85,30 85,70 50,90 15,70 15,30" />
+          <polyline points="50,50 50,10" />
+          <polyline points="50,50 85,70" />
+          <polyline points="50,50 15,70" />
+        </svg>
+        
+        {/* Cubo 2 */}
+        <svg className={`${styles.shape} ${styles.shape2}`} viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round">
+          <polygon points="50,10 85,30 85,70 50,90 15,70 15,30" />
+          <polyline points="50,50 50,10" />
+          <polyline points="50,50 85,70" />
+          <polyline points="50,50 15,70" />
+        </svg>
 
-      {!ready ? (
-        <div className={styles.loaderContainer}>
-          {/* Barra de progreso */}
-          <div className={styles.progressBarContainer}>
-            <div
-              className={styles.progressBarFill}
-              style={{ width: `${progress}%` }}
-            />
+        {/* Pirámide */}
+        <svg className={`${styles.shape} ${styles.shape3}`} viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round">
+          <polygon points="50,15 15,75 85,75" />
+          <polyline points="50,15 50,55" />
+          <polyline points="15,75 50,55 85,75" />
+        </svg>
+
+        {/* Octaedro / Rombo 3D */}
+        <svg className={`${styles.shape} ${styles.shape4}`} viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round">
+          <polygon points="50,10 85,50 50,90 15,50" />
+          <polyline points="15,50 50,35 85,50" />
+          <polyline points="15,50 50,65 85,50" />
+          <polyline points="50,10 50,35 50,90" />
+          <polyline points="50,10 50,65 50,90" />
+        </svg>
+
+        {/* Pirámide 2 */}
+        <svg className={`${styles.shape} ${styles.shape5}`} viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round">
+          <polygon points="50,15 15,75 85,75" />
+          <polyline points="50,15 50,55" />
+          <polyline points="15,75 50,55 85,75" />
+        </svg>
+      </div>
+
+      <img src={logoImg} alt="TecVirtual" className={styles.logo} />
+      
+      <div className={styles.bottomContent}>
+        <p className={styles.slogan}>Vive Tecsup a tu manera</p>
+
+        {!ready ? (
+          <div className={styles.loaderContainer}>
+            {/* Barra de progreso */}
+            <div className={styles.progressBarContainer}>
+              <div
+                className={styles.progressBarFill}
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+            <p className={styles.progressText}>
+              {progress}%
+            </p>
+            <p className={styles.loadingText}>
+              Cargando recursos...
+            </p>
           </div>
-          <p className={styles.progressText}>
-            {progress}%
-          </p>
-          <p className={styles.loadingText}>
-            Cargando recursos...
-          </p>
-        </div>
-      ) : (
-        <ClayButton
-          onClick={onStart}
-          variant="cyan-light"
-          className={styles.startBtn}
-        >
-          INICIAR
-        </ClayButton>
-      )}
+        ) : (
+          <ClayButton
+            onClick={onStart}
+            variant="cyan-light"
+            className={styles.startBtn}
+          >
+            INICIAR
+          </ClayButton>
+        )}
+      </div>
     </div>
   );
 }
