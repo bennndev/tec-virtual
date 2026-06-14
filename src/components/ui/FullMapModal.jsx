@@ -268,7 +268,7 @@ export default function FullMapModal() {
               return (
                 <g 
                   key={marker.id} 
-                  transform={`translate(${pos.x}, ${pos.y})`}
+                  transform={`translate(${pos.x}, ${pos.y}) scale(${1 / zoom})`}
                   onClick={() => startNavigation(marker)}
                 >
                   <g
@@ -283,7 +283,7 @@ export default function FullMapModal() {
             })}
 
             {/* Indicador del Jugador */}
-            <g transform={`translate(${playerPos2D.x}, ${playerPos2D.y}) rotate(${rotationDeg})`}>
+            <g transform={`translate(${playerPos2D.x}, ${playerPos2D.y}) rotate(${rotationDeg}) scale(${1 / zoom})`}>
               <polygon
                 points="0,-4 3,3 0,1 -3,3"
                 fill="#0ea5e9"

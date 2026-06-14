@@ -123,7 +123,7 @@ export default function Minimap() {
         {mapMarkers.map((marker) => {
           const pos = mapCoord(marker.x, marker.z);
           return (
-            <g key={marker.id} transform={`translate(${pos.x}, ${pos.y})`}>
+            <g key={marker.id} transform={`translate(${pos.x}, ${pos.y}) scale(${1 / zoom})`}>
               <g
                 className={styles.poiMarker}
                 onMouseEnter={() => setHoveredObject({ id: marker.id, name: marker.name, description: 'Ubicado en el campus' })}
@@ -136,7 +136,7 @@ export default function Minimap() {
         })}
 
         {/* Indicador del jugador (triángulo que apunta hacia su rotación) */}
-        <g transform={`translate(${playerPos2D.x}, ${playerPos2D.y}) rotate(${rotationDeg})`}>
+        <g transform={`translate(${playerPos2D.x}, ${playerPos2D.y}) rotate(${rotationDeg}) scale(${1 / zoom})`}>
           <polygon
             points="0,-6 4,4 0,2 -4,4"
             fill="#0ea5e9"
