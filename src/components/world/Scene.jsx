@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import { Physics } from '@react-three/rapier';
 import SceneEnvironment from './SceneEnvironment';
 import Player from '../character/Player';
+import NPCs from '../character/NPCs';
 import CameraRig from '../character/CameraRig';
 import PointerLock from '../controls/PointerLock';
 import BackgroundMusic from '../audio/BackgroundMusic';
@@ -31,6 +32,7 @@ export default function Scene() {
         <Physics gravity={[0, -9.81, 0]} timeStep="vary">
           <SceneEnvironment />
           <Player />
+          <NPCs />
         </Physics>
       </Suspense>
 

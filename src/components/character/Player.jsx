@@ -5,6 +5,7 @@ import { KeyboardControls, useKeyboardControls } from '@react-three/drei';
 import * as THREE from 'three';
 import useStore from '../../store/useStore';
 import CHARACTERS from '../../data/characterConfig';
+import npcsData from '../../data/npcs.json';
 import CharacterModel from './CharacterModel';
 
 const keyboardMap = [
@@ -141,14 +142,38 @@ function Character() {
 export default function Player() {
   const setFlyMode = useStore((s) => s.setFlyMode);
 
-  // Tecla F: toggle fly mode
+  // Teclas F y E
   useEffect(() => {
     const handler = (e) => {
+      const state = useStore.getState();
+
       if (e.code === 'KeyF') {
         e.preventDefault();
-        const next = !useStore.getState().flyMode;
+        const next = !state.flyMode;
         setFlyMode(next);
         console.log(`[Fly] Modo ${next ? 'vuelo' : 'normal'} — F para alternar`);
+        return;
+      }
+
+      if (e.code === 'KeyE') {
+        if (state.isDialogueActive) {
+          state.nextDialogue();
+        } else if (state.interactableNPC) {
+          if (state.interactableNPC.id === 'paquito-bot') {
+            state.startDialogue([
+              "¡Hola! Soy PaquitoBot 🤖",
+              "Te acompañaré durante esta experiencia virtual por Tecsup.",
+              "Hoy conocerás una de nuestras carreras tecnológicas de una manera diferente.",
+              "Pero antes necesito ayudarte a crear tu identidad virtual.",
+              "Selecciona el personaje que te representará durante esta visita."
+            ]);
+          } else {
+            state.startDialogue([
+              "¡Hola! Soy " + state.interactableNPC.name + ".",
+              state.interactableNPC.description
+            ]);
+          }
+        }
       }
     };
     window.addEventListener('keydown', handler);

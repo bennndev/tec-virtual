@@ -74,6 +74,44 @@ const useStore = create((set) => ({
   }),
 
   setArrivalTargetName: (name) => set({ arrivalTargetName: name }),
+
+  // --- DIÁLOGOS E INTERACCIÓN ---
+  interactableNPC: null,
+  setInteractableNPC: (npc) => set({ interactableNPC: npc }),
+
+  dialogueQueue: [],
+  currentDialogueIndex: 0,
+  isDialogueActive: false,
+  
+  startDialogue: (messages) => set({ 
+    dialogueQueue: messages, 
+    currentDialogueIndex: 0, 
+    isDialogueActive: true,
+    controlsDisabled: true // Bloquea al jugador mientras habla
+  }),
+  
+  nextDialogue: () => set((state) => {
+    // Avanzar si hay más mensajes
+    if (state.currentDialogueIndex < state.dialogueQueue.length - 1) {
+      return { currentDialogueIndex: state.currentDialogueIndex + 1 };
+    } else {
+      // Fin del diálogo -> Disparar Escena 03 (Selector de avatar)
+      return { 
+        isDialogueActive: false, 
+        dialogueQueue: [], 
+        currentDialogueIndex: 0,
+        isSelectorOpen: true, // Abre el selector automáticamente
+        // No rehabilitamos controlsDisabled porque isSelectorOpen ya requiere controles bloqueados
+      };
+    }
+  }),
+  
+  endDialogue: () => set({ 
+    isDialogueActive: false, 
+    dialogueQueue: [], 
+    currentDialogueIndex: 0,
+    controlsDisabled: false
+  }),
 }));
 
 export default useStore;

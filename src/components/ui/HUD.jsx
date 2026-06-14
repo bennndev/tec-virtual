@@ -6,6 +6,8 @@ import ClayIcon from './ClayIcon';
 import Minimap from './Minimap';
 import FullMapModal from './FullMapModal';
 import NavigationHUD from './NavigationHUD';
+import DialogHUD from './DialogHUD';
+import InteractionPrompt from './InteractionPrompt';
 import styles from './HUD.module.css';
 
 function FPS() {
@@ -126,6 +128,10 @@ export default function HUD() {
       >
         {cameraMode === 'overview' ? 'Tercera persona (M)' : 'Vista general (M)'}
       </ClayButton>
+
+      {/* Diálogos e Interacción */}
+      <InteractionPrompt />
+      <DialogHUD />
     </div>
   );
 }

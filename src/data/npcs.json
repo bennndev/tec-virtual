@@ -1,0 +1,18 @@
+[
+  {
+    "id": "paquito-bot",
+    "name": "Paquito Bot",
+    "modelUrl": "/models/npcs/paquito-bot.glb",
+    "position": [
+      62.12,
+      1.75,
+      -100.97
+    ],
+    "rotation": [
+      0,
+      0.01,
+      0
+    ],
+    "description": "El bot asistente oficial de Tecsup. Listo para guiarte en el campus."
+  }
+]
