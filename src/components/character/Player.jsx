@@ -40,6 +40,8 @@ function Character() {
   const config = CHARACTERS[activeCharacter];
 
   const setPlayerRotation = useStore((s) => s.setPlayerRotation);
+  const quat = useRef(new THREE.Quaternion());
+  const euler = useRef(new THREE.Euler(0, 0, 0, 'YXZ'));
 
   useFrame(({ camera }) => {
     // Sincronizar posición al store (siempre, para HUD y CameraRig)
@@ -47,8 +49,13 @@ function Character() {
       posRef.current.getWorldPosition(vec.current);
       setPlayerPosition({ x: vec.current.x, y: vec.current.y, z: vec.current.z });
       
-      // La cámara siempre apunta en la dirección de la visión del jugador, usamos su rotación Y
-      setPlayerRotation(camera.rotation.y);
+      // Obtener la rotación física real del modelo (orientación de WASD)
+      posRef.current.getWorldQuaternion(quat.current);
+      euler.current.setFromQuaternion(quat.current);
+      
+      // Ajuste de offset: el modelo en ecctrl suele tener la cara apuntando a +Z local,
+      // y Math.PI lo alinea correctamente con la flecha del minimapa.
+      setPlayerRotation(euler.current.y + Math.PI);
     }
 
     // --- MECÁNICA DE VUELO ---
