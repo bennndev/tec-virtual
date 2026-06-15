@@ -82,13 +82,15 @@ const useStore = create((set) => ({
   dialogueQueue: [],
   currentDialogueIndex: 0,
   isDialogueActive: false,
+  activeDialogueNPC: null,
   
-  startDialogue: (messages) => set({ 
+  startDialogue: (messages, npc = null) => set((state) => ({ 
     dialogueQueue: messages, 
     currentDialogueIndex: 0, 
     isDialogueActive: true,
+    activeDialogueNPC: npc || state.interactableNPC,
     controlsDisabled: true // Bloquea al jugador mientras habla
-  }),
+  })),
   
   nextDialogue: () => set((state) => {
     // Avanzar si hay más mensajes
@@ -100,6 +102,7 @@ const useStore = create((set) => ({
         isDialogueActive: false, 
         dialogueQueue: [], 
         currentDialogueIndex: 0,
+        activeDialogueNPC: null,
         isSelectorOpen: true, // Abre el selector automáticamente
         // No rehabilitamos controlsDisabled porque isSelectorOpen ya requiere controles bloqueados
       };
@@ -118,6 +121,7 @@ const useStore = create((set) => ({
     isDialogueActive: false, 
     dialogueQueue: [], 
     currentDialogueIndex: 0,
+    activeDialogueNPC: null,
     controlsDisabled: false
   }),
 }));

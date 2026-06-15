@@ -9,9 +9,9 @@
       -100.97
     ],
     "rotation": [
-      0,
-      0.01,
-      0
+      0.1,
+      0.08,
+      0.01
     ],
     "description": "El bot asistente oficial de Tecsup. Listo para guiarte en el campus."
   }

@@ -217,12 +217,12 @@ export default function Player() {
               "Hoy conocerás una de nuestras carreras tecnológicas de una manera diferente.",
               "Pero antes necesito ayudarte a crear tu identidad virtual.",
               "Selecciona el personaje que te representará durante esta visita."
-            ]);
+            ], state.interactableNPC);
           } else {
             state.startDialogue([
               "¡Hola! Soy " + state.interactableNPC.name + ".",
               state.interactableNPC.description
-            ]);
+            ], state.interactableNPC);
           }
         }
       }

@@ -8,7 +8,7 @@ export default function DialogHUD() {
   const isDialogueActive = useStore((s) => s.isDialogueActive);
   const dialogueQueue = useStore((s) => s.dialogueQueue);
   const currentDialogueIndex = useStore((s) => s.currentDialogueIndex);
-  const interactableNPC = useStore((s) => s.interactableNPC);
+  const activeDialogueNPC = useStore((s) => s.activeDialogueNPC);
   const nextDialogue = useStore((s) => s.nextDialogue);
   const previousDialogue = useStore((s) => s.previousDialogue);
 
@@ -31,7 +31,7 @@ export default function DialogHUD() {
     <div className={styles.overlay} ref={containerRef}>
       <div className={styles.body}>
         <h3 className={styles.speakerName}>
-          {interactableNPC ? interactableNPC.name : 'Sistema'}
+          {activeDialogueNPC ? activeDialogueNPC.name : 'Sistema'}
         </h3>
         <p className={styles.dialogueText}>
           {dialogueQueue[currentDialogueIndex]}
