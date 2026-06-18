@@ -13,6 +13,7 @@ import styles from './CharacterSelector.module.css';
 function PreviewModel({ modelUrl }) {
   const [scene, setScene] = useState(null);
   const groupRef = useRef();
+  const loadedSceneRef = useRef(null);
 
   // Cargar el GLB independientemente, sin usar el caché de useGLTF
   // (que ecctrl modifica in-game con animaciones y transformaciones)
@@ -33,13 +34,33 @@ function PreviewModel({ modelUrl }) {
         gltf.scene.rotation.set(0, 0, 0);
         gltf.scene.scale.set(1, 1, 1);
         gltf.scene.updateMatrix();
+        loadedSceneRef.current = gltf.scene;
         setScene(gltf.scene);
       },
       undefined,
       () => { /* ignore load errors silently */ },
     );
 
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+      if (loadedSceneRef.current) {
+        // Liberar recursos de WebGL para evitar memory leaks
+        loadedSceneRef.current.traverse((child) => {
+          if (child.isMesh) {
+            if (child.geometry) {
+              child.geometry.dispose();
+            }
+            if (child.material) {
+              if (Array.isArray(child.material)) {
+                child.material.forEach((mat) => mat.dispose());
+              } else {
+                child.material.dispose();
+              }
+            }
+          }
+        });
+      }
+    };
   }, [modelUrl]);
 
   // Calcular el centro del modelo mirando SOLO mallas visibles
