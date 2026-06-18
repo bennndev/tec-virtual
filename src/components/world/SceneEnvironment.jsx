@@ -47,6 +47,7 @@ export default function SceneEnvironment() {
           id: child.name,
           name: objectsData[child.name].name,
           x: worldPos.x,
+          y: worldPos.y,
           z: worldPos.z
         });
       }

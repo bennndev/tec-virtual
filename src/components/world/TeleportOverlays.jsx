@@ -1,58 +1,56 @@
 import { useState } from 'react';
 import { Html } from '@react-three/drei';
 import useStore from '../../store/useStore';
-import TELEPORT_ZONES from '../../data/teleportZones';
 import styles from './TeleportOverlays.module.css';
 
 export default function TeleportOverlays() {
   const cameraMode = useStore((s) => s.cameraMode);
-  const setCameraMode = useStore((s) => s.setCameraMode);
   const setTeleportTarget = useStore((s) => s.setTeleportTarget);
+  const mapMarkers = useStore((s) => s.mapMarkers);
 
   const [hoveredZone, setHoveredZone] = useState(null);
 
   if (cameraMode !== 'overview') return null;
 
-  const handleTeleport = (zone) => {
-    // Establecer el destino de teletransporte. El RigidBody en Player.jsx
-    // detectará esto, se moverá y cambiará el modo de cámara automáticamente.
-    setTeleportTarget(zone.position);
+  const handleTeleport = (marker) => {
+    // Para evitar que el jugador spawnee atrapado dentro del colisionador físico del stand,
+    // lo teletransportamos ligeramente desplazado en el eje Z (Z + 2.5) y un poco elevado (Y + 1.0)
+    // para que caiga suavemente al suelo por gravedad.
+    const targetPos = [marker.x, marker.y + 1.0, marker.z + 2.5];
+    setTeleportTarget(targetPos);
   };
 
   return (
     <group>
-      {TELEPORT_ZONES.map((zone) => {
-        const isHovered = hoveredZone === zone.id;
+      {mapMarkers.map((marker) => {
+        const isHovered = hoveredZone === marker.id;
+        const radius = 3.5; // Radio adecuado para resaltar los stands reales
 
         return (
-          <group key={zone.id}>
+          <group key={marker.id}>
             {/* 1. Indicador flotante 3D (Pop-up HTML overlay) */}
             <Html
-              position={[
-                zone.position[0] + zone.labelOffset[0],
-                zone.position[1] + zone.labelOffset[1],
-                zone.position[2] + zone.labelOffset[2]
-              ]}
+              position={[marker.x, marker.y + 4.5, marker.z]} // Elevado 4.5 unidades sobre el stand para visibilidad
               center
             >
               <div
                 className={`${styles.badge} ${isHovered ? styles.badgeHovered : ''}`}
-                onMouseEnter={() => setHoveredZone(zone.id)}
+                onMouseEnter={() => setHoveredZone(marker.id)}
                 onMouseLeave={() => setHoveredZone(null)}
-                onClick={() => handleTeleport(zone)}
+                onClick={() => handleTeleport(marker)}
               >
-                <span className={styles.badgeName}>{zone.name}</span>
+                <span className={styles.badgeName}>{marker.name}</span>
                 <div className={styles.alertBadge}>!</div>
               </div>
             </Html>
 
-            {/* 2. Anillo de resaltado en el suelo (Cánovas de Teletransporte) */}
+            {/* 2. Anillo de resaltado en el suelo (Área de Teletransporte) */}
             <mesh
-              position={[zone.position[0], zone.position[1] - 1.5, zone.position[2]]}
+              position={[marker.x, marker.y - 1.3, marker.z]} // Bajado 1.3 unidades para asentarlo sobre el suelo del stand
               rotation={[-Math.PI / 2, 0, 0]}
               onPointerOver={(e) => {
                 e.stopPropagation();
-                setHoveredZone(zone.id);
+                setHoveredZone(marker.id);
                 document.body.style.cursor = 'pointer';
               }}
               onPointerOut={(e) => {
@@ -61,11 +59,11 @@ export default function TeleportOverlays() {
               }}
               onClick={(e) => {
                 e.stopPropagation();
-                handleTeleport(zone);
+                handleTeleport(marker);
                 document.body.style.cursor = 'auto';
               }}
             >
-              <ringGeometry args={[zone.radius - 0.4, zone.radius, 64]} />
+              <ringGeometry args={[radius - 0.4, radius, 64]} />
               <meshBasicMaterial
                 color={isHovered ? '#00f3ff' : '#0ea5e9'}
                 transparent
@@ -76,10 +74,10 @@ export default function TeleportOverlays() {
 
             {/* Relleno translúcido del disco de teletransporte */}
             <mesh
-              position={[zone.position[0], zone.position[1] - 1.51, zone.position[2]]}
+              position={[marker.x, marker.y - 1.31, marker.z]}
               rotation={[-Math.PI / 2, 0, 0]}
             >
-              <circleGeometry args={[zone.radius - 0.4, 64]} />
+              <circleGeometry args={[radius - 0.4, 64]} />
               <meshBasicMaterial
                 color={isHovered ? '#00f3ff' : '#0ea5e9'}
                 transparent

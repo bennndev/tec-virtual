@@ -186,11 +186,12 @@ export default function CameraRig() {
       });
     } else {
       // → ThirdPerson
+      const currentPos = useStore.getState().playerPosition;
       const rot = useStore.getState().playerRotation;
       const behind = new THREE.Vector3(
-        pos.x - Math.sin(rot) * 5,
-        pos.y + 1.5,
-        pos.z - Math.cos(rot) * 5,
+        currentPos.x - Math.sin(rot) * 5,
+        currentPos.y + 1.5,
+        currentPos.z - Math.cos(rot) * 5,
       );
 
       const mapBounds = useStore.getState().mapBounds;
@@ -199,7 +200,7 @@ export default function CameraRig() {
       const centerZ = (minZ + maxZ) / 2;
 
       const startLook = new THREE.Vector3(centerX, 2, centerZ);
-      const endLook = new THREE.Vector3(pos.x, 1, pos.z);
+      const endLook = new THREE.Vector3(currentPos.x, 1, currentPos.z);
       const currentLook = new THREE.Vector3();
 
       animateCamera(behind, (progress) => {

@@ -54,17 +54,18 @@ function Character() {
   useFrame(() => {
     // Estabilizar el RigidBody al inicio para dar tiempo a cargar el trimesh físico del campus
     if (spawnFrames.current < 60) {
-      spawnFrames.current++;
       if (ecctrlRef.current?.group) {
         const rb = ecctrlRef.current.group;
         rb.setTranslation({ x: CHARACTER_INIT_POS[0], y: CHARACTER_INIT_POS[1], z: CHARACTER_INIT_POS[2] }, true);
         rb.setLinvel({ x: 0, y: 0, z: 0 }, true);
+        spawnFrames.current++;
       }
       return;
     }
 
     // Interceptar Teletransporte
     const teleportTarget = useStore.getState().teleportTarget;
+    let skippedWorldPos = false;
     if (teleportTarget && ecctrlRef.current?.group) {
       const rb = ecctrlRef.current.group;
       rb.setTranslation({ x: teleportTarget[0], y: teleportTarget[1], z: teleportTarget[2] }, true);
@@ -73,8 +74,10 @@ function Character() {
       if (posRef.current) {
         vec.current.set(teleportTarget[0], teleportTarget[1], teleportTarget[2]);
       }
+      setPlayerPosition({ x: teleportTarget[0], y: teleportTarget[1], z: teleportTarget[2] });
       useStore.setState({ teleportTarget: null });
       useStore.getState().setCameraMode('thirdPerson');
+      skippedWorldPos = true;
     }
 
     // Congelar físicas si los controles están deshabilitados (diálogos o modales activos)
@@ -89,7 +92,9 @@ function Character() {
 
     // Sincronizar posición al store (siempre, para HUD y CameraRig)
     if (posRef.current) {
-      posRef.current.getWorldPosition(vec.current);
+      if (!skippedWorldPos) {
+        posRef.current.getWorldPosition(vec.current);
+      }
 
       // --- RESPAWNER DE SEGURIDAD (Red contra caídas al vacío) ---
       if (vec.current.y < -15) {
@@ -104,7 +109,9 @@ function Character() {
         }
       }
       
-      setPlayerPosition({ x: vec.current.x, y: vec.current.y, z: vec.current.z });
+      if (!skippedWorldPos) {
+        setPlayerPosition({ x: vec.current.x, y: vec.current.y, z: vec.current.z });
+      }
       
       // Obtener la rotación física real del modelo (orientación de WASD)
       posRef.current.getWorldQuaternion(quat.current);
