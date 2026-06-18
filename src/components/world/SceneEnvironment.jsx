@@ -44,14 +44,13 @@ export default function SceneEnvironment() {
         const worldPos = new THREE.Vector3();
         child.getWorldPosition(worldPos);
         const objConf = objectsData[child.name];
-        const offset = objConf.teleportOffset || [0, 2.5];
         markers.push({
           id: child.name,
           name: objConf.name,
           x: worldPos.x,
           y: worldPos.y,
           z: worldPos.z,
-          teleportPos: [worldPos.x + offset[0], worldPos.y + 1.0, worldPos.z + offset[1]]
+          teleportPos: objConf.teleportPos || [worldPos.x, worldPos.y + 1.0, worldPos.z + 2.5]
         });
       }
 
