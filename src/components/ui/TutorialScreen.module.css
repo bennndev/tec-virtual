@@ -5,46 +5,19 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+  background-color: #ffffff;
+  background-image: 
+    linear-gradient(rgba(15, 23, 42, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.03) 1px, transparent 1px),
+    radial-gradient(circle at 15% 15%, rgba(14, 165, 233, 0.05) 0%, transparent 45%),
+    radial-gradient(circle at 85% 85%, rgba(14, 165, 233, 0.04) 0%, transparent 45%);
+  background-size: 40px 40px, 40px 40px, 100% 100%, 100% 100%;
+  background-position: center;
   overflow: hidden;
   z-index: 15;
   font-family: 'N27', ui-monospace, sans-serif;
   user-select: none;
-}
-
-/* Luces ambientales de fondo */
-.glowBlob1, .glowBlob2 {
-  position: absolute;
-  width: 500px;
-  height: 500px;
-  border-radius: 50%;
-  filter: blur(120px);
-  opacity: 0.15;
-  pointer-events: none;
-}
-
-.glowBlob1 {
-  top: -10%;
-  left: -10%;
-  background: #0ea5e9;
-  animation: floatBlob1 20s infinite alternate;
-}
-
-.glowBlob2 {
-  bottom: -10%;
-  right: -10%;
-  background: #3b82f6;
-  animation: floatBlob2 20s infinite alternate;
-}
-
-@keyframes floatBlob1 {
-  0% { transform: translate(0, 0) scale(1); }
-  100% { transform: translate(80px, 50px) scale(1.2); }
-}
-
-@keyframes floatBlob2 {
-  0% { transform: translate(0, 0) scale(1.1); }
-  100% { transform: translate(-80px, -50px) scale(0.9); }
+  color: #0f172a;
 }
 
 /* Área central de PaquitoBot */
@@ -63,7 +36,7 @@
   width: 280px;
   height: 280px;
   object-fit: contain;
-  filter: drop-shadow(0 20px 30px rgba(14, 165, 233, 0.25));
+  filter: drop-shadow(0 20px 30px rgba(14, 165, 233, 0.2));
   animation: floatRobot 4s ease-in-out infinite;
   transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -71,7 +44,7 @@
 .robotShadow {
   width: 140px;
   height: 16px;
-  background: rgba(0, 0, 0, 0.35);
+  background: rgba(15, 23, 42, 0.12);
   border-radius: 50%;
   filter: blur(6px);
   margin-top: 24px;
@@ -111,9 +84,10 @@
 }
 
 .controlCard {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(15, 23, 42, 0.08);
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   padding: 12px 20px;
   border-radius: 16px;
   display: flex;
@@ -121,41 +95,55 @@
   align-items: center;
   gap: 6px;
   min-width: 120px;
-  transition: transform 0.2s, background 0.2s;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.2s, border-color 0.2s;
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.04);
 }
 
 .controlCard:hover {
   transform: translateY(-4px);
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.95);
   border-color: rgba(14, 165, 233, 0.3);
 }
 
 .controlCardActive {
   border-color: #0ea5e9 !important;
-  background: rgba(14, 165, 233, 0.15) !important;
+  background: rgba(14, 165, 233, 0.08) !important;
   transform: translateY(-6px) scale(1.05);
-  box-shadow: 0 0 25px rgba(14, 165, 233, 0.4);
+  box-shadow: 
+    0 10px 25px rgba(14, 165, 233, 0.18),
+    0 0 0 2px rgba(14, 165, 233, 0.1);
 }
 
 .keyLabel {
-  background: rgba(255, 255, 255, 0.15);
-  border-bottom: 3px solid rgba(255, 255, 255, 0.3);
+  background: rgba(15, 23, 42, 0.05);
+  border-bottom: 3px solid rgba(15, 23, 42, 0.12);
   padding: 4px 10px;
   border-radius: 8px;
   font-size: 14px;
   font-weight: 700;
-  color: #f8fafc;
+  color: #0f172a;
   font-family: inherit;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  transition: all 0.2s ease;
+}
+
+.controlCardActive .keyLabel {
+  background: #0ea5e9;
+  color: #ffffff;
+  border-bottom-color: #0284c7;
 }
 
 .keyText {
   font-size: 12px;
-  color: #94a3b8;
+  color: #64748b;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  transition: color 0.2s ease;
+}
+
+.controlCardActive .keyText {
+  color: #0284c7;
 }
 
 @media (max-width: 768px) {

@@ -124,6 +124,13 @@ const useStore = create((set) => ({
     }
     return {};
   }),
+
+  skipDialogue: () => set((state) => {
+    if (state.dialogueQueue.length > 0) {
+      return { currentDialogueIndex: state.dialogueQueue.length - 1 };
+    }
+    return {};
+  }),
   
   endDialogue: () => set({ 
     isDialogueActive: false, 

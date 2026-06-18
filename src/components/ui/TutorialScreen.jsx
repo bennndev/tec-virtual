@@ -6,11 +6,11 @@ import styles from './TutorialScreen.module.css';
 const TUTORIAL_DIALOGUES = [
   "¡Hola! Soy PaquitoBot, tu asistente virtual. ¡Te doy la bienvenida a TecVirtual!",
   "Para moverte por el campus, usa las teclas W, A, S, D o las flechas de dirección de tu teclado.",
-  "Para esquivar obstáculos o subir escalones altos, podés saltar presionando la barra ESPACIADORA.",
-  "Si tenés prisa, mantené presionada la tecla SHIFT mientras te movés para correr velozmente.",
-  "Presionando la tecla M vas a poder abrir y cerrar el mapa interactivo del campus para guiarte.",
-  "Por último, si querés conversar con algún compañero o profesor, acercate y presiona la tecla E.",
-  "¡Excelente! Eso es todo. Antes de ingresar al campus 3D, por favor seleccioná tu personaje."
+  "Para esquivar obstáculos o subir escalones altos, puedes saltar presionando la barra ESPACIADORA.",
+  "Si tienes prisa, mantén presionada la tecla SHIFT mientras te mueves para correr rápidamente.",
+  "Al presionar la tecla M podrás abrir y cerrar el mapa interactivo del campus para guiarte.",
+  "Por último, si quieres conversar con algún compañero o profesor, acércate y presiona la tecla E.",
+  "¡Excelente! Eso es todo. Antes de ingresar al campus 3D, por favor selecciona tu personaje."
 ];
 
 // Mapea el índice del diálogo al SVG correspondiente de PaquitoBot
@@ -42,10 +42,6 @@ export default function TutorialScreen() {
 
   return (
     <div className={styles.tutorialContainer}>
-      {/* Blobs decorativos de fondo */}
-      <div className={styles.glowBlob1} />
-      <div className={styles.glowBlob2} />
-
       {/* Atajos de teclado visuales en la parte superior */}
       <div className={styles.controlsPreview}>
         <div className={getHighlightClass(1)}>

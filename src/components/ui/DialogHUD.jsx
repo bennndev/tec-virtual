@@ -11,6 +11,8 @@ export default function DialogHUD() {
   const activeDialogueNPC = useStore((s) => s.activeDialogueNPC);
   const nextDialogue = useStore((s) => s.nextDialogue);
   const previousDialogue = useStore((s) => s.previousDialogue);
+  const skipDialogue = useStore((s) => s.skipDialogue);
+  const gameState = useStore((s) => s.gameState);
 
   const containerRef = useRef(null);
 
@@ -39,23 +41,39 @@ export default function DialogHUD() {
       </div>
 
       <div className={styles.actions}>
-        {currentDialogueIndex > 0 && (
+        {currentDialogueIndex < dialogueQueue.length - 1 ? (
           <ClayButton
             variant="cyan-light"
-            onClick={previousDialogue}
+            onClick={skipDialogue}
+            className={styles.skipBtn}
+          >
+            Saltar
+          </ClayButton>
+        ) : (
+          <div />
+        )}
+
+        <div className={styles.rightActions}>
+          {currentDialogueIndex > 0 && (
+            <ClayButton
+              variant="cyan-light"
+              onClick={previousDialogue}
+              className={styles.actionBtn}
+            >
+              Retroceder
+            </ClayButton>
+          )}
+          
+          <ClayButton
+            variant="cyan-solid"
+            onClick={nextDialogue}
             className={styles.actionBtn}
           >
-            Retroceder
+            {currentDialogueIndex === dialogueQueue.length - 1
+              ? (gameState === 'tutorial' ? 'Elegir Personaje' : 'Finalizar')
+              : 'Avanzar'}
           </ClayButton>
-        )}
-        
-        <ClayButton
-          variant="cyan-solid"
-          onClick={nextDialogue}
-          className={styles.actionBtn}
-        >
-          {currentDialogueIndex === dialogueQueue.length - 1 ? 'Elegir Personaje' : 'Avanzar'}
-        </ClayButton>
+        </div>
       </div>
     </div>
   );
