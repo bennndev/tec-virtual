@@ -95,6 +95,7 @@ export default function CharacterSelector() {
   const previewCharacter = useStore((s) => s.previewCharacter);
   const setPreviewCharacter = useStore((s) => s.setPreviewCharacter);
   const setActiveCharacter = useStore((s) => s.setActiveCharacter);
+  const gameState = useStore((s) => s.gameState);
 
   const characterIds = Object.keys(CHARACTERS);
 
@@ -113,7 +114,11 @@ export default function CharacterSelector() {
   const selectAndClose = useCallback(() => {
     setActiveCharacter(previewCharacter);
     setSelectorOpen(false);
-  }, [previewCharacter, setActiveCharacter, setSelectorOpen]);
+    if (gameState === 'character_select') {
+      useStore.getState().setGameState('game');
+      useStore.getState().setIntro();
+    }
+  }, [previewCharacter, setActiveCharacter, setSelectorOpen, gameState]);
 
   const close = useCallback(() => {
     setSelectorOpen(false);
@@ -139,14 +144,16 @@ export default function CharacterSelector() {
           break;
         case 'Escape':
           e.preventDefault();
-          close();
+          if (gameState === 'game') {
+            close();
+          }
           break;
       }
     };
 
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [isSelectorOpen, goPrev, goNext, selectAndClose, close]);
+  }, [isSelectorOpen, goPrev, goNext, selectAndClose, close, gameState]);
 
   if (!isSelectorOpen) return null;
 
@@ -154,9 +161,11 @@ export default function CharacterSelector() {
   const charInfo = CHAR_DATA[currentIdx] || CHAR_DATA[0];
   const charConfig = CHARACTERS[previewCharacter];
 
+  const isFullscreenView = gameState === 'character_select';
+
   return (
-    <div className={styles.overlay}>
-      <div className={styles.modal}>
+    <div className={`${styles.overlay} ${isFullscreenView ? styles.fullscreenOverlay : ''}`.trim()}>
+      <div className={`${styles.modal} ${isFullscreenView ? styles.fullscreenLayout : ''}`.trim()}>
         {/* Preview 3D — responsive */}
         <div className={styles.previewContainer}>
           <PreviewCanvas modelUrl={charConfig.modelUrl} />
@@ -206,13 +215,15 @@ export default function CharacterSelector() {
             >
               Seleccionar
             </ClayButton>
-            <ClayButton
-              onClick={close}
-              variant="cyan-light"
-              className={styles.actionBtn}
-            >
-              Cancelar
-            </ClayButton>
+            {gameState === 'game' && (
+              <ClayButton
+                onClick={close}
+                variant="cyan-light"
+                className={styles.actionBtn}
+              >
+                Cancelar
+              </ClayButton>
+            )}
           </div>
         </div>
       </div>

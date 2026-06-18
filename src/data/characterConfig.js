@@ -12,7 +12,7 @@ const CHARACTERS = {
     id: 'alejandro',
     name: 'Alejandro',
     modelUrl: '/models/Alejandro.glb',
-    offsetY: -0.2,
+    offsetY: -0.6,
     animationSet: {
       idle: 'Armature|Idle',
       walk: 'Armature|Walk',
@@ -28,7 +28,7 @@ const CHARACTERS = {
     id: 'felipe',
     name: 'Felipe',
     modelUrl: '/models/Felipe.glb',
-    offsetY: -0.2,
+    offsetY: -0.6,
     animationSet: {
       idle: 'Armature|Idle',
       walk: 'Armature|Walk',
@@ -44,7 +44,7 @@ const CHARACTERS = {
     id: 'isabella',
     name: 'Isabella',
     modelUrl: '/models/Isabella.glb',
-    offsetY: -0.2,
+    offsetY: -0.6,
     animationSet: {
       idle: 'Armature|Idle',
       walk: 'Armature|Walk',
@@ -60,7 +60,7 @@ const CHARACTERS = {
     id: 'sofia',
     name: 'Sofía',
     modelUrl: '/models/Sofia.glb',
-    offsetY: -0.2,
+    offsetY: -0.6,
     animationSet: {
       idle: 'Armature|Idle',
       walk: 'Armature|Walk',

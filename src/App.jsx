@@ -1,49 +1,57 @@
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 import { Canvas } from '@react-three/fiber';
 import Scene from './components/world/Scene';
 import HUD from './components/ui/HUD';
 import InfoCard from './components/ui/InfoCard';
 import CharacterSelector from './components/ui/CharacterSelector';
 import StartScreen from './components/ui/StartScreen';
+import TutorialScreen from './components/ui/TutorialScreen';
 import TouchControls from './components/ui/TouchControls';
 import useStore from './store/useStore';
 
 function App() {
-  const [started, setStarted] = useState(false);
+  const gameState = useStore((s) => s.gameState);
+  const setGameState = useStore((s) => s.setGameState);
+  const isSelectorOpen = useStore((s) => s.isSelectorOpen);
 
   const handleStart = useCallback(() => {
-    setStarted(true);
-    // Disparar la animación de intro de cámara
-    useStore.getState().setIntro();
-  }, []);
+    // Al hacer click en INICIAR, transicionamos a la fase de tutorial con PaquitoBot
+    setGameState('tutorial');
+  }, [setGameState]);
 
   return (
     <div style={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden' }}>
-      {/* Canvas siempre montado → WebGL/Rapier/shaders se inicializan en background */}
-      <Canvas
-        shadows
-        camera={{ fov: 60, near: 0.1, far: 1000, position: [0, 2, -5] }}
-        dpr={[1, 2]}
-        gl={{ antialias: true }}
-        style={{ background: '#7ec8e3' }}
-      >
-        <Scene />
-      </Canvas>
-
-      {/* Controles táctiles — joystick + botones, fuera del Canvas */}
-      <TouchControls />
-
-      {/* Overlays — solo visibles después de iniciar */}
-      {started && (
+      {/* Fase 4: Experiencia 3D (Se monta únicamente al entrar al juego) */}
+      {gameState === 'game' && (
         <>
+          <Canvas
+            shadows
+            camera={{ fov: 60, near: 0.1, far: 1000, position: [0, 2, -5] }}
+            dpr={[1, 2]}
+            gl={{ antialias: true }}
+            style={{ background: '#7ec8e3' }}
+          >
+            <Scene />
+          </Canvas>
+
+          {/* Controles y overlays in-game */}
+          <TouchControls />
           <HUD />
           <InfoCard />
-          <CharacterSelector />
         </>
       )}
 
-      {/* Pantalla de inicio — cubre todo hasta que el usuario inicie */}
-      {!started && <StartScreen onStart={handleStart} />}
+      {/* Fase 1: Pantalla de inicio y carga */}
+      {gameState === 'loading' && <StartScreen onStart={handleStart} />}
+
+      {/* Fase 2: Tutorial de PaquitoBot (2D completo) */}
+      {gameState === 'tutorial' && <TutorialScreen />}
+
+      {/* Fase 3: Selección de personaje (Vista completa 2D con Canvas 3D aislado de preview) */}
+      {/* También se permite abrirlo en in-game desde el HUD mediante isSelectorOpen */}
+      {(gameState === 'character_select' || isSelectorOpen) && (
+        <CharacterSelector />
+      )}
     </div>
   );
 }

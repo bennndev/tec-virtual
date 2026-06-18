@@ -51,6 +51,10 @@ const useStore = create((set) => ({
   setIntro: () => set({ isIntro: true }),
   setEndIntro: () => set({ isIntro: false }),
 
+  // Flujo del juego
+  gameState: 'loading', // 'loading' | 'tutorial' | 'character_select' | 'game'
+  setGameState: (state) => set({ gameState: state }),
+
   // Modo vuelo: Space = subir, Shift = bajar, WASD = mover, F = toggle
   flyMode: false,
   setFlyMode: (mode) => set({ flyMode: mode }),
@@ -98,7 +102,7 @@ const useStore = create((set) => ({
       return { currentDialogueIndex: state.currentDialogueIndex + 1 };
     } else {
       // Fin del diálogo -> Disparar Escena 03 (Selector de avatar)
-      return { 
+      const nextState = { 
         isDialogueActive: false, 
         dialogueQueue: [], 
         currentDialogueIndex: 0,
@@ -106,6 +110,10 @@ const useStore = create((set) => ({
         isSelectorOpen: true, // Abre el selector automáticamente
         // No rehabilitamos controlsDisabled porque isSelectorOpen ya requiere controles bloqueados
       };
+      if (state.gameState === 'tutorial') {
+        nextState.gameState = 'character_select';
+      }
+      return nextState;
     }
   }),
 

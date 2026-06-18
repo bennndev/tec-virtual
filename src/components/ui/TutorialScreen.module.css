@@ -1,0 +1,184 @@
+.tutorialContainer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+  overflow: hidden;
+  z-index: 15;
+  font-family: 'N27', ui-monospace, sans-serif;
+  user-select: none;
+}
+
+/* Luces ambientales de fondo */
+.glowBlob1, .glowBlob2 {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.glowBlob1 {
+  top: -10%;
+  left: -10%;
+  background: #0ea5e9;
+  animation: floatBlob1 20s infinite alternate;
+}
+
+.glowBlob2 {
+  bottom: -10%;
+  right: -10%;
+  background: #3b82f6;
+  animation: floatBlob2 20s infinite alternate;
+}
+
+@keyframes floatBlob1 {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(80px, 50px) scale(1.2); }
+}
+
+@keyframes floatBlob2 {
+  0% { transform: translate(0, 0) scale(1.1); }
+  100% { transform: translate(-80px, -50px) scale(0.9); }
+}
+
+/* Área central de PaquitoBot */
+.robotWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 220px; /* Espacio para el DialogHUD abajo */
+  perspective: 1000px;
+  position: relative;
+  z-index: 2;
+}
+
+.robotImage {
+  width: 280px;
+  height: 280px;
+  object-fit: contain;
+  filter: drop-shadow(0 20px 30px rgba(14, 165, 233, 0.25));
+  animation: floatRobot 4s ease-in-out infinite;
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.robotShadow {
+  width: 140px;
+  height: 16px;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 50%;
+  filter: blur(6px);
+  margin-top: 24px;
+  animation: floatShadow 4s ease-in-out infinite;
+}
+
+@keyframes floatRobot {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-15px) rotate(2deg);
+  }
+}
+
+@keyframes floatShadow {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(0.85);
+    opacity: 0.45;
+  }
+}
+
+/* Atajos visuales arriba del diálogo para explicar los controles */
+.controlsPreview {
+  position: absolute;
+  top: 40px;
+  display: flex;
+  gap: 24px;
+  z-index: 10;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 90%;
+}
+
+.controlCard {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 12px 20px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 120px;
+  transition: transform 0.2s, background 0.2s;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.controlCard:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(14, 165, 233, 0.3);
+}
+
+.controlCardActive {
+  border-color: #0ea5e9 !important;
+  background: rgba(14, 165, 233, 0.15) !important;
+  transform: translateY(-6px) scale(1.05);
+  box-shadow: 0 0 25px rgba(14, 165, 233, 0.4);
+}
+
+.keyLabel {
+  background: rgba(255, 255, 255, 0.15);
+  border-bottom: 3px solid rgba(255, 255, 255, 0.3);
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #f8fafc;
+  font-family: inherit;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.keyText {
+  font-size: 12px;
+  color: #94a3b8;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 768px) {
+  .robotImage {
+    width: 200px;
+    height: 200px;
+  }
+  .controlsPreview {
+    top: 20px;
+    gap: 12px;
+  }
+  .controlCard {
+    padding: 8px 12px;
+    min-width: 90px;
+  }
+  .keyLabel {
+    font-size: 12px;
+    padding: 3px 6px;
+  }
+  .keyText {
+    font-size: 10px;
+  }
+  .robotWrapper {
+    margin-bottom: 260px;
+  }
+}
