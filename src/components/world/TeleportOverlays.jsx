@@ -15,7 +15,7 @@ export default function TeleportOverlays() {
   const handleTeleport = (marker, source) => {
     console.log(`[TeleportOverlay] Click detectado en '${marker.name}' (${source})`);
     console.log(`  Posición del marcador: [${marker.x.toFixed(2)}, ${marker.y.toFixed(2)}, ${marker.z.toFixed(2)}]`);
-    const targetPos = marker.teleportPos;
+    const targetPos = marker.teleportPos || [marker.x, marker.y + 1.0, marker.z + 2.5];
     console.log(`  Target de teletransporte enviado: [${targetPos[0].toFixed(2)}, ${targetPos[1].toFixed(2)}, ${targetPos[2].toFixed(2)}]`);
     setTeleportTarget(targetPos);
   };
