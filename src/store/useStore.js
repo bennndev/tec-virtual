@@ -139,6 +139,32 @@ const useStore = create((set) => ({
     activeDialogueNPC: null,
     controlsDisabled: false
   }),
+
+  triggerNPCDialogue: (npc) => set((state) => {
+    const targetNPC = npc || state.interactableNPC;
+    if (!targetNPC) return {};
+
+    const dialogues = targetNPC.id === 'paquito-bot'
+      ? [
+          "¡Hola! Soy PaquitoBot 🤖",
+          "Te acompañaré durante esta experiencia virtual por Tecsup.",
+          "Hoy conocerás una de nuestras carreras tecnológicas de una manera diferente.",
+          "Pero antes necesito ayudarte a crear tu identidad virtual.",
+          "Selecciona el personaje que te representará durante esta visita."
+        ]
+      : [
+          "¡Hola! Soy " + targetNPC.name + ".",
+          targetNPC.description
+        ];
+
+    return {
+      dialogueQueue: dialogues,
+      currentDialogueIndex: 0,
+      isDialogueActive: true,
+      activeDialogueNPC: targetNPC,
+      controlsDisabled: true
+    };
+  }),
 }));
 
 export default useStore;

@@ -210,20 +210,7 @@ export default function Player() {
       } else {
         if (e.code === 'KeyE' && state.interactableNPC) {
           e.preventDefault();
-          if (state.interactableNPC.id === 'paquito-bot') {
-            state.startDialogue([
-              "¡Hola! Soy PaquitoBot 🤖",
-              "Te acompañaré durante esta experiencia virtual por Tecsup.",
-              "Hoy conocerás una de nuestras carreras tecnológicas de una manera diferente.",
-              "Pero antes necesito ayudarte a crear tu identidad virtual.",
-              "Selecciona el personaje que te representará durante esta visita."
-            ], state.interactableNPC);
-          } else {
-            state.startDialogue([
-              "¡Hola! Soy " + state.interactableNPC.name + ".",
-              state.interactableNPC.description
-            ], state.interactableNPC);
-          }
+          state.triggerNPCDialogue();
         }
       }
     };

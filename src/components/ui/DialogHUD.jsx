@@ -12,6 +12,7 @@ export default function DialogHUD() {
   const nextDialogue = useStore((s) => s.nextDialogue);
   const previousDialogue = useStore((s) => s.previousDialogue);
   const skipDialogue = useStore((s) => s.skipDialogue);
+  const endDialogue = useStore((s) => s.endDialogue);
   const gameState = useStore((s) => s.gameState);
 
   const containerRef = useRef(null);
@@ -31,6 +32,16 @@ export default function DialogHUD() {
 
   return (
     <div className={styles.overlay} ref={containerRef}>
+      {gameState !== 'tutorial' && (
+        <button 
+          className={styles.closeButton} 
+          onClick={endDialogue}
+          aria-label="Cerrar diálogo"
+        >
+          ✕
+        </button>
+      )}
+
       <div className={styles.body}>
         <h3 className={styles.speakerName}>
           {activeDialogueNPC ? activeDialogueNPC.name : 'Sistema'}

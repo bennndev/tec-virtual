@@ -43,6 +43,14 @@ function NPC({ data }) {
     useStore.getState().setInteractableNPC(null);
   };
 
+  const handleClick = (e) => {
+    e.stopPropagation();
+    const state = useStore.getState();
+    if (!state.isDialogueActive) {
+      state.triggerNPCDialogue(data);
+    }
+  };
+
   return (
     <RigidBody 
       type="fixed" 
@@ -55,6 +63,7 @@ function NPC({ data }) {
         ref={group}
         onPointerOver={handlePointerOver}
         onPointerOut={handlePointerOut}
+        onClick={handleClick}
       >
         <primitive object={scene} />
       </group>
