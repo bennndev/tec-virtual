@@ -4,8 +4,7 @@ import Ecctrl, { EcctrlAnimation } from 'ecctrl';
 import { KeyboardControls, useKeyboardControls } from '@react-three/drei';
 import * as THREE from 'three';
 import useStore from '../../store/useStore';
-import CHARACTERS from '../../data/characterConfig';
-import npcsData from '../../data/npcs.json';
+import CHARACTERS, { CHARACTER_INIT_DIR, CAM_INIT_DIR } from '../../data/characterConfig';
 import CharacterModel from './CharacterModel';
 
 const keyboardMap = [
@@ -18,6 +17,7 @@ const keyboardMap = [
 ];
 
 const FLY_SPEED = 3;
+
 const FLY_HORIZONTAL_SPEED = 3;
 
 function Character() {
@@ -50,7 +50,7 @@ function Character() {
   const quat = useRef(new THREE.Quaternion());
   const euler = useRef(new THREE.Euler(0, 0, 0, 'YXZ'));
 
-  useFrame(({ camera }) => {
+  useFrame(() => {
     // Estabilizar el RigidBody al inicio para dar tiempo a cargar el trimesh físico del campus
     if (spawnFrames.current < 60) {
       spawnFrames.current++;
@@ -143,6 +143,8 @@ function Character() {
     <Ecctrl
       ref={ecctrlRef}
       animated
+      characterInitDir={CHARACTER_INIT_DIR}
+      camInitDir={CAM_INIT_DIR}
       position={[62.12, 10.10, -98.97]}
       disableFollowCam={disableFollowCam}
       disableControl={controlsDisabled}

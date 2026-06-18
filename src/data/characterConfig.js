@@ -74,3 +74,11 @@ const CHARACTERS = {
 };
 
 export default CHARACTERS;
+
+// --- CONFIGURACIÓN DE APARICIÓN INICIAL ---
+// Modificá estos valores para cambiar la dirección inicial a la que mira el personaje al aparecer (en radianes).
+// Aumentar CHARACTER_INIT_DIR hace que el personaje rote a la izquierda (en sentido antihorario).
+// CAM_INIT_DIR.y debe estar alineada para que la cámara empiece directamente detrás.
+export const CHARACTER_INIT_DIR = 0.8; // Ej: 0.8 para mirar hacia la izquierda (puerta de Tecsup)
+export const CAM_INIT_DIR = { x: 0, y: 0.8 }; // y: debe ser igual a CHARACTER_INIT_DIR para alinear la cámara
+

@@ -3,8 +3,10 @@ import { useThree, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import gsap from 'gsap';
 import useStore from '../../store/useStore';
+import { CHARACTER_INIT_DIR } from '../../data/characterConfig';
 
 const OVERVIEW_OFFSET = new THREE.Vector3(0, 12, -8);
+
 
 export default function CameraRig() {
   const { camera } = useThree();
@@ -83,7 +85,12 @@ export default function CameraRig() {
       if (cancelled) return;
 
       const pos = useStore.getState().playerPosition;
-      const target = new THREE.Vector3(pos.x, pos.y + 1.5, pos.z + 4);
+      const theta = CHARACTER_INIT_DIR;
+      const target = new THREE.Vector3(
+        pos.x + Math.sin(theta) * 5,
+        pos.y + 1.5,
+        pos.z + Math.cos(theta) * 5
+      );
 
       if (gsapRef.current) gsapRef.current.kill();
       isTransitioning.current = true;
@@ -136,10 +143,11 @@ export default function CameraRig() {
       });
     } else {
       // → ThirdPerson
+      const rot = useStore.getState().playerRotation;
       const behind = new THREE.Vector3(
-        pos.x,
+        pos.x - Math.sin(rot) * 5,
         pos.y + 1.5,
-        pos.z + 4,
+        pos.z - Math.cos(rot) * 5,
       );
 
       animateCamera(behind, () => {
