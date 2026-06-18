@@ -145,13 +145,19 @@ export default function CameraRig() {
 
   // Sincronizar transiciones cuando el cameraMode cambia en el store (ya sea por M, HUD o Teleport)
   useEffect(() => {
-    if (cameraMode === prevMode.current) return;
+    console.log(`[CameraRig] useEffect disparado. cameraMode actual: '${cameraMode}', prevMode: '${prevMode.current}'`);
+    if (cameraMode === prevMode.current) {
+      console.log('[CameraRig] cameraMode no cambió. Ignorando.');
+      return;
+    }
 
+    console.log(`[CameraRig] Iniciando transición de '${prevMode.current}' a '${cameraMode}'`);
     isTransitioning.current = true;
     setTransitioningCamera(true);
     const pos = playerPosRef.current;
 
     if (cameraMode === 'overview') {
+      console.log('[CameraRig] Configurando modo Overview...');
       // → Overview
       setControlsDisabled(true);
 
@@ -182,17 +188,22 @@ export default function CameraRig() {
         currentLook.lerpVectors(startLook, endLook, progress);
         camera.lookAt(currentLook);
       }, () => {
+        console.log('[CameraRig] Transición a Overview terminada.');
         setTransitioningCamera(false);
       });
     } else {
+      console.log('[CameraRig] Configurando modo ThirdPerson...');
       // → ThirdPerson
       const currentPos = useStore.getState().playerPosition;
       const rot = useStore.getState().playerRotation;
+      console.log(`  Posición del jugador leída de store: [${currentPos.x.toFixed(2)}, ${currentPos.y.toFixed(2)}, ${currentPos.z.toFixed(2)}]`);
+      console.log(`  Rotación del jugador: ${rot.toFixed(2)}`);
       const behind = new THREE.Vector3(
         currentPos.x - Math.sin(rot) * 5,
         currentPos.y + 1.5,
         currentPos.z - Math.cos(rot) * 5,
       );
+      console.log(`  Cámara detrás del jugador en: [${behind.x.toFixed(2)}, ${behind.y.toFixed(2)}, ${behind.z.toFixed(2)}]`);
 
       const mapBounds = useStore.getState().mapBounds;
       const { minX, maxX, minZ, maxZ } = mapBounds;
@@ -207,12 +218,14 @@ export default function CameraRig() {
         currentLook.lerpVectors(startLook, endLook, progress);
         camera.lookAt(currentLook);
       }, () => {
+        console.log('[CameraRig] Transición a ThirdPerson terminada.');
         setControlsDisabled(false);
         setTransitioningCamera(false);
       });
     }
 
     prevMode.current = cameraMode;
+    console.log(`[CameraRig] prevMode actualizado a '${prevMode.current}'`);
   }, [cameraMode, camera, clock, setControlsDisabled, setTransitioningCamera, animateCamera]);
 
   // Toggle M: solo actualiza el store; la transición reactiva se encarga del resto
