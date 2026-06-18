@@ -12,11 +12,11 @@ export default function TeleportOverlays() {
 
   if (cameraMode !== 'overview') return null;
 
-  const handleTeleport = (marker) => {
-    // Para evitar que el jugador spawnee atrapado dentro del colisionador físico del stand,
-    // lo teletransportamos ligeramente desplazado en el eje Z (Z + 2.5) y un poco elevado (Y + 1.0)
-    // para que caiga suavemente al suelo por gravedad.
+  const handleTeleport = (marker, source) => {
+    console.log(`[TeleportOverlay] Click detectado en '${marker.name}' (${source})`);
+    console.log(`  Posición del marcador: [${marker.x.toFixed(2)}, ${marker.y.toFixed(2)}, ${marker.z.toFixed(2)}]`);
     const targetPos = [marker.x, marker.y + 1.0, marker.z + 2.5];
+    console.log(`  Target de teletransporte enviado: [${targetPos[0].toFixed(2)}, ${targetPos[1].toFixed(2)}, ${targetPos[2].toFixed(2)}]`);
     setTeleportTarget(targetPos);
   };
 
@@ -37,7 +37,7 @@ export default function TeleportOverlays() {
                 className={`${styles.badge} ${isHovered ? styles.badgeHovered : ''}`}
                 onMouseEnter={() => setHoveredZone(marker.id)}
                 onMouseLeave={() => setHoveredZone(null)}
-                onClick={() => handleTeleport(marker)}
+                onClick={() => handleTeleport(marker, 'HTML Badge')}
               >
                 <span className={styles.badgeName}>{marker.name}</span>
                 <div className={styles.alertBadge}>!</div>
@@ -59,7 +59,7 @@ export default function TeleportOverlays() {
               }}
               onClick={(e) => {
                 e.stopPropagation();
-                handleTeleport(marker);
+                handleTeleport(marker, '3D Ring Mesh');
                 document.body.style.cursor = 'auto';
               }}
             >

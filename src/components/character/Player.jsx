@@ -66,18 +66,24 @@ function Character() {
     // Interceptar Teletransporte
     const teleportTarget = useStore.getState().teleportTarget;
     let skippedWorldPos = false;
-    if (teleportTarget && ecctrlRef.current?.group) {
-      const rb = ecctrlRef.current.group;
-      rb.setTranslation({ x: teleportTarget[0], y: teleportTarget[1], z: teleportTarget[2] }, true);
-      rb.setLinvel({ x: 0, y: 0, z: 0 }, true);
-      rb.setAngvel({ x: 0, y: 0, z: 0 }, true);
-      if (posRef.current) {
-        vec.current.set(teleportTarget[0], teleportTarget[1], teleportTarget[2]);
+    if (teleportTarget) {
+      console.log(`[Player] Interceptación de teletransporte activa. Target en store: [${teleportTarget.map(n => n.toFixed(2)).join(', ')}]`);
+      if (ecctrlRef.current?.group) {
+        const rb = ecctrlRef.current.group;
+        console.log('[Player] RigidBody listo. Aplicando setTranslation...');
+        rb.setTranslation({ x: teleportTarget[0], y: teleportTarget[1], z: teleportTarget[2] }, true);
+        rb.setLinvel({ x: 0, y: 0, z: 0 }, true);
+        rb.setAngvel({ x: 0, y: 0, z: 0 }, true);
+        if (posRef.current) {
+          vec.current.set(teleportTarget[0], teleportTarget[1], teleportTarget[2]);
+        }
+        setPlayerPosition({ x: teleportTarget[0], y: teleportTarget[1], z: teleportTarget[2] });
+        useStore.setState({ teleportTarget: null });
+        useStore.getState().setCameraMode('thirdPerson');
+        skippedWorldPos = true;
+      } else {
+        console.warn('[Player] RigidBody NO disponible para teletransporte. Reintentando en el próximo frame...');
       }
-      setPlayerPosition({ x: teleportTarget[0], y: teleportTarget[1], z: teleportTarget[2] });
-      useStore.setState({ teleportTarget: null });
-      useStore.getState().setCameraMode('thirdPerson');
-      skippedWorldPos = true;
     }
 
     // Congelar físicas si los controles están deshabilitados (diálogos o modales activos)
