@@ -22,6 +22,13 @@ export default function CameraRig() {
   // Ref en vez de Zustand subscription: evita 60 re-renders/s
   const playerPosRef = useRef({ x: 0, y: 0, z: 0 });
 
+  // Refs para controlar el arrastre de órbita en vista panorámica
+  const orbitAngle = useRef(0);
+  const orbitPitch = useRef(0.4); // Elevación inicial en radianes (~23 grados)
+  const isDragging = useRef(false);
+  const lastMousePos = useRef({ x: 0, y: 0 });
+  const lastInteractionTime = useRef(0);
+
   // Vectores reutilizables para no alocar en cada frame
   const tmpVec = useRef(new THREE.Vector3());
   const tmpTarget = useRef(new THREE.Vector3());
@@ -47,15 +54,15 @@ export default function CameraRig() {
     const radius = Math.max(width, depth) * 0.55;
     const height = radius * 0.45;
 
-    // Órbita circular lenta en base al tiempo
-    const speed = 0.025;
-    const time = state.clock.getElapsedTime();
-    const angle = time * speed;
+    // Si no se está arrastrando y pasaron más de 3 segundos desde la última interacción, rotar automáticamente
+    if (!isDragging.current && Date.now() - lastInteractionTime.current > 3000) {
+      orbitAngle.current += 0.025 * delta;
+    }
 
     const targetPos = tmpTarget.current.set(
-      centerX + Math.cos(angle) * radius,
-      height,
-      centerZ + Math.sin(angle) * radius
+      centerX + Math.cos(orbitAngle.current) * Math.cos(orbitPitch.current) * radius,
+      height + Math.sin(orbitPitch.current) * radius,
+      centerZ + Math.sin(orbitAngle.current) * Math.cos(orbitPitch.current) * radius
     );
 
     // Frame-rate independent lerp
@@ -170,14 +177,19 @@ export default function CameraRig() {
       const radius = Math.max(width, depth) * 0.55;
       const height = radius * 0.45;
 
-      const time = clock.getElapsedTime();
-      const speed = 0.025;
-      const angle = time * speed;
+      // Sincronizar los ángulos actuales basados en la posición de la cámara para que la transición empiece de forma suave
+      const dx = camera.position.x - centerX;
+      const dz = camera.position.z - centerZ;
+      orbitAngle.current = Math.atan2(dz, dx);
+      
+      const dy = camera.position.y - height;
+      const dist2d = Math.sqrt(dx * dx + dz * dz);
+      orbitPitch.current = Math.max(0.1, Math.min(1.2, Math.atan2(dy, dist2d)));
 
       const target = new THREE.Vector3(
-        centerX + Math.cos(angle) * radius,
-        height,
-        centerZ + Math.sin(angle) * radius
+        centerX + Math.cos(orbitAngle.current) * Math.cos(orbitPitch.current) * radius,
+        height + Math.sin(orbitPitch.current) * radius,
+        centerZ + Math.sin(orbitAngle.current) * Math.cos(orbitPitch.current) * radius
       );
 
       const startLook = new THREE.Vector3(pos.x, 1, pos.z);
@@ -243,6 +255,57 @@ export default function CameraRig() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [toggleCamera]);
+
+  // Registrar listeners para el arrastre 360 de la órbita panorámica (vista águila)
+  useEffect(() => {
+    if (cameraMode !== 'overview') return;
+
+    const handlePointerDown = (e) => {
+      // Solo botón izquierdo del mouse o toques táctiles
+      if (e.button !== 0 && e.button !== undefined) return;
+      isDragging.current = true;
+      lastMousePos.current = { x: e.clientX || (e.touches && e.touches[0].clientX), y: e.clientY || (e.touches && e.touches[0].clientY) };
+      lastInteractionTime.current = Date.now();
+    };
+
+    const handlePointerMove = (e) => {
+      if (!isDragging.current) return;
+      const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+      const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+      if (clientX === undefined || clientY === undefined) return;
+
+      const deltaX = clientX - lastMousePos.current.x;
+      const deltaY = clientY - lastMousePos.current.y;
+      lastMousePos.current = { x: clientX, y: clientY };
+
+      // Sensibilidad ajustada para una órbita suave
+      orbitAngle.current -= deltaX * 0.005;
+      // Limitar verticalmente entre 0.1 y 1.2 rad para que no cruce el suelo ni quede 100% cenital
+      orbitPitch.current = Math.max(0.1, Math.min(1.2, orbitPitch.current + deltaY * 0.003));
+      lastInteractionTime.current = Date.now();
+    };
+
+    const handlePointerUp = () => {
+      isDragging.current = false;
+    };
+
+    window.addEventListener('pointerdown', handlePointerDown);
+    window.addEventListener('pointermove', handlePointerMove);
+    window.addEventListener('pointerup', handlePointerUp);
+    // Soporte táctil básico
+    window.addEventListener('touchstart', handlePointerDown);
+    window.addEventListener('touchmove', handlePointerMove);
+    window.addEventListener('touchend', handlePointerUp);
+
+    return () => {
+      window.removeEventListener('pointerdown', handlePointerDown);
+      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('pointerup', handlePointerUp);
+      window.removeEventListener('touchstart', handlePointerDown);
+      window.removeEventListener('touchmove', handlePointerMove);
+      window.removeEventListener('touchend', handlePointerUp);
+    };
+  }, [cameraMode]);
 
   // Limpieza de GSAP al desmontar
   useEffect(() => {
