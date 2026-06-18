@@ -13,6 +13,7 @@ export default function CameraRig() {
   const cameraMode = useStore((s) => s.cameraMode);
   const setCameraMode = useStore((s) => s.setCameraMode);
   const setControlsDisabled = useStore((s) => s.setControlsDisabled);
+  const setTransitioningCamera = useStore((s) => s.setTransitioningCamera);
 
   const isIntro = useStore((s) => s.isIntro);
   const isTransitioning = useRef(false);
@@ -140,16 +141,18 @@ export default function CameraRig() {
     };
   }, [camera, isIntro]);
 
-  // Toggle M: transiciones de cámara y bloqueo de controles
-  const toggleCamera = useCallback(() => {
-    if (isTransitioning.current) return;
-    isTransitioning.current = true;
+  const prevMode = useRef(cameraMode);
 
+  // Sincronizar transiciones cuando el cameraMode cambia en el store (ya sea por M, HUD o Teleport)
+  useEffect(() => {
+    if (cameraMode === prevMode.current) return;
+
+    isTransitioning.current = true;
+    setTransitioningCamera(true);
     const pos = playerPosRef.current;
 
-    if (cameraMode === 'thirdPerson') {
+    if (cameraMode === 'overview') {
       // → Overview
-      setCameraMode('overview');
       setControlsDisabled(true);
 
       const mapBounds = useStore.getState().mapBounds;
@@ -178,6 +181,8 @@ export default function CameraRig() {
       animateCamera(target, (progress) => {
         currentLook.lerpVectors(startLook, endLook, progress);
         camera.lookAt(currentLook);
+      }, () => {
+        setTransitioningCamera(false);
       });
     } else {
       // → ThirdPerson
@@ -201,11 +206,20 @@ export default function CameraRig() {
         currentLook.lerpVectors(startLook, endLook, progress);
         camera.lookAt(currentLook);
       }, () => {
-        setCameraMode('thirdPerson');
         setControlsDisabled(false);
+        setTransitioningCamera(false);
       });
     }
-  }, [cameraMode, camera, clock, setCameraMode, setControlsDisabled, animateCamera]);
+
+    prevMode.current = cameraMode;
+  }, [cameraMode, camera, clock, setControlsDisabled, setTransitioningCamera, animateCamera]);
+
+  // Toggle M: solo actualiza el store; la transición reactiva se encarga del resto
+  const toggleCamera = useCallback(() => {
+    if (isTransitioning.current) return;
+    const nextMode = cameraMode === 'thirdPerson' ? 'overview' : 'thirdPerson';
+    setCameraMode(nextMode);
+  }, [cameraMode, setCameraMode]);
 
   // Escucha de teclado — toggleCamera ya no se recrea cada frame
   useEffect(() => {

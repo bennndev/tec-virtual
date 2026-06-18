@@ -30,6 +30,14 @@ const useStore = create((set) => ({
   cameraMode: 'thirdPerson',
   setCameraMode: (mode) => set({ cameraMode: mode }),
 
+  // Teletransporte del jugador (coordinado con Rapier)
+  teleportTarget: null, // [x, y, z] | null
+  setTeleportTarget: (pos) => set({ teleportTarget: pos }),
+
+  // Estado de transición de la cámara
+  isTransitioningCamera: false,
+  setTransitioningCamera: (val) => set({ isTransitioningCamera: val }),
+
   // Character selector overlay
   isSelectorOpen: false,
   setSelectorOpen: (open) => set({ isSelectorOpen: open, controlsDisabled: open }),

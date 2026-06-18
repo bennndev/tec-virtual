@@ -1,0 +1,56 @@
+.badge {
+  background: #ffffff;
+  border: none;
+  border-radius: 24px;
+  padding: 8px 18px;
+  color: #0f172a; /* Slate 900 */
+  font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  position: relative;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+}
+
+.badgeHovered {
+  transform: scale(1.08) translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  color: #0ea5e9; /* Sky 500 on hover */
+}
+
+.badgeName {
+  display: inline-block;
+  line-height: 1.2;
+}
+
+.alertBadge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #ef4444; /* Red 500 */
+  color: #ffffff;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  border: 1.5px solid #ffffff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: transform 0.25s ease;
+}
+
+.badgeHovered .alertBadge {
+  transform: scale(1.15) rotate(10deg);
+  background: #dc2626; /* Red 600 */
+}

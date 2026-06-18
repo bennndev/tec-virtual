@@ -6,6 +6,7 @@ import NPCs from '../character/NPCs';
 import CameraRig from '../character/CameraRig';
 import PointerLock from '../controls/PointerLock';
 import BackgroundMusic from '../audio/BackgroundMusic';
+import TeleportOverlays from './TeleportOverlays';
 
 export default function Scene() {
   return (
@@ -37,6 +38,7 @@ export default function Scene() {
       </Suspense>
 
       <CameraRig />
+      <TeleportOverlays />
       <PointerLock />
       <BackgroundMusic />
     </>

@@ -27,6 +27,7 @@ function Character() {
   const activeCharacter = useStore((s) => s.activeCharacter);
   const cameraMode = useStore((s) => s.cameraMode);
   const isIntro = useStore((s) => s.isIntro);
+  const isTransitioningCamera = useStore((s) => s.isTransitioningCamera);
   const controlsDisabled = useStore((s) => s.controlsDisabled);
   const flyMode = useStore((s) => s.flyMode);
 
@@ -42,8 +43,8 @@ function Character() {
   const jumpPressed = useKeyboardControls((state) => state.jump);
   const runPressed = useKeyboardControls((state) => state.run);
 
-  // En overview o intro, ecctrl suelta la cámara
-  const disableFollowCam = cameraMode === 'overview' || isIntro;
+  // En overview o intro o transición de cámara, ecctrl suelta la cámara para evitar tirones
+  const disableFollowCam = cameraMode === 'overview' || isIntro || isTransitioningCamera;
   const config = CHARACTERS[activeCharacter];
 
   const setPlayerRotation = useStore((s) => s.setPlayerRotation);
@@ -60,6 +61,20 @@ function Character() {
         rb.setLinvel({ x: 0, y: 0, z: 0 }, true);
       }
       return;
+    }
+
+    // Interceptar Teletransporte
+    const teleportTarget = useStore.getState().teleportTarget;
+    if (teleportTarget && ecctrlRef.current?.group) {
+      const rb = ecctrlRef.current.group;
+      rb.setTranslation({ x: teleportTarget[0], y: teleportTarget[1], z: teleportTarget[2] }, true);
+      rb.setLinvel({ x: 0, y: 0, z: 0 }, true);
+      rb.setAngvel({ x: 0, y: 0, z: 0 }, true);
+      if (posRef.current) {
+        vec.current.set(teleportTarget[0], teleportTarget[1], teleportTarget[2]);
+      }
+      useStore.setState({ teleportTarget: null });
+      useStore.getState().setCameraMode('thirdPerson');
     }
 
     // Congelar físicas si los controles están deshabilitados (diálogos o modales activos)
