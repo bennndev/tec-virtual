@@ -43,12 +43,14 @@ export default function SceneEnvironment() {
       if (child.isMesh && child.name && objectsData[child.name]) {
         const worldPos = new THREE.Vector3();
         child.getWorldPosition(worldPos);
+        const objConf = objectsData[child.name];
         markers.push({
           id: child.name,
-          name: objectsData[child.name].name,
+          name: objConf.name,
           x: worldPos.x,
           y: worldPos.y,
-          z: worldPos.z
+          z: worldPos.z,
+          teleportPos: objConf.teleportPos || [worldPos.x, worldPos.y + 1.0, worldPos.z + 2.5]
         });
       }
 
