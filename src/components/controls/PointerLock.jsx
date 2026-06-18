@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useThree } from '@react-three/fiber';
+import useStore from '../../store/useStore';
 
 /**
  * Pointer Lock para rotación continua de cámara (solo desktop).
@@ -23,6 +24,14 @@ import { useThree } from '@react-three/fiber';
 export default function PointerLock() {
   const { gl } = useThree();
   const isTransitioningLock = useRef(false);
+  const cameraMode = useStore((s) => s.cameraMode);
+
+  // Liberar el cursor automáticamente si salimos de tercera persona
+  useEffect(() => {
+    if (cameraMode !== 'thirdPerson' && document.pointerLockElement) {
+      document.exitPointerLock();
+    }
+  }, [cameraMode]);
 
   useEffect(() => {
     // No activar pointer lock en dispositivos táctiles
@@ -55,8 +64,8 @@ export default function PointerLock() {
     document.addEventListener('pointerlockchange', handlePointerLockChange);
 
     const handleMouseDown = (e) => {
-      // Solo botón izquierdo (primary)
-      if (e.button !== 0) return;
+      // Solo botón izquierdo (primary) y en modo tercera persona
+      if (e.button !== 0 || useStore.getState().cameraMode !== 'thirdPerson') return;
       canvas.requestPointerLock();
     };
 

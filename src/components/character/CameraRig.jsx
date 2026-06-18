@@ -9,9 +9,10 @@ const OVERVIEW_OFFSET = new THREE.Vector3(0, 12, -8);
 
 
 export default function CameraRig() {
-  const { camera } = useThree();
+  const { camera, clock } = useThree();
   const cameraMode = useStore((s) => s.cameraMode);
   const setCameraMode = useStore((s) => s.setCameraMode);
+  const setControlsDisabled = useStore((s) => s.setControlsDisabled);
 
   const isIntro = useStore((s) => s.isIntro);
   const isTransitioning = useRef(false);
@@ -26,26 +27,42 @@ export default function CameraRig() {
   const tmpQuat = useRef(new THREE.Quaternion());
   const tmpMatrix = useRef(new THREE.Matrix4());
 
-  // Overview: seguimiento continuo del jugador
-  useFrame((_state, delta) => {
+  // Overview / Modo Águila: órbita panorámica alrededor del escenario
+  useFrame((state, delta) => {
     // Leer última posición SIN subscription (no causa re-render)
     const pos = useStore.getState().playerPosition;
     playerPosRef.current = pos;
 
     if (cameraMode !== 'overview' || isTransitioning.current) return;
 
+    // Calcular centro y radio dinámicamente usando mapBounds
+    const mapBounds = useStore.getState().mapBounds;
+    const { minX, maxX, minZ, maxZ } = mapBounds;
+    const centerX = (minX + maxX) / 2;
+    const centerZ = (minZ + maxZ) / 2;
+    const width = maxX - minX;
+    const depth = maxZ - minZ;
+    
+    const radius = Math.max(width, depth) * 0.55;
+    const height = radius * 0.45;
+
+    // Órbita circular lenta en base al tiempo
+    const speed = 0.025;
+    const time = state.clock.getElapsedTime();
+    const angle = time * speed;
+
     const targetPos = tmpTarget.current.set(
-      pos.x + OVERVIEW_OFFSET.x,
-      pos.y + OVERVIEW_OFFSET.y,
-      pos.z + OVERVIEW_OFFSET.z,
+      centerX + Math.cos(angle) * radius,
+      height,
+      centerZ + Math.sin(angle) * radius
     );
 
-    // Frame-rate independent lerp (ecctrl usa esta misma fórmula)
-    const smoothFactor = 1 - Math.exp(-10 * delta);
+    // Frame-rate independent lerp
+    const smoothFactor = 1 - Math.exp(-5 * delta);
     camera.position.lerp(targetPos, smoothFactor);
 
-    // Quaternion slerp para lookAt estable (evita micro-oscilaciones)
-    const lookTarget = tmpVec.current.set(pos.x, 1, pos.z);
+    // Enfocar el centro del campus
+    const lookTarget = tmpVec.current.set(centerX, 2, centerZ);
     tmpMatrix.current.lookAt(camera.position, lookTarget, camera.up);
     tmpQuat.current.setFromRotationMatrix(tmpMatrix.current);
     camera.quaternion.slerp(tmpQuat.current, smoothFactor);
@@ -59,9 +76,11 @@ export default function CameraRig() {
       x: targetPos.x,
       y: targetPos.y,
       z: targetPos.z,
-      duration: 0.8,
+      duration: 1.2,
       ease: 'power2.inOut',
-      onUpdate: lookAtFn,
+      onUpdate: function () {
+        lookAtFn?.(this.progress());
+      },
       onComplete: () => {
         isTransitioning.current = false;
         gsapRef.current = null;
@@ -121,7 +140,7 @@ export default function CameraRig() {
     };
   }, [camera, isIntro]);
 
-  // Toggle M: usa ref en vez de playerPosition del store
+  // Toggle M: transiciones de cámara y bloqueo de controles
   const toggleCamera = useCallback(() => {
     if (isTransitioning.current) return;
     isTransitioning.current = true;
@@ -131,15 +150,34 @@ export default function CameraRig() {
     if (cameraMode === 'thirdPerson') {
       // → Overview
       setCameraMode('overview');
+      setControlsDisabled(true);
+
+      const mapBounds = useStore.getState().mapBounds;
+      const { minX, maxX, minZ, maxZ } = mapBounds;
+      const centerX = (minX + maxX) / 2;
+      const centerZ = (minZ + maxZ) / 2;
+      const width = maxX - minX;
+      const depth = maxZ - minZ;
+      const radius = Math.max(width, depth) * 0.55;
+      const height = radius * 0.45;
+
+      const time = clock.getElapsedTime();
+      const speed = 0.025;
+      const angle = time * speed;
 
       const target = new THREE.Vector3(
-        pos.x + OVERVIEW_OFFSET.x,
-        pos.y + OVERVIEW_OFFSET.y,
-        pos.z + OVERVIEW_OFFSET.z,
+        centerX + Math.cos(angle) * radius,
+        height,
+        centerZ + Math.sin(angle) * radius
       );
 
-      animateCamera(target, () => {
-        camera.lookAt(pos.x, 1, pos.z);
+      const startLook = new THREE.Vector3(pos.x, 1, pos.z);
+      const endLook = new THREE.Vector3(centerX, 2, centerZ);
+      const currentLook = new THREE.Vector3();
+
+      animateCamera(target, (progress) => {
+        currentLook.lerpVectors(startLook, endLook, progress);
+        camera.lookAt(currentLook);
       });
     } else {
       // → ThirdPerson
@@ -150,13 +188,24 @@ export default function CameraRig() {
         pos.z - Math.cos(rot) * 5,
       );
 
-      animateCamera(behind, () => {
-        camera.lookAt(pos.x, 1, pos.z);
+      const mapBounds = useStore.getState().mapBounds;
+      const { minX, maxX, minZ, maxZ } = mapBounds;
+      const centerX = (minX + maxX) / 2;
+      const centerZ = (minZ + maxZ) / 2;
+
+      const startLook = new THREE.Vector3(centerX, 2, centerZ);
+      const endLook = new THREE.Vector3(pos.x, 1, pos.z);
+      const currentLook = new THREE.Vector3();
+
+      animateCamera(behind, (progress) => {
+        currentLook.lerpVectors(startLook, endLook, progress);
+        camera.lookAt(currentLook);
       }, () => {
         setCameraMode('thirdPerson');
+        setControlsDisabled(false);
       });
     }
-  }, [cameraMode, camera, setCameraMode, animateCamera]);
+  }, [cameraMode, camera, clock, setCameraMode, setControlsDisabled, animateCamera]);
 
   // Escucha de teclado — toggleCamera ya no se recrea cada frame
   useEffect(() => {
