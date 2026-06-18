@@ -12,7 +12,7 @@ const CHARACTERS = {
     id: 'alejandro',
     name: 'Alejandro',
     modelUrl: '/models/Alejandro.glb',
-    offsetY: -0.6,
+    offsetY: -0.7,
     animationSet: {
       idle: 'Armature|Idle',
       walk: 'Armature|Walk',
@@ -28,7 +28,7 @@ const CHARACTERS = {
     id: 'felipe',
     name: 'Felipe',
     modelUrl: '/models/Felipe.glb',
-    offsetY: -0.6,
+    offsetY: -0.7,
     animationSet: {
       idle: 'Armature|Idle',
       walk: 'Armature|Walk',
@@ -44,7 +44,7 @@ const CHARACTERS = {
     id: 'isabella',
     name: 'Isabella',
     modelUrl: '/models/Isabella.glb',
-    offsetY: -0.6,
+    offsetY: -0.7,
     animationSet: {
       idle: 'Armature|Idle',
       walk: 'Armature|Walk',
@@ -60,7 +60,7 @@ const CHARACTERS = {
     id: 'sofia',
     name: 'Sofía',
     modelUrl: '/models/Sofia.glb',
-    offsetY: -0.6,
+    offsetY: -0.7,
     animationSet: {
       idle: 'Armature|Idle',
       walk: 'Armature|Walk',
@@ -79,6 +79,8 @@ export default CHARACTERS;
 // Modificá estos valores para cambiar la dirección inicial a la que mira el personaje al aparecer (en radianes).
 // Aumentar CHARACTER_INIT_DIR hace que el personaje rote a la izquierda (en sentido antihorario).
 // CAM_INIT_DIR.y debe estar alineada para que la cámara empiece directamente detrás.
-export const CHARACTER_INIT_DIR = 0.8; // Ej: 0.8 para mirar hacia la izquierda (puerta de Tecsup)
-export const CAM_INIT_DIR = { x: 0, y: 0.8 }; // y: debe ser igual a CHARACTER_INIT_DIR para alinear la cámara
+export const CHARACTER_INIT_DIR = 1.65; // Ej: 0.8 para mirar hacia la izquierda (puerta de Tecsup)
+export const CAM_INIT_DIR = { x: 0, y: 1.65 }; // y: debe ser igual a CHARACTER_INIT_DIR para alinear la cámara
 
+// Coordenadas de inicio [x, y, z] en el mapa.
+export const CHARACTER_INIT_POS = [65, 1.7, -99.45];

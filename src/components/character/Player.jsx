@@ -4,7 +4,7 @@ import Ecctrl, { EcctrlAnimation } from 'ecctrl';
 import { KeyboardControls, useKeyboardControls } from '@react-three/drei';
 import * as THREE from 'three';
 import useStore from '../../store/useStore';
-import CHARACTERS, { CHARACTER_INIT_DIR, CAM_INIT_DIR } from '../../data/characterConfig';
+import CHARACTERS, { CHARACTER_INIT_DIR, CAM_INIT_DIR, CHARACTER_INIT_POS } from '../../data/characterConfig';
 import CharacterModel from './CharacterModel';
 
 const keyboardMap = [
@@ -56,7 +56,7 @@ function Character() {
       spawnFrames.current++;
       if (ecctrlRef.current?.group) {
         const rb = ecctrlRef.current.group;
-        rb.setTranslation({ x: 62.12, y: 10.10, z: -98.97 }, true);
+        rb.setTranslation({ x: CHARACTER_INIT_POS[0], y: CHARACTER_INIT_POS[1], z: CHARACTER_INIT_POS[2] }, true);
         rb.setLinvel({ x: 0, y: 0, z: 0 }, true);
       }
       return;
@@ -81,11 +81,11 @@ function Character() {
         console.warn('¡Jugador fuera de límites! Reposicionando en zona segura...');
         if (ecctrlRef.current?.group) {
           const rb = ecctrlRef.current.group;
-          rb.setTranslation({ x: 62.12, y: 10.10, z: -98.97 }, true);
+          rb.setTranslation({ x: CHARACTER_INIT_POS[0], y: CHARACTER_INIT_POS[1], z: CHARACTER_INIT_POS[2] }, true);
           rb.setLinvel({ x: 0, y: 0, z: 0 }, true);
           rb.setAngvel({ x: 0, y: 0, z: 0 }, true);
           // Actualizamos vec para que la sincronización inmediata del store no registre la Y rota
-          vec.current.set(62.12, 10.10, -98.97);
+          vec.current.set(CHARACTER_INIT_POS[0], CHARACTER_INIT_POS[1], CHARACTER_INIT_POS[2]);
         }
       }
       
@@ -145,7 +145,7 @@ function Character() {
       animated
       characterInitDir={CHARACTER_INIT_DIR}
       camInitDir={CAM_INIT_DIR}
-      position={[62.12, 10.10, -98.97]}
+      position={CHARACTER_INIT_POS}
       disableFollowCam={disableFollowCam}
       disableControl={controlsDisabled}
       capsuleHalfHeight={0.35}
