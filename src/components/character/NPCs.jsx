@@ -9,9 +9,10 @@ npcsData.forEach((npc) => {
   useGLTF.preload(npc.modelUrl);
 });
 
-function NPC({ data }) {
+function NPC({ data, positionOverride }) {
   const { scene, animations } = useGLTF(data.modelUrl);
   const group = useRef();
+  const npcPosition = positionOverride || data.position;
   
   // Vinculamos las animaciones al contenedor del modelo
   const { actions, names } = useAnimations(animations, group);
@@ -55,7 +56,7 @@ function NPC({ data }) {
     <RigidBody 
       type="fixed" 
       colliders="cuboid" 
-      position={data.position} 
+      position={npcPosition} 
       rotation={data.rotation}
       name={data.name}
     >
@@ -72,12 +73,15 @@ function NPC({ data }) {
 }
 
 export default function NPCs() {
+  const npcPositionOverrides = useStore((s) => s.npcPositionOverrides);
+
   return (
     <>
       {npcsData.map((npc) => (
         <NPC
           key={npc.id}
           data={npc}
+          positionOverride={npcPositionOverrides[npc.id]}
         />
       ))}
     </>

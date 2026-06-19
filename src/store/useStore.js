@@ -282,6 +282,13 @@ const useStore = create((set) => ({
   // --- MODAL DE VIDEO YOUTUBE ---
   tvVideoUrl: null,
   setTvVideoUrl: (url) => set({ tvVideoUrl: url }),
+
+  // --- OVERRIDE DE POSICIONES DE NPCS ---
+  // Permite teletransportar un NPC cambiando su posicion en runtime
+  npcPositionOverrides: {},
+  setNpcPosition: (npcId, position) => set((state) => ({
+    npcPositionOverrides: { ...state.npcPositionOverrides, [npcId]: position },
+  })),
 }));
 
 export default useStore;

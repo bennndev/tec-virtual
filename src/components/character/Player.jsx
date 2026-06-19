@@ -156,6 +156,7 @@ function Character() {
           
           const targetName = navigationTarget.name;
           useStore.getState().setArrivalTargetName(targetName);
+          const targetId = navigationTarget.id;
           
           clearNavigation();
 
@@ -163,6 +164,13 @@ function Character() {
           setTimeout(() => {
             useStore.getState().setArrivalTargetName(null);
           }, 4000);
+
+          // Si llegamos al laboratorio de marketing, teletransportar PaquitoBot tras 15s
+          if (targetId === 'zona_laboratorio_marketing') {
+            setTimeout(() => {
+              useStore.getState().setNpcPosition('paquito-bot', [41.41, 20.06, -44.69]);
+            }, 15000);
+          }
         }
       }
     }
