@@ -3,7 +3,11 @@
     "name": "Stand de Información",
     "description": "Punto de información del evento. Aquí puedes encontrar mapas, horarios y resolver dudas sobre las actividades.",
     "category": "Zona Principal",
-    "teleportPos": [104.54, 1.8, -112.5]
+    "teleportPos": [
+      104.54,
+      1.8,
+      -112.5
+    ]
   },
   "CarrerasAdmision": {
     "name": "Carreras y Admisión",
@@ -17,7 +21,11 @@
     "name": "Pantalla Multimedia",
     "description": "Pantalla interactiva con contenido audiovisual sobre los proyectos y logros de la comunidad estudiantil.",
     "category": "Zona Principal",
-    "teleportPos": [252.91, 1.8, -182.5]
+    "teleportPos": [
+      252.91,
+      1.8,
+      -182.5
+    ]
   },
   "stand01": {
     "name": "Stand Principal",
@@ -114,5 +122,65 @@
   "obj_pizarra_rodante": {
     "name": "Pizarra Acrílica Móvil",
     "description": "Pizarra con ruedas para dibujar esquemas de red, tablas de direccionamiento IP, subredes, y resolver problemas de diseño de topología en grupo durante la clase."
+  },
+  "zona_pabellon_A": {
+    "name": "Pabellón A",
+    "description": "Pabellón principal de aulas.",
+    "category": "Zona General"
+  },
+  "zona_pabellon_R": {
+    "name": "Pabellón R",
+    "description": "Pabellón de aulas.",
+    "category": "Zona General"
+  },
+  "zona_pabellon_B": {
+    "name": "Pabellón B",
+    "description": "Pabellón de aulas.",
+    "category": "Zona General"
+  },
+  "zona_cafeteria_01": {
+    "name": "Cafetería",
+    "description": "Lugar de descanso y comida.",
+    "category": "Zona General"
+  },
+  "zona_enfermeria": {
+    "name": "Enfermería",
+    "description": "Servicios de salud y primeros auxilios.",
+    "category": "Zona General"
+  },
+  "zona_estacionamiento": {
+    "name": "Estacionamiento",
+    "description": "Área de parqueo.",
+    "category": "Zona General"
+  },
+  "zona_pabellon_C": {
+    "name": "Pabellón C",
+    "description": "Pabellón de aulas.",
+    "category": "Zona General"
+  },
+  "zona_entrada_pabellon_A": {
+    "name": "Entrada Pabellón A",
+    "description": "Acceso principal al Pabellón A.",
+    "category": "Oculto"
+  },
+  "zona_laboratorio_marketing": {
+    "name": "Laboratorio de Marketing",
+    "description": "Laboratorio especializado en Marketing.",
+    "category": "Laboratorio"
+  },
+  "zona_entrada_laboratorio_marketing": {
+    "name": "Entrada Lab. Marketing",
+    "description": "Acceso al laboratorio de marketing.",
+    "category": "Oculto"
+  },
+  "zona_laboratorio_redes": {
+    "name": "Laboratorio de Redes",
+    "description": "Laboratorio especializado en Redes y Comunicaciones.",
+    "category": "Laboratorio"
+  },
+  "zona_entrada_laboratorio_redes": {
+    "name": "Entrada Lab. Redes",
+    "description": "Acceso al laboratorio de redes.",
+    "category": "Oculto"
   }
 }

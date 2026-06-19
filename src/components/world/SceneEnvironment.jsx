@@ -69,20 +69,29 @@ export default function SceneEnvironment() {
         zones[child.name] = [worldPos.x, worldPos.y, worldPos.z];
         console.log(`[TP] Zona detectada: ${child.name} → (${worldPos.x.toFixed(2)}, ${worldPos.y.toFixed(2)}, ${worldPos.z.toFixed(2)})`);
 
+        // Extraer de objects.json si existe
+        const objConf = objectsData[child.name];
+
         // Formatear el nombre para el marcador (ej: "zona_auditorio_a" -> "Auditorio A")
         const rawName = child.name.replace(/^zona_/, '').replace(/_/g, ' ');
-        const prettyName = rawName.replace(/\b\w/g, c => c.toUpperCase());
+        const prettyName = objConf?.name || rawName.replace(/\b\w/g, c => c.toUpperCase());
 
-        // Agregar también a los marcadores del mapa
-        markers.push({
-          id: child.name,
-          name: prettyName,
-          x: worldPos.x,
-          y: worldPos.y,
-          z: worldPos.z,
-          isZone: true,
-          teleportPos: [worldPos.x, worldPos.y + 1.5, worldPos.z]
-        });
+        // Por defecto mostramos en panorama, a menos que sea un "Laboratorio"
+        const isLab = objConf?.category === 'Laboratorio';
+
+        // Agregar a los marcadores del mapa solo si NO es "Oculto"
+        if (objConf?.category !== 'Oculto') {
+          markers.push({
+            id: child.name,
+            name: prettyName,
+            x: worldPos.x,
+            y: worldPos.y,
+            z: worldPos.z,
+            isZone: true,
+            teleportPos: [worldPos.x, worldPos.y + 1.5, worldPos.z],
+            showInPanorama: !isLab
+          });
+        }
 
         // Si tiene mesh, clonar material y hacer invisible
         if (child.isMesh && child.material) {

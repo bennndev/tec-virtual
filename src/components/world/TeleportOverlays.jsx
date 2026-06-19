@@ -22,7 +22,7 @@ export default function TeleportOverlays() {
 
   return (
     <group>
-      {mapMarkers.map((marker) => {
+      {mapMarkers.filter(m => m.showInPanorama !== false).map((marker) => {
         const isHovered = hoveredZone === marker.id;
         const radius = 3.5; // Radio adecuado para resaltar los stands reales
 
