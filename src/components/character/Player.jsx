@@ -56,7 +56,11 @@ function Character() {
     if (spawnFrames.current < 60) {
       if (ecctrlRef.current?.group) {
         const rb = ecctrlRef.current.group;
-        rb.setTranslation({ x: CHARACTER_INIT_POS[0], y: CHARACTER_INIT_POS[1], z: CHARACTER_INIT_POS[2] }, true);
+        const offset = useStore.getState().glbOffset;
+        const spawnX = CHARACTER_INIT_POS[0] + offset.x;
+        const spawnY = CHARACTER_INIT_POS[1] + offset.y;
+        const spawnZ = CHARACTER_INIT_POS[2] + offset.z;
+        rb.setTranslation({ x: spawnX, y: spawnY, z: spawnZ }, true);
         rb.setLinvel({ x: 0, y: 0, z: 0 }, true);
         spawnFrames.current++;
       }
@@ -103,15 +107,19 @@ function Character() {
       }
 
       // --- RESPAWNER DE SEGURIDAD (Red contra caídas al vacío) ---
-      if (vec.current.y < -15) {
+      const offset = useStore.getState().glbOffset;
+      if (vec.current.y < -15 + offset.y) {
         console.warn('¡Jugador fuera de límites! Reposicionando en zona segura...');
         if (ecctrlRef.current?.group) {
           const rb = ecctrlRef.current.group;
-          rb.setTranslation({ x: CHARACTER_INIT_POS[0], y: CHARACTER_INIT_POS[1], z: CHARACTER_INIT_POS[2] }, true);
+          const spawnX = CHARACTER_INIT_POS[0] + offset.x;
+          const spawnY = CHARACTER_INIT_POS[1] + offset.y;
+          const spawnZ = CHARACTER_INIT_POS[2] + offset.z;
+          rb.setTranslation({ x: spawnX, y: spawnY, z: spawnZ }, true);
           rb.setLinvel({ x: 0, y: 0, z: 0 }, true);
           rb.setAngvel({ x: 0, y: 0, z: 0 }, true);
           // Actualizamos vec para que la sincronización inmediata del store no registre la Y rota
-          vec.current.set(CHARACTER_INIT_POS[0], CHARACTER_INIT_POS[1], CHARACTER_INIT_POS[2]);
+          vec.current.set(spawnX, spawnY, spawnZ);
         }
       }
       

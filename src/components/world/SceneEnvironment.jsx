@@ -8,10 +8,10 @@ import useStore from '../../store/useStore';
 const HOVER_COLOR = new THREE.Color('#ffffff');
 
 // Precarga el escenario en el cache de R3F
-useGLTF.preload('/scenes/tecsup.glb');
+useGLTF.preload('/scenes/tecsup-2.glb');
 
 export default function SceneEnvironment() {
-  const { scene } = useGLTF('/scenes/tecsup.glb');
+  const { scene } = useGLTF('/scenes/tecsup-2.glb');
   const setHoveredObject = useStore((s) => s.setHoveredObject);
   const setTpZones = useStore((s) => s.setTpZones);
   const previousMesh = useRef(null);
@@ -24,6 +24,28 @@ export default function SceneEnvironment() {
   useEffect(() => {
     // Forzar actualización de matrices para getWorldPosition preciso
     scene.updateMatrixWorld(true);
+
+    // Calcular el offset global del escenario de forma dinámica
+    let offset = { x: 0, y: 0, z: 0 };
+    const referenceNode = scene.getObjectByName('muros dep002');
+    if (referenceNode) {
+      const refPos = new THREE.Vector3();
+      referenceNode.getWorldPosition(refPos);
+      
+      // La posición de referencia original en tecsup.glb es [338.90, 3.33, -144.57]
+      offset = {
+        x: refPos.x - 338.90,
+        y: refPos.y - 3.33,
+        z: refPos.z - (-144.57)
+      };
+      
+      console.log(`[Auto-Calibración] Offset GLB detectado: [${offset.x.toFixed(2)}, ${offset.y.toFixed(2)}, ${offset.z.toFixed(2)}]`);
+    } else {
+      console.log('[Auto-Calibración] Nodo de referencia "muros dep002" no encontrado. Usando offset [0,0,0]');
+    }
+
+    // Registrar el offset en el store de Zustand para el Player y la Cámara
+    useStore.getState().setGlbOffset(offset);
 
     const meshes = [];
     const markers = [];
@@ -49,13 +71,27 @@ export default function SceneEnvironment() {
         const worldPos = new THREE.Vector3();
         child.getWorldPosition(worldPos);
         const objConf = objectsData[child.name];
+        
+        let finalTeleportPos;
+        if (objConf.teleportPos) {
+          // Si el objeto tiene una coordenada estática en el JSON, le sumamos el offset del escenario
+          finalTeleportPos = [
+            objConf.teleportPos[0] + offset.x,
+            objConf.teleportPos[1] + offset.y,
+            objConf.teleportPos[2] + offset.z
+          ];
+        } else {
+          // Si es autocalculada sobre el mesh físico, ya tiene el offset del modelo 3D
+          finalTeleportPos = [worldPos.x, worldPos.y + 1.0, worldPos.z + 2.5];
+        }
+
         markers.push({
           id: child.name,
           name: objConf.name,
           x: worldPos.x,
           y: worldPos.y,
           z: worldPos.z,
-          teleportPos: objConf.teleportPos || [worldPos.x, worldPos.y + 1.0, worldPos.z + 2.5]
+          teleportPos: finalTeleportPos
         });
       }
 

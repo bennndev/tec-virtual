@@ -4,6 +4,10 @@ const useStore = create((set) => ({
   playerPosition: { x: 0, y: 0, z: 0 },
   setPlayerPosition: (pos) => set({ playerPosition: pos }),
 
+  // Desfase global detectado del modelo GLB para auto-calibración de coordenadas
+  glbOffset: { x: 0, y: 0, z: 0 },
+  setGlbOffset: (offset) => set({ glbOffset: offset }),
+
   // Dirección de la cámara del jugador (yaw) para rotar el ícono en el minimapa
   playerRotation: 0,
   setPlayerRotation: (rot) => set({ playerRotation: rot }),

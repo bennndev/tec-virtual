@@ -104,8 +104,9 @@ export default function CameraRig() {
     let cancelled = false;
 
     // Posicionar cámara arriba del escenario ANTES del primer render
-    camera.position.set(0, 12, -8);
-    camera.lookAt(0, 0, 0);
+    const offset = useStore.getState().glbOffset;
+    camera.position.set(offset.x, 12 + offset.y, -8 + offset.z);
+    camera.lookAt(offset.x, offset.y, offset.z);
 
     // Pequeña espera para que el personaje aparezca y la escena se estabilice
     const timer = setTimeout(() => {
