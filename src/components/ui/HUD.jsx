@@ -133,6 +133,16 @@ export default function HUD() {
             <ClayIcon name={musicMuted ? 'volume_off' : 'volume_up'} />
           </ClayButton>
 
+          {/* Botón panorámico — centro inferior */}
+          <ClayButton
+            onClick={handleToggle}
+            variant="cyan-solid"
+            className={styles.mapBtn}
+          >
+            <ClayIcon name="map" className={styles.icon} />
+            <span>(M)</span>
+          </ClayButton>
+
           {/* Diálogos e Interacción */}
           <InteractionPrompt />
           <DialogHUD />
