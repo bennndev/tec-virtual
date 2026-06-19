@@ -120,7 +120,7 @@ export default function HUD() {
           <Minimap />
           <FullMapModal />
 
-          {/* Selector de personaje */}
+          {/* El atajo O para selector de personaje sigue activo via CharacterSwitcher */}
           <CharacterSwitcher />
 
           {/* Control de música */}
@@ -131,15 +131,6 @@ export default function HUD() {
             title={musicMuted ? 'Activar música' : 'Silenciar música'}
           >
             <ClayIcon name={musicMuted ? 'volume_off' : 'volume_up'} />
-          </ClayButton>
-
-          {/* Cambio de modo de camara — extremo derecho inferior */}
-          <ClayButton
-            onClick={handleToggle}
-            variant="cyan-light"
-            className={styles.cameraBtn}
-          >
-            Vista general (M)
           </ClayButton>
 
           {/* Diálogos e Interacción */}

@@ -1,10 +1,7 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect } from 'react';
 import useStore from '../../store/useStore';
-import ClayButton from './ClayButton';
-import styles from './CharacterSwitcher.module.css';
 
 export default function CharacterSwitcher() {
-  const activeCharacter = useStore((s) => s.activeCharacter);
   const setSelectorOpen = useStore((s) => s.setSelectorOpen);
   const setPreviewCharacter = useStore((s) => s.setPreviewCharacter);
 
@@ -25,18 +22,6 @@ export default function CharacterSwitcher() {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [setSelectorOpen, setPreviewCharacter]);
 
-  const openSelector = useCallback(() => {
-    setPreviewCharacter(activeCharacter);
-    setSelectorOpen(true);
-  }, [activeCharacter, setPreviewCharacter, setSelectorOpen]);
-
-  return (
-    <ClayButton
-      onClick={openSelector}
-      variant="cyan-light"
-      className={styles.switcherBtn}
-    >
-      Personaje (O)
-    </ClayButton>
-  );
+  // Sin botón visual — solo el atajo de teclado O
+  return null;
 }
