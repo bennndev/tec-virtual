@@ -186,7 +186,7 @@ const useStore = create((set) => ({
         break;
       case 'docente_marketing':
         dialogues = [
-          "¡Bienvenido! Soy la profesora Valeria.",
+          "¡Bienvenido! Soy el profesor Carlos Mendoza.",
           "Cada anuncio que ves en internet, cada campaña en redes sociales y cada estrategia tiene detrás profesionales que analizan información y toman decisiones.",
           "Marketing ya no se trata solamente de vender. Hoy se trata de comprender personas, interpretar datos y generar experiencias memorables.",
           "Para que lo experimentes por ti mismo, acércate a la estación y presiona E para iniciar la misión."

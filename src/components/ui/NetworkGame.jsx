@@ -378,7 +378,11 @@ export default function NetworkGame() {
                     onMouseUp={() => handlePortMouseUp(port.id)}
                     onTouchStart={(e) => {
                       e.stopPropagation();
-                      handlePortClick(port.id);
+                      handlePortMouseDown(e, port.id);
+                    }}
+                    onTouchEnd={(e) => {
+                      e.stopPropagation();
+                      handlePortMouseUp(port.id);
                     }}
                     title={`${port.name}`}
                   />

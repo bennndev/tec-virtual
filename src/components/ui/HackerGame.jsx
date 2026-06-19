@@ -262,6 +262,10 @@ export default function HackerGame() {
                   className={styles.bug}
                   style={{ left: `${bug.x}%`, top: `${bug.y}%` }}
                   onClick={() => handleBugClick(bug.id)}
+                  onTouchStart={(e) => {
+                    e.preventDefault();
+                    handleBugClick(bug.id);
+                  }}
                   title="¡Haz clic para neutralizar!"
                 >
                   <span className={styles.bugEmoji}>{bug.emoji}</span>
