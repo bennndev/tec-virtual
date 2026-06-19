@@ -95,16 +95,6 @@
   /* padding and font-size are now handled globally in .clay-btn */
 }
 
-/* Modo inline: fluye con el layout en vez de absolute */
-.inline {
-  position: relative;
-  bottom: auto;
-  left: auto;
-  transform: none;
-  margin-top: clamp(8px, 2vh, 16px);
-  width: min(94%, 800px);
-}
-
 @media (max-width: 640px) {
   .actions {
     flex-direction: column-reverse;
@@ -118,4 +108,26 @@
     flex: 1;
     width: 100%;
   }
+}
+
+/* Variante inline sin posicionamiento absoluto */
+.overlayInline {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: clamp(16px, 2vw, 24px);
+  padding: clamp(12px, 2vh, 20px) clamp(14px, 2vw, 24px);
+  color: #475569;
+  pointer-events: auto;
+  box-shadow:
+    12px 12px 24px rgba(166, 180, 200, 0.3),
+    inset 8px 8px 16px rgba(255, 255, 255, 0.9),
+    inset -8px -8px 16px rgba(166, 180, 200, 0.45);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(4px, 1vh, 8px);
+  font-family: 'N27', system-ui, sans-serif;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 100;
 }

@@ -4,7 +4,7 @@ import useStore from '../../store/useStore';
 import ClayButton from './ClayButton';
 import styles from './DialogHUD.module.css';
 
-export default function DialogHUD({ inline = false }) {
+export default function DialogHUD({ variant = 'overlay' }) {
   const isDialogueActive = useStore((s) => s.isDialogueActive);
   const dialogueQueue = useStore((s) => s.dialogueQueue);
   const currentDialogueIndex = useStore((s) => s.currentDialogueIndex);
@@ -30,8 +30,10 @@ export default function DialogHUD({ inline = false }) {
 
   if (!isDialogueActive || dialogueQueue.length === 0) return null;
 
+  const overlayClass = variant === 'inline' ? styles.overlayInline : styles.overlay;
+
   return (
-    <div className={`${styles.overlay}${inline ? ` ${styles.inline}` : ''}`} ref={containerRef}>
+    <div className={overlayClass} ref={containerRef}>
       {gameState !== 'tutorial' && (
         <ClayButton 
           className={styles.closeButton} 

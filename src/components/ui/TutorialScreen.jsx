@@ -67,21 +67,31 @@ export default function TutorialScreen() {
         </div>
       </div>
 
-      {/* Robot PaquitoBot flotando en el centro */}
-      <div className={styles.robotWrapper}>
-        <img
-          src={activeSvg}
-          alt="PaquitoBot"
-          className={styles.robotImage}
-        />
-        <div className={styles.robotShadow} />
+      {/* Contenido principal: robot + diálogo lado a lado en tablet+ */}
+      <div className={styles.mainContent}>
+        {/* Robot PaquitoBot a la izquierda */}
+        <div className={styles.robotWrapper}>
+          <img
+            src={activeSvg}
+            alt="PaquitoBot"
+            className={styles.robotImage}
+          />
+          <div className={styles.robotShadow} />
+        </div>
+
+        {/* Diálogo a la derecha (inline en tablet+, overlay en mobile) */}
+        <div className={styles.dialogArea}>
+          <DialogHUD variant="inline" />
+        </div>
       </div>
 
       {/* Reproduce voz de PaquitoBot según el diálogo actual */}
       <VoicePlayer />
 
-      {/* HUD de diálogos — modo inline para que fluya con el layout */}
-      <DialogHUD inline />
+      {/* HUD overlay (solo visible en mobile, oculto en tablet+) */}
+      <div className={styles.mobileOverlay}>
+        <DialogHUD />
+      </div>
     </div>
   );
 }

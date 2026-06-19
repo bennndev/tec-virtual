@@ -12,79 +12,25 @@
     radial-gradient(circle at 85% 85%, rgba(14, 165, 233, 0.04) 0%, transparent 45%);
   background-size: 40px 40px, 40px 40px, 100% 100%, 100% 100%;
   background-position: center;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
   z-index: 15;
   font-family: 'N27', ui-monospace, sans-serif;
   user-select: none;
   color: #0f172a;
 }
 
-/* Espaciador que empuja el robot al centro vertical
-   y el diálogo al fondo naturalmente */
-.robotWrapper {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  perspective: 1000px;
-  position: relative;
-  z-index: 2;
-  min-height: min(280px, 40vh);
-  padding: clamp(60px, 8vh, 100px) 16px clamp(8px, 2vh, 16px);
-}
-
-.robotImage {
-  width: min(280px, 40vw);
-  height: min(280px, 40vw);
-  object-fit: contain;
-  filter: drop-shadow(0 20px 30px rgba(14, 165, 233, 0.2));
-  animation: floatRobot 4s ease-in-out infinite;
-  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.robotShadow {
-  width: clamp(80px, 20vw, 140px);
-  height: clamp(10px, 1.5vh, 16px);
-  background: rgba(15, 23, 42, 0.12);
-  border-radius: 50%;
-  filter: blur(6px);
-  margin-top: clamp(12px, 2vh, 24px);
-  animation: floatShadow 4s ease-in-out infinite;
-}
-
-@keyframes floatRobot {
-  0%, 100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-15px) rotate(2deg);
-  }
-}
-
-@keyframes floatShadow {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 0.8;
-  }
-  50% {
-    transform: scale(0.85);
-    opacity: 0.45;
-  }
-}
-
-/* Atajos visuales arriba del diálogo para explicar los controles */
+/* ========================================
+   Controles en la parte superior
+   ======================================== */
 .controlsPreview {
-  position: sticky;
-  top: 0;
+  position: absolute;
+  top: 40px;
   display: flex;
   gap: 24px;
   z-index: 10;
   flex-wrap: wrap;
   justify-content: center;
   max-width: 90%;
-  padding: 16px 0 0;
 }
 
 .controlCard {
@@ -150,18 +96,127 @@
   color: #0284c7;
 }
 
+/* ========================================
+   Contenido principal: robot + diálogo
+   ======================================== */
+.mainContent {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: clamp(24px, 4vw, 60px);
+  width: 90%;
+  max-width: 1000px;
+  padding-top: 80px; /* espacio para controles */
+  padding-bottom: 20px;
+}
+
+/* Robot a la izquierda */
+.robotWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  perspective: 1000px;
+  position: relative;
+  z-index: 2;
+}
+
+.robotImage {
+  width: clamp(120px, 18vw, 220px);
+  height: clamp(120px, 18vw, 220px);
+  object-fit: contain;
+  filter: drop-shadow(0 20px 30px rgba(14, 165, 233, 0.2));
+  animation: floatRobot 4s ease-in-out infinite;
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.robotShadow {
+  width: clamp(60px, 10vw, 110px);
+  height: clamp(8px, 1.2vh, 14px);
+  background: rgba(15, 23, 42, 0.12);
+  border-radius: 50%;
+  filter: blur(6px);
+  margin-top: clamp(10px, 1.5vh, 20px);
+  animation: floatShadow 4s ease-in-out infinite;
+}
+
+/* Diálogo a la derecha */
+.dialogArea {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Overlay mobile (oculto en tablet+) */
+.mobileOverlay {
+  display: none;
+}
+
+@keyframes floatRobot {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-15px) rotate(2deg);
+  }
+}
+
+@keyframes floatShadow {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(0.85);
+    opacity: 0.45;
+  }
+}
+
+/* ========================================
+   Tablet vertical y menores -> layout vertical
+   ======================================== */
 @media (max-width: 768px) {
-  .robotImage {
-    width: min(160px, 50vw);
-    height: min(160px, 50vw);
+  .tutorialContainer {
+    justify-content: center;
   }
+
+  .mainContent {
+    flex-direction: column;
+    gap: 0;
+    padding-top: 60px;
+    padding-bottom: 0;
+    flex: 0 0 auto;
+  }
+
   .robotWrapper {
-    padding: clamp(40px, 5vh, 60px) 12px clamp(4px, 1vh, 8px);
-    min-height: min(180px, 30vh);
+    margin-bottom: clamp(80px, 12vh, 160px);
   }
+
+  .robotImage {
+    width: min(160px, 40vw);
+    height: min(160px, 40vw);
+  }
+
+  .robotShadow {
+    width: min(100px, 25vw);
+  }
+
+  .dialogArea {
+    display: none; /* ocultamos inline dialog en mobile */
+  }
+
+  .mobileOverlay {
+    display: block; /* mostramos overlay dialog en mobile */
+  }
+
   .controlsPreview {
+    top: 16px;
     gap: 10px;
-    padding: 10px 0 0;
   }
   .controlCard {
     padding: 6px 10px;
@@ -177,18 +232,17 @@
 }
 
 /* Pantallas muy cortas (paisaje mobile, tablets pequeñas) */
-@media (max-height: 700px) {
-  .robotImage {
-    width: min(120px, 25vw);
-    height: min(120px, 25vw);
-  }
+@media (max-height: 700px) and (max-width: 768px) {
   .robotWrapper {
-    padding: clamp(20px, 3vh, 40px) 12px clamp(4px, 1vh, 8px);
-    min-height: min(140px, 25vh);
+    margin-bottom: clamp(60px, 10vh, 120px);
+  }
+  .robotImage {
+    width: min(120px, 30vw);
+    height: min(120px, 30vw);
   }
   .controlsPreview {
+    top: 8px;
     gap: 6px;
-    padding: 6px 0 0;
   }
   .controlCard {
     padding: 4px 8px;
@@ -210,12 +264,11 @@
     height: 80px;
   }
   .robotWrapper {
-    padding: 8px 8px 4px;
-    min-height: 90px;
+    margin-bottom: 50px;
   }
   .controlsPreview {
     gap: 4px;
-    padding: 4px 0 0;
+    top: 4px;
   }
   .controlCard {
     padding: 3px 6px;
