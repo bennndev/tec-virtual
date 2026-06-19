@@ -42,6 +42,10 @@ export default function HUD() {
   const toggleMusic = useStore((s) => s.toggleMusic);
   const flyMode = useStore((s) => s.flyMode);
 
+  const networkGameActive = useStore((s) => s.networkGameActive);
+  const networkGameWon = useStore((s) => s.networkGameWon);
+  const toggleNetworkGame = useStore((s) => s.toggleNetworkGame);
+
   const [showStats, setShowStats] = useState(false);
 
   // Toggle de estadísticas (F3 es el estándar de depuración)
@@ -120,6 +124,40 @@ export default function HUD() {
         <ClayIcon name={musicMuted ? 'volume_off' : 'volume_up'} />
       </ClayButton>
 
+      {/* Botón de acceso al Minijuego de Red 2D */}
+      {!networkGameWon && (
+        <ClayButton
+          onClick={toggleNetworkGame}
+          variant={networkGameActive ? 'cyan-solid' : 'cyan-light'}
+          title="Reparar Internet (X)"
+          style={{
+            position: 'absolute',
+            bottom: '230px',
+            right: '20px',
+            pointerEvents: 'auto',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '10px 20px',
+            fontSize: '14px',
+            fontWeight: '700',
+            letterSpacing: '0.3px',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          <span style={{
+            background: networkGameActive ? '#ffffff' : '#0ea5e9',
+            color: networkGameActive ? '#0ea5e9' : '#ffffff',
+            padding: '2px 8px',
+            borderRadius: '6px',
+            fontSize: '11px',
+            fontWeight: '850',
+            boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.1)'
+          }}>X</span>
+          <span>Reparar Internet</span>
+        </ClayButton>
+      )}
+
       {/* Cambio de modo de camara — extremo derecho inferior */}
       <ClayButton
         onClick={handleToggle}
@@ -134,4 +172,5 @@ export default function HUD() {
       <DialogHUD />
     </div>
   );
+
 }

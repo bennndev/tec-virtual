@@ -7,6 +7,7 @@ import CharacterSelector from './components/ui/CharacterSelector';
 import StartScreen from './components/ui/StartScreen';
 import TutorialScreen from './components/ui/TutorialScreen';
 import TouchControls from './components/ui/TouchControls';
+import NetworkGame from './components/ui/NetworkGame';
 import useStore from './store/useStore';
 
 function App() {
@@ -52,8 +53,12 @@ function App() {
       {(gameState === 'character_select' || isSelectorOpen) && (
         <CharacterSelector />
       )}
+
+      {/* Minijuego 2D overlay de reconexión de red */}
+      <NetworkGame />
     </div>
   );
 }
 
 export default App;
+
