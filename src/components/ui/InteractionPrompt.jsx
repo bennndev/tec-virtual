@@ -12,12 +12,17 @@ export default function InteractionPrompt() {
   const hackerGameProximity = useStore((s) => s.hackerGameProximity);
   const hackerGameActive = useStore((s) => s.hackerGameActive);
   const hackerGameWon = useStore((s) => s.hackerGameWon);
+  const tvRedesProximity = useStore((s) => s.tvRedesProximity);
+  const tvMarketingProximity = useStore((s) => s.tvMarketingProximity);
+  const tvVideoUrl = useStore((s) => s.tvVideoUrl);
   const containerRef = useRef(null);
 
   const showVitrinePrompt = vitrineProximity && !networkGameWon && !networkGameActive;
   const showHackerPrompt = hackerGameProximity && !hackerGameWon && !hackerGameActive;
+  const showTvRedesPrompt = tvRedesProximity && !tvVideoUrl;
+  const showTvMarketingPrompt = tvMarketingProximity && !tvVideoUrl;
 
-  const shouldShow = interactableNPC || showVitrinePrompt || showHackerPrompt;
+  const shouldShow = interactableNPC || showVitrinePrompt || showHackerPrompt || showTvRedesPrompt || showTvMarketingPrompt;
 
   useEffect(() => {
     if (containerRef.current && shouldShow && !isDialogueActive) {
@@ -44,6 +49,24 @@ export default function InteractionPrompt() {
       <div className={styles.prompt} ref={containerRef}>
         <span className={styles.key}>E</span>
         <span>Defender Ataque Hacker</span>
+      </div>
+    );
+  }
+
+  if (showTvRedesPrompt) {
+    return (
+      <div className={styles.prompt} ref={containerRef}>
+        <span className={styles.key}>E</span>
+        <span>Ver video — Redes</span>
+      </div>
+    );
+  }
+
+  if (showTvMarketingPrompt) {
+    return (
+      <div className={styles.prompt} ref={containerRef}>
+        <span className={styles.key}>E</span>
+        <span>Ver video — Marketing</span>
       </div>
     );
   }

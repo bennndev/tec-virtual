@@ -229,7 +229,17 @@ const useStore = create((set) => ({
     hackerGameWon: false,
     hackerGameActive: false,
     controlsDisabled: false
-  })
+  }),
+
+  // --- INTERACCIÓN CON TVS INFORMATIVOS ---
+  tvRedesProximity: false,
+  setTvRedesProximity: (val) => set({ tvRedesProximity: val }),
+  tvMarketingProximity: false,
+  setTvMarketingProximity: (val) => set({ tvMarketingProximity: val }),
+
+  // --- MODAL DE VIDEO YOUTUBE ---
+  tvVideoUrl: null,
+  setTvVideoUrl: (url) => set({ tvVideoUrl: url }),
 }));
 
 export default useStore;

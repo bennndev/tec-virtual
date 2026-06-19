@@ -1,0 +1,106 @@
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  font-family: 'N27', system-ui, sans-serif;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal {
+  width: 90%;
+  max-width: 960px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 40px;
+  box-shadow:
+    12px 12px 24px rgba(0, 0, 0, 0.3),
+    inset 8px 8px 16px rgba(255, 255, 255, 0.9),
+    inset -8px -8px 16px rgba(166, 180, 200, 0.45);
+  overflow: hidden;
+  animation: modalIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes modalIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.header {
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.8);
+}
+
+.title {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #0ea5e9;
+}
+
+.closeBtn {
+  background: #ffffff;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  color: #94a3b8;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  box-shadow:
+    4px 4px 8px rgba(166, 180, 200, 0.2),
+    inset 3px 3px 6px rgba(255, 255, 255, 0.6),
+    inset -3px -3px 6px rgba(166, 180, 200, 0.3);
+}
+
+.closeBtn:hover {
+  color: #ef4444;
+  transform: scale(1.05);
+}
+
+.videoContainer {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 aspect ratio */
+  background: #000;
+}
+
+.iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.error {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ef4444;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: center;
+}

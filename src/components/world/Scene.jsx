@@ -6,6 +6,7 @@ import NPCs from '../character/NPCs';
 import CameraRig from '../character/CameraRig';
 import VitrineInteraction from './VitrineInteraction';
 import HackerGameInteraction from './HackerGameInteraction';
+import TvInteraction from './TvInteraction';
 import PointerLock from '../controls/PointerLock';
 import BackgroundMusic from '../audio/BackgroundMusic';
 import TeleportOverlays from './TeleportOverlays';
@@ -45,6 +46,7 @@ export default function Scene() {
       <EnExLights />
       <VitrineInteraction />
       <HackerGameInteraction />
+      <TvInteraction />
       <PointerLock />
       <BackgroundMusic />
     </>

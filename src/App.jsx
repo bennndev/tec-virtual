@@ -11,6 +11,7 @@ import TouchControls from './components/ui/TouchControls';
 import EnExConfirmModal from './components/ui/EnExConfirmModal';
 import NetworkGame from './components/ui/NetworkGame';
 import HackerGame from './components/ui/HackerGame';
+import VideoModal from './components/ui/VideoModal';
 import useStore from './store/useStore';
 
 function App() {
@@ -63,6 +64,9 @@ function App() {
 
       {/* Minijuego 2D overlay de ciberseguridad */}
       <HackerGame />
+
+      {/* Modal de video YouTube */}
+      <VideoModal />
     </div>
   );
 }

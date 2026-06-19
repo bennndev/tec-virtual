@@ -277,6 +277,18 @@ export default function Player() {
           state.toggleHackerGame();
           return;
         }
+        // E cerca del TV de Redes → abre video
+        if (e.code === 'KeyE' && state.tvRedesProximity && !state.tvVideoUrl) {
+          e.preventDefault();
+          state.setTvVideoUrl('https://www.youtube.com/watch?v=REDES_VIDEO_ID');
+          return;
+        }
+        // E cerca del TV de Marketing → abre video
+        if (e.code === 'KeyE' && state.tvMarketingProximity && !state.tvVideoUrl) {
+          e.preventDefault();
+          state.setTvVideoUrl('https://www.youtube.com/watch?v=MARKETING_VIDEO_ID');
+          return;
+        }
         // E sobre un NPC → inicia diálogo
         if (e.code === 'KeyE' && state.interactableNPC) {
           e.preventDefault();

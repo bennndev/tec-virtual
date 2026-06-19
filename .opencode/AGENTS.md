@@ -32,6 +32,7 @@ src/
 │   │   ├── Ground.jsx   # (deprecated — reemplazado por SceneEnvironment)
 │   │   ├── VitrineInteraction.jsx # Zona de interacción por proximidad con minijuego
 │   │   ├── HackerGameInteraction.jsx # Zona de interacción por proximidad con juego de ciberseguridad
+│   │   ├── TvInteraction.jsx # Zona de interacción por proximidad con reproductor de video
 │   │   └── Obstacles.jsx# (deprecated — reemplazado por SceneEnvironment)
 │   ├── character/       # Personaje y cámara
 │   │   ├── Player.jsx   # Cápsula controlable con ecctrl + WASD + fly mode (F)
