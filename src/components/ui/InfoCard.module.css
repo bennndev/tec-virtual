@@ -29,6 +29,7 @@
   /* Opacity/transform inicial — GSAP lo anima */
   opacity: 0;
   transform: scale(0.8);
+  font-family: 'N27', system-ui, sans-serif;
 }
 
 /* --- Layout interno: ícono + contenido --- */
@@ -73,6 +74,7 @@
 
 /* --- Título (object_name) --- */
 .title {
+  font-family: 'N27', system-ui, sans-serif;
   margin: 0 0 8px;
   font-size: 1.5rem;
   font-weight: 800;
@@ -85,6 +87,7 @@
 
 /* --- Descripción --- */
 .desc {
+  font-family: 'N27', system-ui, sans-serif;
   margin: 0;
   font-size: 0.875rem;
   line-height: 1.625;

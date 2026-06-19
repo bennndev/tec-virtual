@@ -53,10 +53,10 @@ export default function EnExConfirmModal() {
 
         {/* Actions */}
         <div className={styles.actions}>
-          <button className={styles.cancelBtn} onClick={handleCancel}>
+          <button className="clay-btn clay-cyan-light" onClick={handleCancel}>
             Cancelar
           </button>
-          <button className={styles.confirmBtn} onClick={handleConfirm}>
+          <button className="clay-btn clay-cyan-solid" onClick={handleConfirm}>
             Entrar
           </button>
         </div>

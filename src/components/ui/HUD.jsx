@@ -76,7 +76,7 @@ export default function HUD() {
         height: '100%',
         pointerEvents: 'none',
         zIndex: 10,
-        fontFamily: 'ui-monospace, Consolas, monospace',
+        fontFamily: "'N27', system-ui, sans-serif",
         color: '#fff',
         fontSize: '14px',
       }}
