@@ -35,9 +35,14 @@ export default function InteractionPrompt() {
 
   if (isDialogueActive) return null;
 
+  // Tap en el prompt = simular tecla E (funciona en mobile)
+  const handleTap = () => {
+    window.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyE' }));
+  };
+
   if (showVitrinePrompt) {
     return (
-      <div className={styles.prompt} ref={containerRef}>
+      <div className={styles.prompt} ref={containerRef} onClick={handleTap} onTouchEnd={(e) => { e.preventDefault(); handleTap(); }}>
         <span className={styles.key}>E</span>
         <span>Reparar Internet</span>
       </div>
@@ -46,7 +51,7 @@ export default function InteractionPrompt() {
 
   if (showHackerPrompt) {
     return (
-      <div className={styles.prompt} ref={containerRef}>
+      <div className={styles.prompt} ref={containerRef} onClick={handleTap} onTouchEnd={(e) => { e.preventDefault(); handleTap(); }}>
         <span className={styles.key}>E</span>
         <span>Defender Ataque Hacker</span>
       </div>
@@ -55,7 +60,7 @@ export default function InteractionPrompt() {
 
   if (showTvRedesPrompt) {
     return (
-      <div className={styles.prompt} ref={containerRef}>
+      <div className={styles.prompt} ref={containerRef} onClick={handleTap} onTouchEnd={(e) => { e.preventDefault(); handleTap(); }}>
         <span className={styles.key}>E</span>
         <span>Ver video — Redes</span>
       </div>
@@ -64,7 +69,7 @@ export default function InteractionPrompt() {
 
   if (showTvMarketingPrompt) {
     return (
-      <div className={styles.prompt} ref={containerRef}>
+      <div className={styles.prompt} ref={containerRef} onClick={handleTap} onTouchEnd={(e) => { e.preventDefault(); handleTap(); }}>
         <span className={styles.key}>E</span>
         <span>Ver video — Marketing</span>
       </div>
@@ -74,7 +79,7 @@ export default function InteractionPrompt() {
   if (!interactableNPC) return null;
 
   return (
-    <div className={styles.prompt} ref={containerRef}>
+    <div className={styles.prompt} ref={containerRef} onClick={handleTap} onTouchEnd={(e) => { e.preventDefault(); handleTap(); }}>
       <span className={styles.key}>E</span>
       <span>Hablar con {interactableNPC.name}</span>
     </div>

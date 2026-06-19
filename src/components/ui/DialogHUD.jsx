@@ -32,8 +32,15 @@ export default function DialogHUD({ variant = 'overlay' }) {
 
   const overlayClass = variant === 'inline' ? styles.overlayInline : styles.overlay;
 
+  // Tap en cualquier parte de la burbuja avanza el diálogo (especialmente útil en mobile)
+  const handleOverlayClick = (e) => {
+    // Ignorar clicks en botones (ellos ya manejan su propia acción)
+    if (e.target.closest('button')) return;
+    nextDialogue();
+  };
+
   return (
-    <div className={overlayClass} ref={containerRef}>
+    <div className={overlayClass} ref={containerRef} onClick={handleOverlayClick}>
       {gameState !== 'tutorial' && (
         <ClayButton 
           className={styles.closeButton} 
@@ -70,7 +77,7 @@ export default function DialogHUD({ variant = 'overlay' }) {
           {currentDialogueIndex > 0 && (
             <ClayButton
               variant="cyan-light"
-              onClick={previousDialogue}
+              onClick={(e) => { e.stopPropagation(); previousDialogue(); }}
               className={styles.actionBtn}
             >
               Retroceder
@@ -79,7 +86,7 @@ export default function DialogHUD({ variant = 'overlay' }) {
           
           <ClayButton
             variant="cyan-solid"
-            onClick={nextDialogue}
+            onClick={(e) => { e.stopPropagation(); nextDialogue(); }}
             className={styles.actionBtn}
           >
             {currentDialogueIndex === dialogueQueue.length - 1
