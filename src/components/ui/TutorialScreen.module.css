@@ -26,15 +26,15 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-bottom: 220px; /* Espacio para el DialogHUD abajo */
+  margin-bottom: clamp(120px, 18vh, 220px); /* Espacio adaptable para el DialogHUD */
   perspective: 1000px;
   position: relative;
   z-index: 2;
 }
 
 .robotImage {
-  width: 280px;
-  height: 280px;
+  width: min(280px, 40vw);
+  height: min(280px, 40vw);
   object-fit: contain;
   filter: drop-shadow(0 20px 30px rgba(14, 165, 233, 0.2));
   animation: floatRobot 4s ease-in-out infinite;
@@ -42,12 +42,12 @@
 }
 
 .robotShadow {
-  width: 140px;
-  height: 16px;
+  width: clamp(80px, 20vw, 140px);
+  height: clamp(10px, 1.5vh, 16px);
   background: rgba(15, 23, 42, 0.12);
   border-radius: 50%;
   filter: blur(6px);
-  margin-top: 24px;
+  margin-top: clamp(12px, 2vh, 24px);
   animation: floatShadow 4s ease-in-out infinite;
 }
 
@@ -148,25 +148,73 @@
 
 @media (max-width: 768px) {
   .robotImage {
-    width: 200px;
-    height: 200px;
+    width: min(180px, 50vw);
+    height: min(180px, 50vw);
   }
   .controlsPreview {
-    top: 20px;
-    gap: 12px;
+    top: 16px;
+    gap: 10px;
   }
   .controlCard {
-    padding: 8px 12px;
-    min-width: 90px;
+    padding: 6px 10px;
+    min-width: 72px;
   }
   .keyLabel {
-    font-size: 12px;
-    padding: 3px 6px;
+    font-size: 11px;
+    padding: 2px 5px;
   }
   .keyText {
-    font-size: 10px;
+    font-size: 9px;
   }
   .robotWrapper {
-    margin-bottom: 260px;
+    margin-bottom: clamp(100px, 16vh, 200px);
+  }
+}
+
+/* Pantallas muy cortas (paisaje mobile, tablets pequeñas) */
+@media (max-height: 700px) {
+  .tutorialContainer {
+    justify-content: flex-start;
+    padding-top: 10px;
+  }
+  .robotImage {
+    width: min(130px, 30vw);
+    height: min(130px, 30vw);
+  }
+  .robotWrapper {
+    margin-bottom: clamp(80px, 14vh, 140px);
+  }
+  .controlsPreview {
+    top: 8px;
+    gap: 6px;
+  }
+  .controlCard {
+    padding: 4px 8px;
+    min-width: 60px;
+  }
+  .keyLabel {
+    font-size: 9px;
+    padding: 2px 4px;
+  }
+  .keyText {
+    font-size: 8px;
+  }
+}
+
+/* Pantallas muy cortas Y angostas (mobile landscape) */
+@media (max-height: 500px) {
+  .robotImage {
+    width: 80px;
+    height: 80px;
+  }
+  .robotWrapper {
+    margin-bottom: 60px;
+  }
+  .controlsPreview {
+    gap: 4px;
+  }
+  .controlCard {
+    padding: 3px 6px;
+    min-width: 50px;
   }
 }

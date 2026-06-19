@@ -135,7 +135,7 @@ export default function Minimap() {
                   }
                 }}
               >
-                <MarkerIcon x="-5" y="-5" width="10" height="10" />
+                <MarkerIcon x="-8" y="-8" width="16" height="16" />
               </g>
             </g>
           );

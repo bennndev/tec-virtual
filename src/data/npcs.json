@@ -3,16 +3,32 @@
     "id": "paquito-bot",
     "name": "Paquito Bot",
     "modelUrl": "/models/npcs/paquito-bot.glb",
-    "position": [
-      -73,
-      21.07,
-      -6.78
-    ],
-    "rotation": [
-      0.1,
-      0.08,
-      0.01
-    ],
+    "position": [-73, 21.07, -6.78],
+    "rotation": [0.1, 0.08, 0.01],
     "description": "El bot asistente oficial de Tecsup. Listo para guiarte en el campus."
+  },
+  {
+    "id": "guardia_tecsup",
+    "name": "Guardia Tecsup",
+    "modelUrl": "/models/npcs/guardia_tecsup.glb",
+    "position": [-69.95, 20.04, -5.77],
+    "rotation": [0, 0, 0],
+    "description": "El guardia de seguridad del campus. Vela por el orden y la tranquilidad de todos."
+  },
+  {
+    "id": "docente_redes",
+    "name": "Docente de Redes",
+    "modelUrl": "/models/npcs/docente_redes.glb",
+    "position": [45.68, 20.30, -37.9],
+    "rotation": [0, 0, 0],
+    "description": "Docente especialista en redes y telecomunicaciones. Siempre dispuesto a resolver tus dudas técnicas."
+  },
+  {
+    "id": "docente_marketing",
+    "name": "Docente de Marketing",
+    "modelUrl": "/models/npcs/docente_marketing.glb",
+    "position": [38.00, 20.03, -51.73],
+    "rotation": [0, 0, 0],
+    "description": "Docente del laboratorio de Marketing digital. Experto en estrategias y tendencias del mercado."
   }
-]
+]

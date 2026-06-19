@@ -296,7 +296,7 @@ export default function FullMapModal() {
                     onMouseEnter={() => setHoveredObject({ id: marker.id, name: marker.name, description: desc })}
                     onMouseLeave={() => setHoveredObject(null)}
                   >
-                    <MarkerIcon x="-4" y="-4" width="8" height="8" />
+                    <MarkerIcon x="-7" y="-7" width="14" height="14" />
                   </g>
                 </g>
               );
