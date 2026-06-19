@@ -20,12 +20,10 @@
   white-space: nowrap;
 }
 
-/* Botón panorámico — centrado abajo */
-.mapBtn {
+/* Botón panorámico */
+.mapBtn,
+.mapBtnTouch {
   position: absolute;
-  bottom: 60px;
-  left: 50%;
-  transform: translateX(-50%);
   pointer-events: auto;
   padding: 14px 28px;
   font-size: 16px;
@@ -37,33 +35,53 @@
   border-radius: 20px;
   font-family: 'N27', system-ui, sans-serif;
   z-index: 20;
-  animation: floatGlow 3s ease-in-out infinite;
   cursor: pointer;
 }
 
-.mapBtn .icon {
+/* Desktop: centrado abajo */
+.mapBtn {
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: floatGlowCenter 3s ease-in-out infinite;
+}
+
+/* Touch: al lado del joystick */
+.mapBtnTouch {
+  bottom: 55px;
+  left: 185px;
+  animation: floatGlowStatic 3s ease-in-out infinite;
+}
+
+.mapBtn .icon,
+.mapBtnTouch .icon {
   font-size: 22px;
   line-height: 1;
 }
 
-@keyframes floatGlow {
+@keyframes floatGlowCenter {
   0%, 100% {
-    box-shadow:
-      0 0 20px rgba(14, 165, 233, 0.4),
-      12px 12px 24px rgba(166, 180, 200, 0.3),
-      inset 8px 8px 16px rgba(255, 255, 255, 0.9),
-      inset -8px -8px 16px rgba(166, 180, 200, 0.45);
+    box-shadow: 0 0 20px rgba(14, 165, 233, 0.4), 12px 12px 24px rgba(166, 180, 200, 0.3), inset 8px 8px 16px rgba(255, 255, 255, 0.9), inset -8px -8px 16px rgba(166, 180, 200, 0.45);
     transform: translateX(-50%) translateY(0);
   }
   50% {
-    box-shadow:
-      0 0 40px rgba(14, 165, 233, 0.6),
-      12px 12px 24px rgba(166, 180, 200, 0.3),
-      inset 8px 8px 16px rgba(255, 255, 255, 0.9),
-      inset -8px -8px 16px rgba(166, 180, 200, 0.45);
+    box-shadow: 0 0 40px rgba(14, 165, 233, 0.6), 12px 12px 24px rgba(166, 180, 200, 0.3), inset 8px 8px 16px rgba(255, 255, 255, 0.9), inset -8px -8px 16px rgba(166, 180, 200, 0.45);
     transform: translateX(-50%) translateY(-4px);
   }
 }
+
+@keyframes floatGlowStatic {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(14, 165, 233, 0.4), 12px 12px 24px rgba(166, 180, 200, 0.3), inset 8px 8px 16px rgba(255, 255, 255, 0.9), inset -8px -8px 16px rgba(166, 180, 200, 0.45);
+    transform: translateY(0);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(14, 165, 233, 0.6), 12px 12px 24px rgba(166, 180, 200, 0.3), inset 8px 8px 16px rgba(255, 255, 255, 0.9), inset -8px -8px 16px rgba(166, 180, 200, 0.45);
+    transform: translateY(-4px);
+  }
+}
+
+
 
 
 /* ========================================
@@ -165,13 +183,16 @@
     font-size: 14px;
   }
 
-  .mapBtn {
-    bottom: 175px; /* arriba del joystick para que no se pisen */
-    left: 50%;
-    transform: translateX(-50%);
+  .mapBtn,
+  .mapBtnTouch {
     padding: 10px 18px;
     font-size: 13px;
     gap: 6px;
+  }
+
+  .mapBtnTouch {
+    left: 175px;
+    bottom: 50px;
   }
 
   .mapBtn .icon {

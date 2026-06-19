@@ -43,6 +43,9 @@ export default function HUD() {
   const flyMode = useStore((s) => s.flyMode);
 
   const [showStats, setShowStats] = useState(false);
+  const [isTouchDevice] = useState(
+    () => 'ontouchstart' in window || navigator.maxTouchPoints > 0
+  );
 
   // Toggle de estadísticas (F3 es el estándar de depuración)
   useEffect(() => {
@@ -133,11 +136,11 @@ export default function HUD() {
             <ClayIcon name={musicMuted ? 'volume_off' : 'volume_up'} />
           </ClayButton>
 
-          {/* Botón panorámico — centro inferior */}
+          {/* Botón panorámico — centro inferior desktop, al lado del joystick en touch */}
           <ClayButton
             onClick={handleToggle}
             variant="cyan-solid"
-            className={styles.mapBtn}
+            className={`${styles.mapBtn} ${isTouchDevice ? styles.mapBtnTouch : ''}`}
           >
             <ClayIcon name="map" className={styles.icon} />
             <span>(M)</span>
