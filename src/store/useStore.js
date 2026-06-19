@@ -136,27 +136,36 @@ const useStore = create((set) => ({
         nextState.controlsDisabled = true;
         nextState.gameState = 'character_select';
       }
-      // Si hablamos con PaquitoBot, activar navegación
+      // Si hablamos con PaquitoBot, activar navegación según el paso
       if (state.activeDialogueNPC?.id === 'paquito-bot') {
-        if (state.npcPositionOverrides?.['paquito-bot']) {
-          // Ya fue teletransportado → segundo diálogo: navegar a redes
-          const redesZone = state.tpZones?.zona_laboratorio_redes;
-          if (redesZone) {
-            const targetPos = { x: redesZone[0], y: redesZone[1], z: redesZone[2] };
-            const startPos = state.playerPosition;
-            const path = pathfinder.calculatePath(startPos, targetPos);
-            nextState.navigationTarget = { id: 'zona_laboratorio_redes', name: 'Laboratorio de Redes', ...targetPos };
-            nextState.navigationPath = path;
-            nextState.isNavigating = true;
-          }
-        } else {
-          // Primer diálogo: navegar a marketing
+        if (state.paquitoStep === 0) {
+          // Paso 0 → navegar a marketing + teletransportar ya
           const marketingZone = state.tpZones?.zona_laboratorio_marketing;
           if (marketingZone) {
             const targetPos = { x: marketingZone[0], y: marketingZone[1], z: marketingZone[2] };
             const startPos = state.playerPosition;
             const path = pathfinder.calculatePath(startPos, targetPos);
             nextState.navigationTarget = { id: 'zona_laboratorio_marketing', name: 'Laboratorio de Marketing', ...targetPos };
+            nextState.navigationPath = path;
+            nextState.isNavigating = true;
+          }
+          nextState.npcPositionOverrides = { ...state.npcPositionOverrides, 'paquito-bot': [37.07, 20.04, -44.67] };
+          nextState.paquitoStep = 1;
+        } else if (state.paquitoStep === 1) {
+          // Paso 1 (marketing) → cerrar y empezar timer de 15s para teletransporte a redes
+          setTimeout(() => {
+            const s = useStore.getState();
+            s.setNpcPosition('paquito-bot', [41.43, 20.06, -44.42]);
+            s.advancePaquitoStep();
+          }, 15000);
+        } else if (state.paquitoStep === 2) {
+          // Paso 2 (redes guía) → navegar al lab de redes
+          const redesZone = state.tpZones?.zona_laboratorio_redes;
+          if (redesZone) {
+            const targetPos = { x: redesZone[0], y: redesZone[1], z: redesZone[2] };
+            const startPos = state.playerPosition;
+            const path = pathfinder.calculatePath(startPos, targetPos);
+            nextState.navigationTarget = { id: 'zona_laboratorio_redes', name: 'Laboratorio de Redes', ...targetPos };
             nextState.navigationPath = path;
             nextState.isNavigating = true;
           }
@@ -204,11 +213,30 @@ const useStore = create((set) => ({
         ];
         break;
       case 'paquito-bot':
-        dialogues = [
-          "¡Hola! Soy PaquitoBot 🤖",
-          "Soy el bot asistente oficial de Tecsup, listo para guiarte en el campus.",
-          "Primero comencemos conociendo el área de Marketing Digital, dirígete a su laboratorio."
-        ];
+        switch (state.paquitoStep) {
+          case 0: // Entrada: guiar a marketing
+            dialogues = [
+              "Hola! Soy PaquitoBot, el bot asistente oficial de Tecsup.",
+              "Estoy listo para guiarte en el campus.",
+              "Primero comencemos conociendo el area de Marketing Digital, dirigete a su laboratorio."
+            ];
+            break;
+          case 1: // Marketing: saludo breve
+            dialogues = ["Genial, llegaste."];
+            break;
+          case 2: // Redes: guiar al lab de redes
+            dialogues = [
+              "Genial, que divertido.",
+              "Ahora exploremos el laboratorio de Redes y Telecomunicaciones."
+            ];
+            break;
+          default: // Redes: cierre
+            dialogues = [
+              "Muy bien, exploraste todos los laboratorios.",
+              "Acá termina nuestro recorrido.",
+              "Espero te hayas divertido y aprendido."
+            ];
+        }
         break;
       case 'docente_redes':
         dialogues = [
@@ -303,6 +331,11 @@ const useStore = create((set) => ({
   setNpcPosition: (npcId, position) => set((state) => ({
     npcPositionOverrides: { ...state.npcPositionOverrides, [npcId]: position },
   })),
+
+  // --- FLUJO DE PAQUITOBOT ---
+  // 0=entrada, 1=marketing (saludo), 2=redes-guia, 3=redes-cierre
+  paquitoStep: 0,
+  advancePaquitoStep: () => set((state) => ({ paquitoStep: state.paquitoStep + 1 })),
 }));
 
 export default useStore;

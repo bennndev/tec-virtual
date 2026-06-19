@@ -165,31 +165,12 @@ function Character() {
             useStore.getState().setArrivalTargetName(null);
           }, 4000);
 
-          // Si llegamos al laboratorio de marketing, teletransportar PaquitoBot tras 15s
-          if (targetId === 'zona_laboratorio_marketing') {
-            setTimeout(() => {
-              const store = useStore.getState();
-              store.setNpcPosition('paquito-bot', [41.41, 20.06, -44.69]);
-              store.startDialogue([
-                "¡Llegaste! 🎉 El laboratorio de Marketing Digital es donde la creatividad y los datos se encuentran.",
-                "Los estudiantes aquí aprenden a crear campañas que conectan marcas con personas en todo el mundo.",
-                "Pero la aventura no termina aquí... Aún falta explorar el laboratorio de Redes y Telecomunicaciones.",
-                "¡Vamos! Sígueme al siguiente laboratorio."
-              ], { id: 'paquito-bot', name: 'PaquitoBot' });
-            }, 15000);
-          }
-
           // Si llegamos al laboratorio de redes, teletransportar PaquitoBot tras 15s
           if (targetId === 'zona_laboratorio_redes') {
             setTimeout(() => {
               const store = useStore.getState();
-              store.setNpcPosition('paquito-bot', [37.39, 20.30, -37.11]);
-              store.startDialogue([
-                "¡Excelente! 🚀 Este es el laboratorio de Redes y Telecomunicaciones.",
-                "Acá los estudiantes aprenden cómo mantener conectado al mundo: fibra óptica, switches, routers y ciberseguridad.",
-                "Los profesores te están esperando para mostrarte cómo funciona realmente la infraestructura digital.",
-                "Acércate y habla con el profesor Torres para comenzar con los desafíos."
-              ], { id: 'paquito-bot', name: 'PaquitoBot' });
+              store.setNpcPosition('paquito-bot', [37.35, 20.30, -36.87]);
+              store.advancePaquitoStep(); // paso 2 → 3 (cierre)
             }, 15000);
           }
         }
