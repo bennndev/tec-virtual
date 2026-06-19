@@ -82,7 +82,9 @@
   line-height: 1.2;
   color: #0ea5e9;
   /* sky-500 */
-  white-space: nowrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 /* --- Descripción --- */

@@ -5,6 +5,12 @@ import * as THREE from 'three';
 import objectsData from '../../data/objects.json';
 import useStore from '../../store/useStore';
 
+// Construir lookup de prefijos para objetos agrupados (ej: monitores con sub-meshes)
+// Se ordena de mayor a menor longitud para priorizar el match más específico
+const PREFIX_ENTRIES = Object.entries(objectsData)
+  .filter(([, v]) => v.meshPrefix)
+  .sort(([, a], [, b]) => b.meshPrefix.length - a.meshPrefix.length);
+
 const HOVER_COLOR = new THREE.Color('#ffffff');
 
 // Precarga el escenario en el cache de R3F
@@ -163,10 +169,24 @@ export default function SceneEnvironment() {
 
     previousMesh.current = mesh;
 
-    // Verificar si es un objeto interactivo
-    if (mesh.name && objectsData[mesh.name]) {
+    // Buscar datos del objeto: exact match primero, luego por prefijo
+    let objData = null;
+    if (mesh.name) {
+      objData = objectsData[mesh.name];
+      if (!objData) {
+        // Buscar por prefijo (para objetos con múltiples sub-meshes)
+        for (const [, entry] of PREFIX_ENTRIES) {
+          if (mesh.name.startsWith(entry.meshPrefix)) {
+            objData = entry;
+            break;
+          }
+        }
+      }
+    }
+
+    if (objData) {
       applyHover(mesh);
-      setHoveredObject({ id: mesh.name, ...objectsData[mesh.name] });
+      setHoveredObject({ id: mesh.name, ...objData });
     } else {
       setHoveredObject(null);
     }
