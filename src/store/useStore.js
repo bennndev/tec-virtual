@@ -121,16 +121,18 @@ const useStore = create((set) => ({
     if (state.currentDialogueIndex < state.dialogueQueue.length - 1) {
       return { currentDialogueIndex: state.currentDialogueIndex + 1 };
     } else {
-      // Fin del diálogo -> Disparar Escena 03 (Selector de avatar)
+      // Fin del diálogo — cerrar limpiamente
       const nextState = { 
         isDialogueActive: false, 
         dialogueQueue: [], 
         currentDialogueIndex: 0,
         activeDialogueNPC: null,
-        isSelectorOpen: true, // Abre el selector automáticamente
-        // No rehabilitamos controlsDisabled porque isSelectorOpen ya requiere controles bloqueados
+        controlsDisabled: false,
       };
+      // Solo en el tutorial se abre el selector al terminar
       if (state.gameState === 'tutorial') {
+        nextState.isSelectorOpen = true;
+        nextState.controlsDisabled = true;
         nextState.gameState = 'character_select';
       }
       return nextState;
@@ -164,18 +166,38 @@ const useStore = create((set) => ({
     const targetNPC = npc || state.interactableNPC;
     if (!targetNPC) return {};
 
-    const dialogues = targetNPC.id === 'paquito-bot'
-      ? [
-          "¡Hola! Soy PaquitoBot 🤖",
-          "Te acompañaré durante esta experiencia virtual por Tecsup.",
-          "Hoy conocerás una de nuestras carreras tecnológicas de una manera diferente.",
-          "Pero antes necesito ayudarte a crear tu identidad virtual.",
-          "Selecciona el personaje que te representará durante esta visita."
-        ]
-      : [
+    let dialogues;
+    switch (targetNPC.id) {
+      case 'guardia_tecsup':
+        dialogues = [
+          "Buenos días.",
+          "Por favor muéstreme su identificación.",
+          "Todo en orden.",
+          "Bienvenido a Tecsup."
+        ];
+        break;
+      case 'docente_redes':
+        dialogues = [
+          "¡Bienvenido! Soy el profesor Torres.",
+          "Cada mensaje que envías, cada videojuego online y cada videollamada dependen de profesionales capaces de diseñar y administrar redes.",
+          "Pero no solo conectamos dispositivos. También protegemos la información frente a amenazas digitales.",
+          "Por eso hoy tendrás dos misiones: primero restaurarás la conectividad del campus, después defenderás nuestra infraestructura de un ataque informático."
+        ];
+        break;
+      case 'docente_marketing':
+        dialogues = [
+          "¡Bienvenido! Soy la profesora Valeria.",
+          "Cada anuncio que ves en internet, cada campaña en redes sociales y cada estrategia tiene detrás profesionales que analizan información y toman decisiones.",
+          "Marketing ya no se trata solamente de vender. Hoy se trata de comprender personas, interpretar datos y generar experiencias memorables.",
+          "Para que lo experimentes por ti mismo, acércate a la estación y presiona E para iniciar la misión."
+        ];
+        break;
+      default:
+        dialogues = [
           "¡Hola! Soy " + targetNPC.name + ".",
           targetNPC.description
         ];
+    }
 
     return {
       dialogueQueue: dialogues,
