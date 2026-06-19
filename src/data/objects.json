@@ -7,15 +7,11 @@
   },
   "CarrerasAdmision": {
     "name": "Carreras y Admisión",
-    "description": "Información sobre las carreras profesionales y el proceso de admisión a la institución.",
-    "category": "Zona Principal",
-    "teleportPos": [97.08, 1.8, -111.5]
+    "description": "Información sobre las carreras profesionales y el proceso de admisión a la institución."
   },
   "Empresas": {
     "name": "Empresas Participantes",
-    "description": "Directorio de las empresas que participan en la feria tecnológica. Revisa sus propuestas y oportunidades.",
-    "category": "Zona Principal",
-    "teleportPos": [104.35, 1.8, -110.5]
+    "description": "Directorio de las empresas que participan en la feria tecnológica. Revisa sus propuestas y oportunidades."
   },
   "Video004": {
     "name": "Pantalla Multimedia",
@@ -25,9 +21,7 @@
   },
   "stand01": {
     "name": "Stand Principal",
-    "description": "Stand de exhibición principal del evento. Muestra los proyectos destacados de la comunidad estudiantil.",
-    "category": "Zona Principal",
-    "teleportPos": [101.89, 1.8, -114.5]
+    "description": "Stand de exhibición principal del evento. Muestra los proyectos destacados de la comunidad estudiantil."
   },
   "obj_rack_comunicaciones": {
     "name": "Rack de Comunicaciones",
