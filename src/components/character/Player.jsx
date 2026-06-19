@@ -196,17 +196,17 @@ function Character() {
       disableControl={controlsDisabled}
       capsuleHalfHeight={0.35}
       capsuleRadius={0.3}
-      floatHeight={0.08}
+      floatHeight={0}
       maxVelLimit={flyMode ? FLY_HORIZONTAL_SPEED : 3}
       sprintMult={flyMode ? 1 : 1.8}
       jumpVel={flyMode ? 0 : 4}
       camInitDis={-5}
       camMaxDis={-7}
       camMinDis={-0.7}
-      camMoveSpeed={1}
-      camZoomSpeed={1}
-      camFollowMult={80}
-      camLerpMult={100}
+      camMoveSpeed={0.3}
+      camZoomSpeed={0.3}
+      camFollowMult={15}
+      camLerpMult={20}
     >
       <group ref={posRef}>
         <EcctrlAnimation
