@@ -462,7 +462,7 @@ export default function NetworkGame() {
                 <div className={styles.trophyContainer}>🏆</div>
                 <h2 className={styles.victoryTitle}>¡CONECTIVIDAD RESTAURADA AL 100%!</h2>
                 <p className={styles.victoryText}>
-                  ¡Excelente! Armaste la topología de red estrella correctamente. El Switch conmutó
+                  ¡Excelente! Has armado la topología de red en estrella correctamente. El switch ha conmutado
                   las señales del router, el servidor y el laboratorio de Tecsup de forma exitosa.
                 </p>
                 <ClayButton variant="cyan-solid" className={styles.actionBtn} onClick={handleComplete}>

@@ -47,9 +47,9 @@ export default function EnExConfirmModal() {
         <div className={styles.icon}>⬦</div>
 
         {/* Text */}
-        <p className={styles.question}>¿Querés ir a</p>
+        <p className={styles.question}>¿Quieres ir a</p>
         <p className={styles.destination}>{pendingEnex.label}</p>
-        <p className={styles.hint}>Pisaste una zona de teletransporte</p>
+        <p className={styles.hint}>Has entrado a una zona de teletransporte</p>
 
         {/* Actions */}
         <div className={styles.actions}>
