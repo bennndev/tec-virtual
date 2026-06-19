@@ -80,8 +80,8 @@ export default function TutorialScreen() {
       {/* Reproduce voz de PaquitoBot según el diálogo actual */}
       <VoicePlayer />
 
-      {/* HUD de diálogos overlayed abajo */}
-      <DialogHUD />
+      {/* HUD de diálogos — modo inline para que fluya con el layout */}
+      <DialogHUD inline />
     </div>
   );
 }

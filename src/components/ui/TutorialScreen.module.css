@@ -4,7 +4,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   background-color: #ffffff;
   background-image: 
     linear-gradient(rgba(15, 23, 42, 0.03) 1px, transparent 1px),
@@ -13,23 +12,27 @@
     radial-gradient(circle at 85% 85%, rgba(14, 165, 233, 0.04) 0%, transparent 45%);
   background-size: 40px 40px, 40px 40px, 100% 100%, 100% 100%;
   background-position: center;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   z-index: 15;
   font-family: 'N27', ui-monospace, sans-serif;
   user-select: none;
   color: #0f172a;
 }
 
-/* Área central de PaquitoBot */
+/* Espaciador que empuja el robot al centro vertical
+   y el diálogo al fondo naturalmente */
 .robotWrapper {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-bottom: clamp(120px, 18vh, 220px); /* Espacio adaptable para el DialogHUD */
   perspective: 1000px;
   position: relative;
   z-index: 2;
+  min-height: min(280px, 40vh);
+  padding: clamp(60px, 8vh, 100px) 16px clamp(8px, 2vh, 16px);
 }
 
 .robotImage {
@@ -73,14 +76,15 @@
 
 /* Atajos visuales arriba del diálogo para explicar los controles */
 .controlsPreview {
-  position: absolute;
-  top: 40px;
+  position: sticky;
+  top: 0;
   display: flex;
   gap: 24px;
   z-index: 10;
   flex-wrap: wrap;
   justify-content: center;
   max-width: 90%;
+  padding: 16px 0 0;
 }
 
 .controlCard {
@@ -148,12 +152,16 @@
 
 @media (max-width: 768px) {
   .robotImage {
-    width: min(180px, 50vw);
-    height: min(180px, 50vw);
+    width: min(160px, 50vw);
+    height: min(160px, 50vw);
+  }
+  .robotWrapper {
+    padding: clamp(40px, 5vh, 60px) 12px clamp(4px, 1vh, 8px);
+    min-height: min(180px, 30vh);
   }
   .controlsPreview {
-    top: 16px;
     gap: 10px;
+    padding: 10px 0 0;
   }
   .controlCard {
     padding: 6px 10px;
@@ -166,27 +174,21 @@
   .keyText {
     font-size: 9px;
   }
-  .robotWrapper {
-    margin-bottom: clamp(100px, 16vh, 200px);
-  }
 }
 
 /* Pantallas muy cortas (paisaje mobile, tablets pequeñas) */
 @media (max-height: 700px) {
-  .tutorialContainer {
-    justify-content: flex-start;
-    padding-top: 10px;
-  }
   .robotImage {
-    width: min(130px, 30vw);
-    height: min(130px, 30vw);
+    width: min(120px, 25vw);
+    height: min(120px, 25vw);
   }
   .robotWrapper {
-    margin-bottom: clamp(80px, 14vh, 140px);
+    padding: clamp(20px, 3vh, 40px) 12px clamp(4px, 1vh, 8px);
+    min-height: min(140px, 25vh);
   }
   .controlsPreview {
-    top: 8px;
     gap: 6px;
+    padding: 6px 0 0;
   }
   .controlCard {
     padding: 4px 8px;
@@ -208,10 +210,12 @@
     height: 80px;
   }
   .robotWrapper {
-    margin-bottom: 60px;
+    padding: 8px 8px 4px;
+    min-height: 90px;
   }
   .controlsPreview {
     gap: 4px;
+    padding: 4px 0 0;
   }
   .controlCard {
     padding: 3px 6px;

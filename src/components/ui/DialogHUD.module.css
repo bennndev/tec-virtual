@@ -95,6 +95,16 @@
   /* padding and font-size are now handled globally in .clay-btn */
 }
 
+/* Modo inline: fluye con el layout en vez de absolute */
+.inline {
+  position: relative;
+  bottom: auto;
+  left: auto;
+  transform: none;
+  margin-top: clamp(8px, 2vh, 16px);
+  width: min(94%, 800px);
+}
+
 @media (max-width: 640px) {
   .actions {
     flex-direction: column-reverse;
