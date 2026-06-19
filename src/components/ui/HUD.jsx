@@ -41,6 +41,8 @@ export default function HUD() {
   const musicMuted = useStore((s) => s.musicMuted);
   const toggleMusic = useStore((s) => s.toggleMusic);
   const flyMode = useStore((s) => s.flyMode);
+  const tpZones = useStore((s) => s.tpZones);
+  const setTeleportTarget = useStore((s) => s.setTeleportTarget);
 
   const [showStats, setShowStats] = useState(false);
 
@@ -119,6 +121,22 @@ export default function HUD() {
       >
         <ClayIcon name={musicMuted ? 'volume_off' : 'volume_up'} />
       </ClayButton>
+
+      {/* Botones de TP para zonas detectadas automáticamente */}
+      {Object.keys(tpZones).length > 0 && (
+        <div className={styles.tpBtnContainer}>
+          {Object.entries(tpZones).map(([name, pos]) => (
+            <ClayButton
+              key={name}
+              variant="cyan-solid"
+              className={styles.tpBtn}
+              onClick={() => setTeleportTarget(pos)}
+            >
+              ⚡ {name.replace(/^zona_/, '').replace(/_/g, ' ')}
+            </ClayButton>
+          ))}
+        </div>
+      )}
 
       {/* Cambio de modo de camara — extremo derecho inferior */}
       <ClayButton

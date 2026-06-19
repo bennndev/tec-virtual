@@ -7,6 +7,7 @@ import CharacterSelector from './components/ui/CharacterSelector';
 import StartScreen from './components/ui/StartScreen';
 import TutorialScreen from './components/ui/TutorialScreen';
 import TouchControls from './components/ui/TouchControls';
+import EnExConfirmModal from './components/ui/EnExConfirmModal';
 import useStore from './store/useStore';
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
           <TouchControls />
           <HUD />
           <InfoCard />
+          <EnExConfirmModal />
         </>
       )}
 

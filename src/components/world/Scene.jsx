@@ -7,6 +7,7 @@ import CameraRig from '../character/CameraRig';
 import PointerLock from '../controls/PointerLock';
 import BackgroundMusic from '../audio/BackgroundMusic';
 import TeleportOverlays from './TeleportOverlays';
+import EnExLights from './EnExLights';
 
 export default function Scene() {
   return (
@@ -39,6 +40,7 @@ export default function Scene() {
 
       <CameraRig />
       <TeleportOverlays />
+      <EnExLights />
       <PointerLock />
       <BackgroundMusic />
     </>

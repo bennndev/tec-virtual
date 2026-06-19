@@ -13,16 +13,21 @@ useGLTF.preload('/scenes/tecsup.glb');
 export default function SceneEnvironment() {
   const { scene } = useGLTF('/scenes/tecsup.glb');
   const setHoveredObject = useStore((s) => s.setHoveredObject);
+  const setTpZones = useStore((s) => s.setTpZones);
   const previousMesh = useRef(null);
 
   // Bounds y Markers para el Minimapa
   const setMapBounds = useStore((s) => s.setMapBounds);
   const setMapMarkers = useStore((s) => s.setMapMarkers);
 
-  // BVH en todas las geometrías del escenario + bounds calculation
+  // BVH en todas las geometrías del escenario + bounds calculation + detección de zonas TP
   useEffect(() => {
+    // Forzar actualización de matrices para getWorldPosition preciso
+    scene.updateMatrixWorld(true);
+
     const meshes = [];
     const markers = [];
+    const zones = {};
 
     // Calcular la caja delimitadora real del campus
     const box = new THREE.Box3().setFromObject(scene);
@@ -54,6 +59,21 @@ export default function SceneEnvironment() {
         });
       }
 
+      // === ZONAS DE TP (detección por prefijo zona_, funciona con meshes o empties) ===
+      if (child.name.startsWith('zona_')) {
+        const worldPos = new THREE.Vector3();
+        child.getWorldPosition(worldPos);
+        zones[child.name] = [worldPos.x, worldPos.y, worldPos.z];
+        console.log(`[TP] Zona detectada: ${child.name} → (${worldPos.x.toFixed(2)}, ${worldPos.y.toFixed(2)}, ${worldPos.z.toFixed(2)})`);
+
+        // Si tiene mesh, clonar material y hacer invisible
+        if (child.isMesh && child.material) {
+          child.material = child.material.clone();
+          child.material.transparent = true;
+          child.material.opacity = 0;
+        }
+      }
+
       // Remover luces y cámaras del GLB para usar las nuestras
       if (child.isLight || child.isCamera) {
         child.removeFromParent();
@@ -62,6 +82,10 @@ export default function SceneEnvironment() {
 
     setMapMarkers(markers);
 
+    if (Object.keys(zones).length > 0) {
+      setTpZones(zones);
+    }
+
     return () => {
       meshes.forEach((mesh) => {
         if (mesh.geometry) {
@@ -69,7 +93,7 @@ export default function SceneEnvironment() {
         }
       });
     };
-  }, [scene, setMapBounds, setMapMarkers]);
+  }, [scene, setMapBounds, setMapMarkers, setTpZones]);
 
   // Guarda el material original antes de modificarlo
   const saveOriginalEmissive = useCallback((mesh) => {

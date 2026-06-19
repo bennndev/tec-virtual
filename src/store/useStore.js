@@ -34,6 +34,15 @@ const useStore = create((set) => ({
   teleportTarget: null, // [x, y, z] | null
   setTeleportTarget: (pos) => set({ teleportTarget: pos }),
 
+  // Zonas de TP detectadas automáticamente del GLB: { [meshName]: [x, y, z] }
+  tpZones: {},
+  setTpZones: (zones) => set({ tpZones: zones }),
+
+  // EnEx confirmation modal: { label: string, target: [x,y,z] } | null
+  pendingEnex: null,
+  setPendingEnex: (data) => set({ pendingEnex: data }),
+  clearPendingEnex: () => set({ pendingEnex: null }),
+
   // Estado de transición de la cámara
   isTransitioningCamera: false,
   setTransitioningCamera: (val) => set({ isTransitioningCamera: val }),
