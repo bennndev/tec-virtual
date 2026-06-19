@@ -54,11 +54,10 @@ function App() {
       {/* Fase 2: Tutorial de PaquitoBot (2D completo) */}
       {gameState === 'tutorial' && <TutorialScreen />}
 
-      {/* Fase 3: Selección de personaje (Vista completa 2D con Canvas 3D aislado de preview) */}
-      {/* También se permite abrirlo en in-game desde el HUD mediante isSelectorOpen */}
-      {(gameState === 'character_select' || isSelectorOpen) && (
-        <CharacterSelector />
-      )}
+      {/* Fase 3: Selección de personaje */}
+      {/* Se monta desde el tutorial para precargar el Canvas 3D y los modelos en background.
+           El modal solo se muestra cuando isSelectorOpen es true. */}
+      {gameState !== 'loading' && <CharacterSelector />}
 
       {/* Minijuego 2D overlay de reconexión de red */}
       <NetworkGame />
