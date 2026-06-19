@@ -231,13 +231,6 @@ export default function Player() {
     const handler = (e) => {
       const state = useStore.getState();
 
-      // Tecla X para alternar el minijuego de red
-      if (e.code === 'KeyX') {
-        e.preventDefault();
-        state.toggleNetworkGame();
-        return;
-      }
-
       // Si el minijuego está activo, interceptamos el teclado
       if (state.networkGameActive) {
         if (e.code === 'Escape') {
@@ -272,6 +265,13 @@ export default function Player() {
           return;
         }
       } else {
+        // E cerca de la vitrina de servidores → abre el minijuego
+        if (e.code === 'KeyE' && state.vitrineProximity && !state.networkGameWon) {
+          e.preventDefault();
+          state.toggleNetworkGame();
+          return;
+        }
+        // E sobre un NPC → inicia diálogo
         if (e.code === 'KeyE' && state.interactableNPC) {
           e.preventDefault();
           state.triggerNPCDialogue();

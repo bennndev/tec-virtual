@@ -4,6 +4,7 @@ import SceneEnvironment from './SceneEnvironment';
 import Player from '../character/Player';
 import NPCs from '../character/NPCs';
 import CameraRig from '../character/CameraRig';
+import VitrineInteraction from './VitrineInteraction';
 import PointerLock from '../controls/PointerLock';
 import BackgroundMusic from '../audio/BackgroundMusic';
 import TeleportOverlays from './TeleportOverlays';
@@ -41,6 +42,7 @@ export default function Scene() {
       <CameraRig />
       <TeleportOverlays />
       <EnExLights />
+      <VitrineInteraction />
       <PointerLock />
       <BackgroundMusic />
     </>

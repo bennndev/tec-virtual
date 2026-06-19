@@ -186,6 +186,10 @@ const useStore = create((set) => ({
     };
   }),
 
+  // --- INTERACCIÓN CON LA VITRINA DE SERVIDORES ---
+  vitrineProximity: false,
+  setVitrineProximity: (val) => set({ vitrineProximity: val }),
+
   // --- MINIJUEGO DE RED (CONEXIÓN INTERNET) ---
   networkGameActive: false,
   networkGameWon: false,
