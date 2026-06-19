@@ -46,10 +46,11 @@
   animation: floatGlowCenter 3s ease-in-out infinite;
 }
 
-/* Touch: al lado del joystick */
+/* Touch: al lado del botón de música */
 .mapBtnTouch {
-  bottom: 55px;
-  left: 185px;
+  top: 20px;
+  left: 80px;
+  bottom: auto;
   animation: floatGlowStatic 3s ease-in-out infinite;
 }
 
@@ -191,8 +192,8 @@
   }
 
   .mapBtnTouch {
-    left: 175px;
-    bottom: 50px;
+    top: 12px;
+    left: 68px;
   }
 
   .mapBtn .icon {
