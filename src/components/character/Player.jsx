@@ -280,13 +280,13 @@ export default function Player() {
         // E cerca del TV de Redes → abre video
         if (e.code === 'KeyE' && state.tvRedesProximity && !state.tvVideoUrl) {
           e.preventDefault();
-          state.setTvVideoUrl('https://www.youtube.com/watch?v=zYh9cpDU7Z0');
+          state.setTvVideoUrl('https://youtu.be/tRnq3EKHtG8');
           return;
         }
         // E cerca del TV de Marketing → abre video
         if (e.code === 'KeyE' && state.tvMarketingProximity && !state.tvVideoUrl) {
           e.preventDefault();
-          state.setTvVideoUrl('https://www.youtube.com/watch?v=rSh-3Gu5Vtg');
+          state.setTvVideoUrl('https://youtu.be/dUHHnWRrJvc');
           return;
         }
         // E sobre un NPC → inicia diálogo
