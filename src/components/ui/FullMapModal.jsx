@@ -5,45 +5,8 @@ import ClayButton from './ClayButton';
 import styles from './FullMapModal.module.css';
 import { pathfinder } from '../../services/pathfinding';
 
-// Importar SVG como componentes de React
-import AlmacenIcon from '../../assets/icons/almacen.svg?react';
-import AuditorioAIcon from '../../assets/icons/auditorio-a.svg?react';
-import AuditorioBIcon from '../../assets/icons/auditorio-b.svg?react';
-import BibliotecaIcon from '../../assets/icons/biblioteca.svg?react';
-import BicicletasIcon from '../../assets/icons/bicicletas.svg?react';
-import CafeteriaIcon from '../../assets/icons/cafeteria.svg?react';
-import EnfermeriaIcon from '../../assets/icons/enfermeria.svg?react';
-import EstacionamientoIcon from '../../assets/icons/estacionamiento.svg?react';
-import Laboratorio1Icon from '../../assets/icons/laboratorio-1.svg?react';
-import Laboratorio2Icon from '../../assets/icons/laboratorio-2.svg?react';
-import LockersIcon from '../../assets/icons/lockers.svg?react';
-
 import objectsData from '../../data/objects.json';
-
-const getMarkerIcon = (markerId) => {
-  if (!markerId) return Laboratorio2Icon;
-  const idLower = markerId.toLowerCase().replace(/^zona_/, '').replace(/_/g, '-');
-  
-  if (idLower.includes('almacen')) return AlmacenIcon;
-  if (idLower.includes('auditorio-a')) return AuditorioAIcon;
-  if (idLower.includes('auditorio-b')) return AuditorioBIcon;
-  if (idLower.includes('biblioteca')) return BibliotecaIcon;
-  if (idLower.includes('bicicletas')) return BicicletasIcon;
-  if (idLower.includes('cafeteria')) return CafeteriaIcon;
-  if (idLower.includes('enfermeria')) return EnfermeriaIcon;
-  if (idLower.includes('estacionamiento')) return EstacionamientoIcon;
-  if (idLower.includes('laboratorio-1')) return Laboratorio1Icon;
-  if (idLower.includes('laboratorio-2')) return Laboratorio2Icon;
-  if (idLower.includes('lockers')) return LockersIcon;
-  
-  // Stands principales o admision
-  if (idLower.includes('carreras') || idLower.includes('admision')) return Laboratorio1Icon;
-  if (idLower.includes('empresas')) return EstacionamientoIcon;
-  if (idLower.includes('stand01') || idLower.includes('stand-principal')) return Laboratorio2Icon;
-  if (idLower.includes('stand05') || idLower.includes('stand-de-informacion')) return BibliotecaIcon;
-  
-  return Laboratorio2Icon; // Fallback
-};
+import { getMarkerIcon } from '../../utils/markerIcons';
 
 export default function FullMapModal() {
   const isMapModalOpen = useStore((s) => s.isMapModalOpen);
@@ -56,6 +19,8 @@ export default function FullMapModal() {
   const setHoveredObject = useStore((s) => s.setHoveredObject);
   
   // Navigation State
+  const navigationTarget = useStore((s) => s.navigationTarget);
+  const isNavigating = useStore((s) => s.isNavigating);
   const clearNavigation = useStore((s) => s.clearNavigation);
   const navigationPath = useStore((s) => s.navigationPath);
   const setNavigationTarget = useStore((s) => s.setNavigationTarget);
@@ -104,15 +69,21 @@ export default function FullMapModal() {
   };
 
   const handleZoneClick = (marker) => {
-    if (marker.teleportPos) {
-      clearNavigation(); // Limpiar ruta si había una activa
-      const targetPos = { x: marker.x, y: marker.y || 0, z: marker.z };
-      const path = pathfinder.calculatePath(playerPosition, targetPos);
-      setNavigationTarget({ id: marker.id, name: marker.name, ...targetPos }, path);
-      handleClose(); // Cerrar modal del mapa
-    } else {
+    if (!marker.teleportPos) {
       console.warn('Esta área no tiene coordenadas asignadas para la ruta.');
+      return;
     }
+
+    // Toggle: si ya es el destino activo, lo desmarca
+    if (isNavigating && navigationTarget?.id === marker.id) {
+      clearNavigation();
+      return;
+    }
+
+    // Si no, marca la ruta hacia este destino
+    const targetPos = { x: marker.x, y: marker.y || 0, z: marker.z };
+    const path = pathfinder.calculatePath(playerPosition, targetPos);
+    setNavigationTarget({ id: marker.id, name: marker.name, ...targetPos }, path);
   };
 
   // Manejadores de eventos de zoom y arrastre (Pan)
@@ -289,7 +260,7 @@ export default function FullMapModal() {
                     onMouseEnter={() => setHoveredObject({ id: marker.id, name: marker.name, description: desc })}
                     onMouseLeave={() => setHoveredObject(null)}
                   >
-                    <MarkerIcon x="-3" y="-3" width="6" height="6" />
+                    <MarkerIcon x="-4" y="-4" width="8" height="8" />
                   </g>
                 </g>
               );
@@ -298,7 +269,7 @@ export default function FullMapModal() {
             {/* Indicador del Jugador */}
             <g transform={`translate(${playerPos2D.x}, ${playerPos2D.y}) rotate(${rotationDeg})`}>
               <polygon
-                points="0,-4 3,3 0,1 -3,3"
+                points="0,-3.5 2.5,2.5 0,0.8 -2.5,2.5"
                 fill="#0ea5e9"
                 className={styles.playerMarker}
               />
