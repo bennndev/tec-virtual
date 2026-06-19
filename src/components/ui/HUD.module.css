@@ -166,7 +166,10 @@
   }
 
   .mapBtn {
-    bottom: 40px;
+    /* Alineado arriba del joystick móvil (izquierda abajo) */
+    bottom: 175px;
+    left: 16px;
+    transform: none;
     padding: 10px 18px;
     font-size: 13px;
     gap: 6px;
