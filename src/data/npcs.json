@@ -4,9 +4,9 @@
     "name": "Paquito Bot",
     "modelUrl": "/models/npcs/paquito-bot.glb",
     "position": [
-      62.12,
-      1.75,
-      -100.97
+      -73,
+      21.07,
+      -6.78
     ],
     "rotation": [
       0.1,
