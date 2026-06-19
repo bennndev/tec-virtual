@@ -190,6 +190,10 @@ const useStore = create((set) => ({
   vitrineProximity: false,
   setVitrineProximity: (val) => set({ vitrineProximity: val }),
 
+  // --- INTERACCIÓN CON PC DE CIBERSEGURIDAD ---
+  hackerGameProximity: false,
+  setHackerGameProximity: (val) => set({ hackerGameProximity: val }),
+
   // --- MINIJUEGO DE RED (CONEXIÓN INTERNET) ---
   networkGameActive: false,
   networkGameWon: false,
@@ -206,6 +210,24 @@ const useStore = create((set) => ({
   resetNetworkGame: () => set({
     networkGameWon: false,
     networkGameActive: false,
+    controlsDisabled: false
+  }),
+
+  // --- MINIJUEGO DE CIBERSEGURIDAD (DEFENDER ATAQUE HACKER) ---
+  hackerGameActive: false,
+  hackerGameWon: false,
+  toggleHackerGame: () => set((state) => {
+    if (state.hackerGameWon && !state.hackerGameActive) return {};
+    const nextActive = !state.hackerGameActive;
+    return {
+      hackerGameActive: nextActive,
+      controlsDisabled: nextActive,
+    };
+  }),
+  setHackerGameWon: (won) => set({ hackerGameWon: won }),
+  resetHackerGame: () => set({
+    hackerGameWon: false,
+    hackerGameActive: false,
     controlsDisabled: false
   })
 }));

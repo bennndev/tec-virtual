@@ -31,6 +31,7 @@ src/
 │   │   ├── SceneEnvironment.jsx # Carga de GLB como escenario con física + hover + BVH
 │   │   ├── Ground.jsx   # (deprecated — reemplazado por SceneEnvironment)
 │   │   ├── VitrineInteraction.jsx # Zona de interacción por proximidad con minijuego
+│   │   ├── HackerGameInteraction.jsx # Zona de interacción por proximidad con juego de ciberseguridad
 │   │   └── Obstacles.jsx# (deprecated — reemplazado por SceneEnvironment)
 │   ├── character/       # Personaje y cámara
 │   │   ├── Player.jsx   # Cápsula controlable con ecctrl + WASD + fly mode (F)

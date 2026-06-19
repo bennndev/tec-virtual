@@ -10,6 +10,7 @@ import TutorialScreen from './components/ui/TutorialScreen';
 import TouchControls from './components/ui/TouchControls';
 import EnExConfirmModal from './components/ui/EnExConfirmModal';
 import NetworkGame from './components/ui/NetworkGame';
+import HackerGame from './components/ui/HackerGame';
 import useStore from './store/useStore';
 
 function App() {
@@ -59,6 +60,9 @@ function App() {
 
       {/* Minijuego 2D overlay de reconexión de red */}
       <NetworkGame />
+
+      {/* Minijuego 2D overlay de ciberseguridad */}
+      <HackerGame />
     </div>
   );
 }

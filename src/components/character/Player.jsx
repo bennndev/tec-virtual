@@ -271,6 +271,12 @@ export default function Player() {
           state.toggleNetworkGame();
           return;
         }
+        // E cerca de la PC de ciberseguridad → abre Defender Ataque Hacker
+        if (e.code === 'KeyE' && state.hackerGameProximity && !state.hackerGameWon) {
+          e.preventDefault();
+          state.toggleHackerGame();
+          return;
+        }
         // E sobre un NPC → inicia diálogo
         if (e.code === 'KeyE' && state.interactableNPC) {
           e.preventDefault();
