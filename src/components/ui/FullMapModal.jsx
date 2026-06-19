@@ -134,6 +134,39 @@ export default function FullMapModal() {
     setIsDragging(false);
   };
 
+  // Touch support para arrastre en móviles
+  const handleTouchStart = (e) => {
+    if (zoom > 1 && e.touches.length === 1) {
+      setIsDragging(true);
+      dragStart.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isDragging || zoom <= 1 || e.touches.length !== 1) return;
+
+    const dx = e.touches[0].clientX - dragStart.current.x;
+    const dy = e.touches[0].clientY - dragStart.current.y;
+
+    const svgSize = 100 / zoom;
+    const dragScale = svgSize / 400;
+
+    setPan(prev => {
+      let newX = prev.x - dx * dragScale;
+      let newY = prev.y - dy * dragScale;
+      const limit = (100 - svgSize) / 2;
+      newX = Math.max(-limit, Math.min(limit, newX));
+      newY = Math.max(-limit, Math.min(limit, newY));
+      return { x: newX, y: newY };
+    });
+
+    dragStart.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+  };
+
   const PADDING = 10;
   
   const mapCoord = useMemo(() => {
@@ -233,6 +266,9 @@ export default function FullMapModal() {
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseUp}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
           style={{ cursor: zoom > 1 ? (isDragging ? 'grabbing' : 'grab') : 'crosshair' }}
         >
           <svg viewBox={viewBox} className={styles.minimapSvg}>

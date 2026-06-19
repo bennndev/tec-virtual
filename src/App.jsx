@@ -8,6 +8,7 @@ import CharacterSelector from './components/ui/CharacterSelector';
 import StartScreen from './components/ui/StartScreen';
 import TutorialScreen from './components/ui/TutorialScreen';
 import TouchControls from './components/ui/TouchControls';
+import RotateDevice from './components/ui/RotateDevice';
 import EnExConfirmModal from './components/ui/EnExConfirmModal';
 import NetworkGame from './components/ui/NetworkGame';
 import HackerGame from './components/ui/HackerGame';
@@ -67,6 +68,9 @@ function App() {
 
       {/* Modal de video YouTube */}
       <VideoModal />
+
+      {/* Overlay de orientación para móviles */}
+      <RotateDevice />
     </div>
   );
 }

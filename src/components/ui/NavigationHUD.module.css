@@ -97,3 +97,38 @@
   color: white;
   transform: scale(1.1);
 }
+
+/* ========================================
+   Responsive: pantallas angostas
+   ======================================== */
+@media (max-width: 900px) {
+  .container {
+    top: 60px;
+    padding: 8px 14px;
+    gap: 10px;
+    border-radius: 28px;
+  }
+
+  .compassBox {
+    width: 28px;
+    height: 28px;
+  }
+
+  .arrow {
+    font-size: 18px;
+  }
+
+  .targetName {
+    font-size: 0.75rem;
+  }
+
+  .distance {
+    font-size: 1.1rem;
+  }
+
+  .cancelBtn {
+    width: 26px;
+    height: 26px;
+    font-size: 11px;
+  }
+}
