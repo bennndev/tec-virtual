@@ -37,7 +37,13 @@ export default function TeleportOverlays() {
                 className={`${styles.badge} ${isHovered ? styles.badgeHovered : ''}`}
                 onMouseEnter={() => setHoveredZone(marker.id)}
                 onMouseLeave={() => setHoveredZone(null)}
-                onClick={() => handleTeleport(marker, 'HTML Badge')}
+                onPointerDown={(e) => e.stopPropagation()}
+                onMouseDown={(e) => e.stopPropagation()}
+                onTouchStart={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleTeleport(marker, 'HTML Badge');
+                }}
               >
                 <span className={styles.badgeName}>{marker.name}</span>
                 <div className={styles.alertBadge}>!</div>
@@ -57,6 +63,7 @@ export default function TeleportOverlays() {
                 setHoveredZone(null);
                 document.body.style.cursor = 'auto';
               }}
+              onPointerDown={(e) => e.stopPropagation()}
               onClick={(e) => {
                 e.stopPropagation();
                 handleTeleport(marker, '3D Ring Mesh');

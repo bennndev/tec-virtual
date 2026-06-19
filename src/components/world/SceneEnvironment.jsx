@@ -44,19 +44,22 @@ export default function SceneEnvironment() {
         meshes.push(child);
       }
 
-      // Extraer marcadores si están en objects.json
+      // Extraer marcadores si están en objects.json y son Zonas Principales
       if (child.isMesh && child.name && objectsData[child.name]) {
-        const worldPos = new THREE.Vector3();
-        child.getWorldPosition(worldPos);
         const objConf = objectsData[child.name];
-        markers.push({
-          id: child.name,
-          name: objConf.name,
-          x: worldPos.x,
-          y: worldPos.y,
-          z: worldPos.z,
-          teleportPos: objConf.teleportPos || [worldPos.x, worldPos.y + 1.0, worldPos.z + 2.5]
-        });
+        if (objConf.category === 'Zona Principal') {
+          const worldPos = new THREE.Vector3();
+          child.getWorldPosition(worldPos);
+          markers.push({
+            id: child.name,
+            name: objConf.name,
+            x: worldPos.x,
+            y: worldPos.y,
+            z: worldPos.z,
+            isZone: true,
+            teleportPos: objConf.teleportPos || [worldPos.x, worldPos.y + 1.0, worldPos.z + 2.5]
+          });
+        }
       }
 
       // === ZONAS DE TP (detección por prefijo zona_, funciona con meshes o empties) ===
@@ -65,6 +68,21 @@ export default function SceneEnvironment() {
         child.getWorldPosition(worldPos);
         zones[child.name] = [worldPos.x, worldPos.y, worldPos.z];
         console.log(`[TP] Zona detectada: ${child.name} → (${worldPos.x.toFixed(2)}, ${worldPos.y.toFixed(2)}, ${worldPos.z.toFixed(2)})`);
+
+        // Formatear el nombre para el marcador (ej: "zona_auditorio_a" -> "Auditorio A")
+        const rawName = child.name.replace(/^zona_/, '').replace(/_/g, ' ');
+        const prettyName = rawName.replace(/\b\w/g, c => c.toUpperCase());
+
+        // Agregar también a los marcadores del mapa
+        markers.push({
+          id: child.name,
+          name: prettyName,
+          x: worldPos.x,
+          y: worldPos.y,
+          z: worldPos.z,
+          isZone: true,
+          teleportPos: [worldPos.x, worldPos.y + 1.5, worldPos.z]
+        });
 
         // Si tiene mesh, clonar material y hacer invisible
         if (child.isMesh && child.material) {

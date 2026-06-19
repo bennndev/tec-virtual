@@ -18,25 +18,32 @@ import Laboratorio1Icon from '../../assets/icons/laboratorio-1.svg?react';
 import Laboratorio2Icon from '../../assets/icons/laboratorio-2.svg?react';
 import LockersIcon from '../../assets/icons/lockers.svg?react';
 
-// Lista estática de íconos que el usuario subió
-const LEGEND_ITEMS = [
-  // Hardcoded areas provistas por el usuario
-  { id: 'CarrerasAdmision', label: 'Carreras y Admisión', Icon: Laboratorio1Icon, x: 96.92, y: 2.37, z: -114.39 },
-  { id: 'Empresas', label: 'Empresas Participantes', Icon: EstacionamientoIcon, x: 103.98, y: 2.26, z: -107.10 },
-  { id: 'stand01', label: 'Stand Principal', Icon: Laboratorio2Icon, x: 101.84, y: 2.57, z: -116.95 },
-  // Resto de la leyenda
-  { id: 'almacen', label: 'Almacén', Icon: AlmacenIcon },
-  { id: 'auditorio-a', label: 'Auditorio A', Icon: AuditorioAIcon },
-  { id: 'auditorio-b', label: 'Auditorio B', Icon: AuditorioBIcon },
-  { id: 'biblioteca', label: 'Biblioteca', Icon: BibliotecaIcon },
-  { id: 'bicicletas', label: 'Bicicletas', Icon: BicicletasIcon },
-  { id: 'cafeteria', label: 'Cafetería', Icon: CafeteriaIcon },
-  { id: 'enfermeria', label: 'Enfermería', Icon: EnfermeriaIcon },
-  { id: 'estacionamiento', label: 'Estacionamiento', Icon: EstacionamientoIcon },
-  { id: 'laboratorio-1', label: 'Laboratorio 1', Icon: Laboratorio1Icon },
-  { id: 'laboratorio-2', label: 'Laboratorio 2', Icon: Laboratorio2Icon },
-  { id: 'lockers', label: 'Lockers', Icon: LockersIcon },
-];
+import objectsData from '../../data/objects.json';
+
+const getMarkerIcon = (markerId) => {
+  if (!markerId) return Laboratorio2Icon;
+  const idLower = markerId.toLowerCase().replace(/^zona_/, '').replace(/_/g, '-');
+  
+  if (idLower.includes('almacen')) return AlmacenIcon;
+  if (idLower.includes('auditorio-a')) return AuditorioAIcon;
+  if (idLower.includes('auditorio-b')) return AuditorioBIcon;
+  if (idLower.includes('biblioteca')) return BibliotecaIcon;
+  if (idLower.includes('bicicletas')) return BicicletasIcon;
+  if (idLower.includes('cafeteria')) return CafeteriaIcon;
+  if (idLower.includes('enfermeria')) return EnfermeriaIcon;
+  if (idLower.includes('estacionamiento')) return EstacionamientoIcon;
+  if (idLower.includes('laboratorio-1')) return Laboratorio1Icon;
+  if (idLower.includes('laboratorio-2')) return Laboratorio2Icon;
+  if (idLower.includes('lockers')) return LockersIcon;
+  
+  // Stands principales o admision
+  if (idLower.includes('carreras') || idLower.includes('admision')) return Laboratorio1Icon;
+  if (idLower.includes('empresas')) return EstacionamientoIcon;
+  if (idLower.includes('stand01') || idLower.includes('stand-principal')) return Laboratorio2Icon;
+  if (idLower.includes('stand05') || idLower.includes('stand-de-informacion')) return BibliotecaIcon;
+  
+  return Laboratorio2Icon; // Fallback
+};
 
 export default function FullMapModal() {
   const isMapModalOpen = useStore((s) => s.isMapModalOpen);
@@ -49,10 +56,14 @@ export default function FullMapModal() {
   const setHoveredObject = useStore((s) => s.setHoveredObject);
   
   // Navigation State
-  const navigationTarget = useStore((s) => s.navigationTarget);
-  const setNavigationTarget = useStore((s) => s.setNavigationTarget);
   const clearNavigation = useStore((s) => s.clearNavigation);
   const navigationPath = useStore((s) => s.navigationPath);
+  const setNavigationTarget = useStore((s) => s.setNavigationTarget);
+
+  // Lista dinámica ordenada alfabéticamente para la leyenda
+  const sortedMarkers = useMemo(() => {
+    return [...mapMarkers].sort((a, b) => a.name.localeCompare(b.name));
+  }, [mapMarkers]);
 
   // Zoom & Pan State para el mapa expandido (estilo GTA V)
   const [zoom, setZoom] = useState(1);
@@ -92,18 +103,15 @@ export default function FullMapModal() {
     });
   };
 
-  const startNavigation = (target) => {
-    if (target.x !== undefined && target.z !== undefined) {
-      // Si ya estábamos navegando a este mismo lugar, lo desactivamos (Toggle)
-      if (navigationTarget && navigationTarget.id === target.id) {
-        clearNavigation();
-        return;
-      }
-
-      const path = pathfinder.calculatePath(playerPosition, target);
-      setNavigationTarget({ id: target.id, name: target.label || target.name, x: target.x, y: target.y || 0, z: target.z }, path);
+  const handleZoneClick = (marker) => {
+    if (marker.teleportPos) {
+      clearNavigation(); // Limpiar ruta si había una activa
+      const targetPos = { x: marker.x, y: marker.y || 0, z: marker.z };
+      const path = pathfinder.calculatePath(playerPosition, targetPos);
+      setNavigationTarget({ id: marker.id, name: marker.name, ...targetPos }, path);
+      handleClose(); // Cerrar modal del mapa
     } else {
-      console.warn('Esta área no tiene coordenadas asignadas todavía.');
+      console.warn('Esta área no tiene coordenadas asignadas para la ruta.');
     }
   };
 
@@ -228,19 +236,22 @@ export default function FullMapModal() {
         {/* Panel Izquierdo: Leyenda */}
         <div className={styles.legendPanel}>
           <h2 className={styles.legendTitle}>Leyenda del Mapa</h2>
-          {LEGEND_ITEMS.map((item) => (
-            <ClayButton 
-              key={item.id} 
-              variant="translucent" 
-              className={styles.legendItemButton}
-              onClick={() => startNavigation(item)}
-            >
-              <div className={styles.legendIcon}>
-                <item.Icon />
-              </div>
-              <span className={styles.legendLabel}>{item.label}</span>
-            </ClayButton>
-          ))}
+          {sortedMarkers.map((marker) => {
+            const IconComponent = getMarkerIcon(marker.id);
+            return (
+              <ClayButton 
+                key={marker.id} 
+                variant="translucent" 
+                className={styles.legendItemButton}
+                onClick={() => handleZoneClick(marker)}
+              >
+                <div className={styles.legendIcon}>
+                  <IconComponent />
+                </div>
+                <span className={styles.legendLabel}>{marker.name}</span>
+              </ClayButton>
+            );
+          })}
         </div>
 
         {/* Panel Derecho: Mapa Expandido */}
@@ -265,18 +276,20 @@ export default function FullMapModal() {
             {/* Marcadores de POI */}
             {mapMarkers.map((marker) => {
               const pos = mapCoord(marker.x, marker.z);
+              const MarkerIcon = getMarkerIcon(marker.id);
+              const desc = objectsData[marker.id]?.description || 'Zona representativa del campus';
               return (
                 <g 
                   key={marker.id} 
                   transform={`translate(${pos.x}, ${pos.y})`}
-                  onClick={() => startNavigation(marker)}
+                  onClick={() => handleZoneClick(marker)}
                 >
                   <g
                     className={styles.poiMarker}
-                    onMouseEnter={() => setHoveredObject({ id: marker.id, name: marker.name, description: 'Ubicado en el campus' })}
+                    onMouseEnter={() => setHoveredObject({ id: marker.id, name: marker.name, description: desc })}
                     onMouseLeave={() => setHoveredObject(null)}
                   >
-                    <Laboratorio2Icon x="-3" y="-3" width="6" height="6" />
+                    <MarkerIcon x="-3" y="-3" width="6" height="6" />
                   </g>
                 </g>
               );

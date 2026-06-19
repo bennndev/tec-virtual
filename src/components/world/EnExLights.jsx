@@ -60,7 +60,7 @@ export default function EnExLights() {
             console.warn(`[EnEx] Destination "${zone.destination}" not in GLB. Skipping.`);
             continue;
           }
-          target = [destPos[0], destPos[1] + 0.1, destPos[2]];
+          target = [destPos[0], destPos[1] + 1.5, destPos[2]];
         } else {
           target = zone.destination;
         }
