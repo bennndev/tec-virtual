@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { pathfinder } from '../services/pathfinding';
 
 const useStore = create((set) => ({
   playerPosition: { x: 0, y: 0, z: 0 },
@@ -135,6 +136,18 @@ const useStore = create((set) => ({
         nextState.controlsDisabled = true;
         nextState.gameState = 'character_select';
       }
+      // Si hablamos con PaquitoBot, activar navegación al laboratorio de marketing
+      if (state.activeDialogueNPC?.id === 'paquito-bot') {
+        const marketingZone = state.tpZones?.zona_laboratorio_marketing;
+        if (marketingZone) {
+          const targetPos = { x: marketingZone[0], y: marketingZone[1], z: marketingZone[2] };
+          const startPos = state.playerPosition;
+          const path = pathfinder.calculatePath(startPos, targetPos);
+          nextState.navigationTarget = { id: 'zona_laboratorio_marketing', name: 'Laboratorio de Marketing', ...targetPos };
+          nextState.navigationPath = path;
+          nextState.isNavigating = true;
+        }
+      }
       return nextState;
     }
   }),
@@ -174,6 +187,13 @@ const useStore = create((set) => ({
           "Por favor muéstreme su identificación.",
           "Todo en orden.",
           "Bienvenido a Tecsup."
+        ];
+        break;
+      case 'paquito-bot':
+        dialogues = [
+          "¡Hola! Soy PaquitoBot 🤖",
+          "Soy el bot asistente oficial de Tecsup, listo para guiarte en el campus.",
+          "Primero comencemos conociendo el área de Marketing Digital, dirígete a su laboratorio."
         ];
         break;
       case 'docente_redes':
