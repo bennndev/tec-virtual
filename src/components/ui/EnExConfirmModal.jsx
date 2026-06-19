@@ -10,7 +10,7 @@ export default function EnExConfirmModal() {
   useEffect(() => {
     if (!pendingEnex) return;
     const handleKey = (e) => {
-      if (e.key === 'Escape') useStore.setState({ pendingEnex: null });
+      if (e.key === 'Escape') useStore.setState({ pendingEnex: null, controlsDisabled: false });
     };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
@@ -18,7 +18,7 @@ export default function EnExConfirmModal() {
 
   if (!pendingEnex) return null;
 
-  const handleCancel = () => useStore.setState({ pendingEnex: null });
+  const handleCancel = () => useStore.setState({ pendingEnex: null, controlsDisabled: false });
 
   const handleConfirm = () => {
     // One atomic write: teleport + close modal + reset cooldown for a fresh 5s
@@ -29,6 +29,7 @@ export default function EnExConfirmModal() {
       teleportTarget: pendingEnex.target,
       pendingEnex: null,
       enexBlockedUntil: Date.now() + 5000,
+      controlsDisabled: false,
     });
   };
 

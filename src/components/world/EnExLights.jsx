@@ -71,6 +71,7 @@ export default function EnExLights() {
         useStore.setState({
           pendingEnex: { label: zone.label, target },
           enexBlockedUntil: Date.now() + 5000,
+          controlsDisabled: true,
         });
         console.log(`[EnEx] "${zone.id}" → confirmation queued`);
         break;
