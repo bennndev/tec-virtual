@@ -5,13 +5,19 @@ import * as THREE from 'three';
 import objectsData from '../../data/objects.json';
 import useStore from '../../store/useStore';
 
+// Construir lookup de prefijos para objetos agrupados (ej: monitores con sub-meshes)
+// Se ordena de mayor a menor longitud para priorizar el match más específico
+const PREFIX_ENTRIES = Object.entries(objectsData)
+  .filter(([, v]) => v.meshPrefix)
+  .sort(([, a], [, b]) => b.meshPrefix.length - a.meshPrefix.length);
+
 const HOVER_COLOR = new THREE.Color('#ffffff');
 
 // Precarga el escenario en el cache de R3F
-useGLTF.preload('/scenes/tecsup.glb');
+useGLTF.preload('/scenes/tecsup-2.glb');
 
 export default function SceneEnvironment() {
-  const { scene } = useGLTF('/scenes/tecsup.glb');
+  const { scene } = useGLTF('/scenes/tecsup-2.glb');
   const setHoveredObject = useStore((s) => s.setHoveredObject);
   const setTpZones = useStore((s) => s.setTpZones);
   const previousMesh = useRef(null);
@@ -44,19 +50,22 @@ export default function SceneEnvironment() {
         meshes.push(child);
       }
 
-      // Extraer marcadores si están en objects.json
+      // Extraer marcadores si están en objects.json y son Zonas Principales
       if (child.isMesh && child.name && objectsData[child.name]) {
-        const worldPos = new THREE.Vector3();
-        child.getWorldPosition(worldPos);
         const objConf = objectsData[child.name];
-        markers.push({
-          id: child.name,
-          name: objConf.name,
-          x: worldPos.x,
-          y: worldPos.y,
-          z: worldPos.z,
-          teleportPos: objConf.teleportPos || [worldPos.x, worldPos.y + 1.0, worldPos.z + 2.5]
-        });
+        if (objConf.category === 'Zona Principal') {
+          const worldPos = new THREE.Vector3();
+          child.getWorldPosition(worldPos);
+          markers.push({
+            id: child.name,
+            name: objConf.name,
+            x: worldPos.x,
+            y: worldPos.y,
+            z: worldPos.z,
+            isZone: true,
+            teleportPos: objConf.teleportPos || [worldPos.x, worldPos.y + 1.0, worldPos.z + 2.5]
+          });
+        }
       }
 
       // === ZONAS DE TP (detección por prefijo zona_, funciona con meshes o empties) ===
@@ -65,6 +74,30 @@ export default function SceneEnvironment() {
         child.getWorldPosition(worldPos);
         zones[child.name] = [worldPos.x, worldPos.y, worldPos.z];
         console.log(`[TP] Zona detectada: ${child.name} → (${worldPos.x.toFixed(2)}, ${worldPos.y.toFixed(2)}, ${worldPos.z.toFixed(2)})`);
+
+        // Extraer de objects.json si existe
+        const objConf = objectsData[child.name];
+
+        // Formatear el nombre para el marcador (ej: "zona_auditorio_a" -> "Auditorio A")
+        const rawName = child.name.replace(/^zona_/, '').replace(/_/g, ' ');
+        const prettyName = objConf?.name || rawName.replace(/\b\w/g, c => c.toUpperCase());
+
+        // Por defecto mostramos en panorama, a menos que sea un "Laboratorio"
+        const isLab = objConf?.category === 'Laboratorio';
+
+        // Agregar a los marcadores del mapa solo si NO es "Oculto"
+        if (objConf?.category !== 'Oculto') {
+          markers.push({
+            id: child.name,
+            name: prettyName,
+            x: worldPos.x,
+            y: worldPos.y,
+            z: worldPos.z,
+            isZone: true,
+            teleportPos: [worldPos.x, worldPos.y + 1.5, worldPos.z],
+            showInPanorama: !isLab
+          });
+        }
 
         // Si tiene mesh, clonar material y hacer invisible
         if (child.isMesh && child.material) {
@@ -136,10 +169,24 @@ export default function SceneEnvironment() {
 
     previousMesh.current = mesh;
 
-    // Verificar si es un objeto interactivo
-    if (mesh.name && objectsData[mesh.name]) {
+    // Buscar datos del objeto: exact match primero, luego por prefijo
+    let objData = null;
+    if (mesh.name) {
+      objData = objectsData[mesh.name];
+      if (!objData) {
+        // Buscar por prefijo (para objetos con múltiples sub-meshes)
+        for (const [, entry] of PREFIX_ENTRIES) {
+          if (mesh.name.startsWith(entry.meshPrefix)) {
+            objData = entry;
+            break;
+          }
+        }
+      }
+    }
+
+    if (objData) {
       applyHover(mesh);
-      setHoveredObject({ id: mesh.name, ...objectsData[mesh.name] });
+      setHoveredObject({ id: mesh.name, ...objData });
     } else {
       setHoveredObject(null);
     }

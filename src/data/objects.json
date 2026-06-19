@@ -2,118 +2,366 @@
   "stand05": {
     "name": "Stand de Información",
     "description": "Punto de información del evento. Aquí puedes encontrar mapas, horarios y resolver dudas sobre las actividades.",
-    "teleportPos": [104.54, 1.8, -112.5]
+    "category": "Zona Principal",
+    "teleportPos": [
+      104.54,
+      1.8,
+      -112.5
+    ]
   },
   "CarrerasAdmision": {
     "name": "Carreras y Admisión",
-    "description": "Información sobre las carreras profesionales y el proceso de admisión a la institución.",
-    "teleportPos": [97.08, 1.8, -111.5]
+    "description": "Información sobre las carreras profesionales y el proceso de admisión a la institución."
   },
   "Empresas": {
     "name": "Empresas Participantes",
-    "description": "Directorio de las empresas que participan en la feria tecnológica. Revisa sus propuestas y oportunidades.",
-    "teleportPos": [104.35, 1.8, -110.5]
+    "description": "Directorio de las empresas que participan en la feria tecnológica. Revisa sus propuestas y oportunidades."
   },
   "Video004": {
     "name": "Pantalla Multimedia",
     "description": "Pantalla interactiva con contenido audiovisual sobre los proyectos y logros de la comunidad estudiantil.",
-    "teleportPos": [252.91, 1.8, -182.5]
+    "category": "Zona Principal",
+    "teleportPos": [
+      252.91,
+      1.8,
+      -182.5
+    ]
   },
   "stand01": {
     "name": "Stand Principal",
-    "description": "Stand de exhibición principal del evento. Muestra los proyectos destacados de la comunidad estudiantil.",
-    "teleportPos": [101.89, 1.8, -114.5]
+    "description": "Stand de exhibición principal del evento. Muestra los proyectos destacados de la comunidad estudiantil."
   },
   "obj_rack_comunicaciones": {
     "name": "Rack de Comunicaciones",
-    "description": "Gabinete metálico estándar de 19 pulgadas donde se montan servidores, switches, paneles de parcheo y equipos activos. Organiza el cableado estructurado, centraliza la distribución de red y permite escalar el hardware del laboratorio."
+    "description": "Gabinete metálico donde se montan servidores, switches y otros equipos de red. Organiza el cableado y centraliza la distribución de los equipos del laboratorio."
   },
   "obj_servidor_2": {
     "name": "Servidor (Primario)",
-    "description": "Equipo principal del laboratorio que gestiona servicios de red: DHCP para asignación dinámica de IPs, DNS para resolución de nombres y Active Directory para autenticación de usuarios."
+    "description": "Computadora potente que gestiona servicios de red como la asignación de direcciones IP (DHCP), la resolución de nombres de dominio (DNS) y la autenticación de usuarios en la red."
   },
   "obj_servidor_3": {
     "name": "Servidor de Backup / NAS",
-    "description": "Servidor de almacenamiento en red con redundancia RAID. Se usa en prácticas de respaldo automatizado, recuperación ante desastres y políticas de copias de seguridad empresariales."
+    "description": "Servidor de almacenamiento en red. Se usa para hacer copias de seguridad automáticas, proteger la información ante fallos y practicar la recuperación de datos."
   },
   "obj_router_3": {
     "name": "Router",
-    "description": "Dispositivo que interconecta redes distintas (LAN/WAN). Enruta paquetes usando tablas de enrutamiento. Prácticas de configuración de rutas estáticas, protocolos RIP, OSPF y NAT."
+    "description": "Dispositivo que conecta redes distintas, como la red local con Internet. Se encarga de encontrar la mejor ruta para que los datos lleguen a su destino."
   },
   "obj_switch_3": {
     "name": "Switch",
-    "description": "Concentrador inteligente que distribuye tráfico Ethernet dentro de una misma red. Base para segmentación con VLANs, prevención de bucles (STP), agregación de enlaces y calidad de servicio (QoS)."
+    "description": "Equipo que conecta varios dispositivos dentro de una misma red local (computadoras, impresoras, etc.) y se encarga de enviar la información al destinatario correcto."
   },
   "obj_modem_2": {
     "name": "Módem de Fibra Óptica (ONT)",
-    "description": "Convierte señales ópticas de fibra a señales eléctricas Ethernet. Equipo de última milla en conexiones FTTH. Prácticas de diagnóstico de capa física y medición de potencia óptica."
+    "description": "Convierte la señal de luz que viaja por la fibra óptica en señal eléctrica que entiende tu computadora. Es el equipo que permite tener Internet de alta velocidad en casa."
   },
   "obj_modem_3": {
     "name": "Módem ADSL / Cable",
-    "description": "Modula y demodula señales sobre par trenzado o coaxial. Tecnología de acceso heredada. Usado para contrastar medios de transmisión y estudiar evolución de conectividad residencial."
+    "description": "Equipo que convierte las señales de telefonía o cable coaxial en señal de Internet. Fue la tecnología más usada antes de la llegada de la fibra óptica."
   },
   "obj_cable_5": {
-    "name": "Cable UTP Cat 6",
-    "description": "Cable de par trenzado no blindado categoría 6, soporta Gigabit Ethernet hasta 250 MHz. Prácticas de ponchado RJ45, certificación de cableado, medición de atenuación y diafonía (NEXT/PSNEXT)."
+    "name": "Cable UTP Categoría 6",
+    "description": "Cable de red de alto rendimiento que soporta velocidades de hasta 1 Gigabit por segundo. Se usa para conectar computadoras, switches y otros equipos de red."
   },
   "obj_telefono_ip_5": {
     "name": "Teléfono IP",
-    "description": "Teléfono digital que funciona sobre la red de datos usando protocolo SIP. Reemplaza la telefonía analógica. Prácticas de centralita IP (Asterisk/3CX), codecs de voz y priorización de tráfico VoIP con QoS."
+    "description": "Teléfono digital que funciona a través de Internet en lugar de la línea telefónica tradicional. Permite hacer llamadas usando protocolos como SIP y es común en oficinas modernas."
   },
   "obj_celular_5": {
     "name": "Smartphone",
-    "description": "Terminal móvil 4G/5G usado en el laboratorio para pruebas de cobertura celular, handover entre celdas, análisis de espectro radioeléctrico y configuración de punto de acceso portátil."
+    "description": "Teléfono inteligente con conexión 4G/5G. En el laboratorio se usa para realizar pruebas de cobertura móvil, analizar la calidad de la señal y estudiar cómo funcionan las redes celulares."
   },
   "obj_antena_plato": {
     "name": "Antena Satelital (Parabólica)",
-    "description": "Antena direccional de alta ganancia para comunicaciones satelitales. Capta señales de microondas desde satélites en órbita geoestacionaria. Prácticas de alineación de azimut, elevación y cálculo de footprint."
+    "description": "Antena que capta señales de satélites en el espacio. Se usa para comunicaciones a larga distancia y para recibir señales de televisión satelital o Internet rural."
   },
   "obj_antena_pruebas_vitrina": {
-    "name": "Antena Omni de Pruebas",
-    "description": "Antena pequeña omnidireccional para mediciones de campo RF. Se usa con analizador de espectro para medir intensidad de señal, relación señal/ruido y patrones de propagación en interiores."
+    "name": "Antena Omnidireccional de Pruebas",
+    "description": "Antena pequeña que recibe señales de todas las direcciones. Se usa con analizadores de espectro para medir la intensidad de las señales inalámbricas en el laboratorio."
   },
   "vitrina": {
     "name": "Vitrina de Equipos",
     "description": "Exhibición de componentes históricos y actuales: tarjetas de red, conectores, fibra óptica, herramientas de ponchado y certificación de cableado."
   },
   "pc_1": {
-    "name": "Estación 1 — Simulación",
-    "description": "PC equipada con Packet Tracer y GNS3 para diseñar y simular topologías de red. Prácticas de configuración de routers virtuales, análisis de tablas de enrutamiento y pruebas de conectividad."
+    "name": "PC de Simulación de Redes",
+    "description": "Computadora equipada con programas como Packet Tracer y GNS3 para diseñar y simular redes de computadoras. Aquí los estudiantes practican cómo configurar routers y switches de forma virtual."
   },
   "pc_2": {
-    "name": "Estación 2 — Administración Remota",
-    "description": "Terminal para administración de equipos via SSH, Telnet y RDP. Prácticas de virtualización con VMware/VirtualBox, monitoreo de servicios y hardening básico de servidores."
+    "name": "PC de Administración Remota",
+    "description": "Computadora para administrar equipos de red de forma remota mediante SSH y escritorio remoto. También se usa para crear máquinas virtuales y aprender a proteger servidores."
   },
   "pc_3": {
-    "name": "Estación 3 — Seguridad y Firewall",
-    "description": "Puesto dedicado a ciberseguridad de red. Configuración de ACLs, políticas de firewall, detección de intrusiones con Snort/Suricata y análisis de logs de seguridad."
+    "name": "PC de Seguridad y Firewall",
+    "description": "Puesto dedicado a la ciberseguridad. Los estudiantes aprenden a configurar firewalls, crear reglas de acceso, detectar intrusiones y analizar registros de seguridad de la red."
   },
   "pc_4": {
-    "name": "Estación 4 — Monitoreo de Red",
-    "description": "Estación de monitoreo continuo con PRTG/Zabbix. Dashboards de disponibilidad de servicios, alertas de fallos, uso de ancho de banda y reportes de SLA en tiempo real."
+    "name": "PC de Monitoreo de Red",
+    "description": "Estación que supervisa el estado de la red en tiempo real. Los estudiantes usan herramientas como PRTG o Zabbix para medir el rendimiento, detectar fallos y generar reportes."
   },
   "cpu_1": {
-    "name": "CPU Gabinete 1 — Router Virtual",
-    "description": "Torre con múltiples tarjetas de red (NICs) para funcionar como router/firewall virtual. Prácticas con pfSense, VyOS y enrutamiento entre múltiples segmentos de red."
+    "name": "Servidor de Router Virtual",
+    "description": "Computadora con varias tarjetas de red configurada como router virtual. Se usa para practicar con sistemas como pfSense y VyOS, aprendiendo a segmentar redes y controlar el tráfico."
   },
   "cpu_2": {
-    "name": "CPU Gabinete 2 — Almacenamiento",
-    "description": "Gabinete configurado con RAID por software. Se usa en prácticas de almacenamiento en red (NAS/iSCSI), sistemas de archivos distribuidos y políticas de backup empresarial."
+    "name": "Servidor de Almacenamiento en Red",
+    "description": "Servidor configurado con discos en redundancia (RAID). Se usa en prácticas de almacenamiento conectado a la red, sistemas de respaldo y políticas de recuperación de datos."
   },
   "cpu_3": {
-    "name": "CPU Gabinete 3 — Forense de Red",
-    "description": "Equipo con capacidad de captura de paquetes a velocidad de línea. Prácticas de forense de red con Wireshark, reproducción de tráfico con tcpreplay y análisis de protocolos."
+    "name": "Servidor de Forense de Red",
+    "description": "Equipo especializado en capturar y analizar todo el tráfico de la red. Los estudiantes aprenden a usar Wireshark para investigar incidentes y detectar actividades sospechosas."
   },
   "cpu_4": {
-    "name": "CPU Gabinete 4 — NFV / SDR",
-    "description": "Gabinete con GPU para virtualización de funciones de red (NFV) y procesamiento de señales por software (SDR). Laboratorios de 5G cloud-native y radio definido por software."
+    "name": "Servidor NFV / SDR",
+    "description": "Servidor con capacidad de procesamiento avanzado para virtualizar funciones de red. Se usa en laboratorios de redes 5G y para experimentar con radio definido por software."
   },
   "obj_tv_digital": {
     "name": "TV / Monitor de Proyección",
-    "description": "Pantalla grande del laboratorio para presentar diagramas de red en vivo, demostraciones de configuración de equipos y revisión grupal de ejercicios de topología."
+    "description": "Pantalla grande del laboratorio que se usa para proyectar diagramas de red, mostrar configuraciones en vivo y revisar ejercicios de topología en grupo."
   },
   "obj_pizarra_rodante": {
     "name": "Pizarra Acrílica Móvil",
-    "description": "Pizarra con ruedas para dibujar esquemas de red, tablas de direccionamiento IP, subredes, y resolver problemas de diseño de topología en grupo durante la clase."
+    "description": "Pizarra con ruedas ideal para dibujar esquemas de red, tablas de direcciones IP y resolver problemas de diseño de redes en grupo durante la clase."
+  },
+  "zona_pabellon_A": {
+    "name": "Pabellón A",
+    "description": "Pabellón principal de aulas.",
+    "category": "Zona General"
+  },
+  "zona_pabellon_R": {
+    "name": "Pabellón R",
+    "description": "Pabellón de aulas.",
+    "category": "Zona General"
+  },
+  "zona_pabellon_B": {
+    "name": "Pabellón B",
+    "description": "Pabellón de aulas.",
+    "category": "Zona General"
+  },
+  "zona_cafeteria_01": {
+    "name": "Cafetería",
+    "description": "Lugar de descanso y comida.",
+    "category": "Zona General"
+  },
+  "zona_enfermeria": {
+    "name": "Enfermería",
+    "description": "Servicios de salud y primeros auxilios.",
+    "category": "Zona General"
+  },
+  "zona_estacionamiento": {
+    "name": "Estacionamiento",
+    "description": "Área de parqueo.",
+    "category": "Zona General"
+  },
+  "zona_pabellon_C": {
+    "name": "Pabellón C",
+    "description": "Pabellón de aulas.",
+    "category": "Zona General"
+  },
+  "zona_entrada_pabellon_A": {
+    "name": "Entrada Pabellón A",
+    "description": "Acceso principal al Pabellón A.",
+    "category": "Oculto"
+  },
+  "zona_laboratorio_marketing": {
+    "name": "Laboratorio de Marketing",
+    "description": "Laboratorio especializado en Marketing.",
+    "category": "Laboratorio"
+  },
+  "zona_entrada_laboratorio_marketing": {
+    "name": "Entrada Lab. Marketing",
+    "description": "Acceso al laboratorio de marketing.",
+    "category": "Oculto"
+  },
+  "zona_laboratorio_redes": {
+    "name": "Laboratorio de Redes",
+    "description": "Laboratorio especializado en Redes y Comunicaciones.",
+    "category": "Laboratorio"
+  },
+  "zona_entrada_laboratorio_redes": {
+    "name": "Entrada Lab. Redes",
+    "description": "Acceso al laboratorio de redes.",
+    "category": "Oculto"
+  },
+
+  "obj_cable_1": {
+    "name": "Cable de Red UTP",
+    "description": "Cable Ethernet de par trenzado para conectar equipos de red. Su diseño reduce interferencias y garantiza una transmisión estable."
+  },
+  "obj_cable_2": {
+    "name": "Cable de Fibra Óptica",
+    "description": "Transmite datos con luz en vez de electricidad. Más rápido que el cobre y llega más lejos sin perder calidad. Es la base del Internet de alta velocidad."
+  },
+  "obj_cable_3": {
+    "name": "Cable Coaxial",
+    "description": "Cable con conductor central y malla metálica. Usado en TV por cable y antenas. Fue de los primeros en llevar Internet a los hogares."
+  },
+  "obj_cable_4": {
+    "name": "Cable de Par Trenzado Blindado",
+    "description": "UTP con capa protectora extra contra interferencias eléctricas. Ideal para entornos industriales o con mucho equipo eléctrico cerca."
+  },
+  "obj_router_1": {
+    "name": "Router de Borde",
+    "description": "Router que conecta la red local con Internet. Protege la red, traduce direcciones IP (NAT) y gestiona la conexión con el proveedor."
+  },
+  "obj_router_2": {
+    "name": "Router Interno",
+    "description": "Conecta distintas secciones de una misma red. Crea subredes más pequeñas para mejorar el rendimiento y la seguridad."
+  },
+  "obj_switch_1": {
+    "name": "Switch de Acceso",
+    "description": "Conecta dispositivos finales como PCs, impresoras y teléfonos IP. Es la puerta de entrada de los usuarios a la red."
+  },
+  "obj_switch_2": {
+    "name": "Switch Administrable",
+    "description": "Switch configurable para administración avanzada. Crea redes virtuales (VLANs), prioriza tráfico y monitorea cada puerto."
+  },
+  "obj_modem_1": {
+    "name": "Módem",
+    "description": "Convierte señales digitales en señales que viajan por la línea telefónica o cable, y viceversa. Su nombre viene de modulador-demodulador."
+  },
+  "obj_telefono_ip_1": {
+    "name": "Teléfono IP (Modelo Básico)",
+    "description": "Teléfono digital que funciona sobre la red de datos. Ideal para entender cómo la voz se convierte en datos y viaja por Internet en lugar de la línea telefónica tradicional."
+  },
+  "obj_telefono_ip_2": {
+    "name": "Teléfono IP (Pantalla Táctil)",
+    "description": "Teléfono IP con pantalla que permite gestionar contactos, ver el historial de llamadas y acceder a funciones avanzadas como conferencias y transferencias."
+  },
+  "obj_telefono_ip_3": {
+    "name": "Teléfono IP Inalámbrico",
+    "description": "Teléfono IP que se conecta por WiFi en lugar de cable de red. Ofrece movilidad dentro de la oficina sin perder la calidad de las llamadas digitales."
+  },
+  "obj_telefono_ip_4": {
+    "name": "Teléfono IP para Videoconferencia",
+    "description": "Teléfono IP con cámara integrada para videollamadas. Muestra cómo la misma red de datos puede transportar voz, video y datos simultáneamente."
+  },
+  "obj_celular_1": {
+    "name": "Smartphone 4G",
+    "description": "Teléfono móvil con tecnología 4G. Se usa en el laboratorio para medir cobertura, velocidad de descarga y analizar cómo las redes móviles se conectan con la red fija."
+  },
+  "obj_celular_2": {
+    "name": "Smartphone 5G",
+    "description": "Teléfono móvil de quinta generación. Permite velocidades mucho más altas que el 4G. En el laboratorio se estudia su integración con redes de fibra óptica y antenas de última generación."
+  },
+  "obj_celular_3": {
+    "name": "Smartphone de Gama Media",
+    "description": "Teléfono con capacidades 4G estándar. Se usa para pruebas de compatibilidad con diferentes bandas de frecuencia y para estudiar el rendimiento en distintas condiciones de red."
+  },
+  "obj_celular_4": {
+    "name": "Smartphone Dual SIM",
+    "description": "Teléfono con dos ranuras para chips, ideal para prácticas de enrutamiento entre operadores, balanceo de carga y redundancia en comunicaciones móviles."
+  },
+  "instagram_marketing": {
+    "name": "Estación de Marketing en Instagram",
+    "description": "Crea y gestiona campañas en Instagram. Aprende a diseñar publicaciones, medir alcance y engagement, y vender productos con Instagram Shopping.",
+    "meshPrefix": "pc_monitor_der_01_instagram"
+  },
+  "facebook_marketing": {
+    "name": "Estación de Publicidad en Facebook",
+    "description": "Crea campañas publicitarias segmentadas en Facebook. Define públicos, administra presupuestos y mide el retorno de inversión de tus anuncios.",
+    "meshPrefix": "pc_monitor_der_02_facebook"
+  },
+  "tiktok_marketing": {
+    "name": "Estación de Contenido para TikTok",
+    "description": "Produce contenido viral para TikTok. Aprende a usar tendencias, hashtags, analizar rendimiento y construir una comunidad en la plataforma.",
+    "meshPrefix": "pc_monitor_der_03_tiktok"
+  },
+  "whatsapp_marketing": {
+    "name": "Estación de WhatsApp Business",
+    "description": "Configura WhatsApp Business para tu negocio. Crea catálogos de productos, automatiza respuestas y usa listas de difusión para comunicarte con clientes.",
+    "meshPrefix": "pc_monitor_der_04_whatsapp"
+  },
+  "photoshop_marketing": {
+    "name": "Estación de Adobe Photoshop",
+    "description": "El programa más usado para editar y retocar imágenes. Crea composiciones visuales, diseña piezas publicitarias y prepara imágenes para redes sociales y sitios web.",
+    "meshPrefix": "pc_monitor_izq_01_photoshop"
+  },
+  "illustrator_marketing": {
+    "name": "Estación de Adobe Illustrator",
+    "description": "Crea gráficos vectoriales: logotipos, ilustraciones y tipografías que escalan a cualquier tamaño sin perder calidad. La herramienta líder del diseño vectorial.",
+    "meshPrefix": "pc_monitor_izq_02_illustrator"
+  },
+  "premiere_marketing": {
+    "name": "Estación de Adobe Premiere Pro",
+    "description": "Edita video profesional con Adobe Premiere Pro. Agrega efectos, trabaja con audio y produce contenido audiovisual para campañas de marketing.",
+    "meshPrefix": "pc_monitor_izq_03_premiere"
+  },
+  "canva_marketing": {
+    "name": "Estación de Canva",
+    "description": "Diseño gráfico fácil y rápido. Crea publicaciones para redes sociales, presentaciones y flyers sin necesidad de ser diseñador experto.",
+    "meshPrefix": "pc_monitor_izq_04_canva"
+  },
+
+  "logo_canva": {
+    "name": "Logo de Canva",
+    "description": "Plataforma de diseño online que hace accesible la creación de contenido visual a cualquier persona, sin importar su experiencia.",
+    "meshPrefix": "logo_canva"
+  },
+  "logo_facebook": {
+    "name": "Logo de Facebook",
+    "description": "Red social con miles de millones de usuarios. En marketing se usa para publicidad segmentada, crear comunidades de marca y comunicarte con clientes.",
+    "meshPrefix": "logo_facebook"
+  },
+  "logo_illustrator": {
+    "name": "Logo de Adobe Illustrator",
+    "description": "Diseño vectorial para crear logotipos, iconos e ilustraciones. Los vectores escalan a cualquier tamaño sin perder calidad, ideal para marcas e identidad visual.",
+    "meshPrefix": "logo_illustrator"
+  },
+  "logo_instagram": {
+    "name": "Logo de Instagram",
+    "description": "Red social visual de fotos y videos cortos. Clave en marketing digital para mostrar productos de forma atractiva y conectar con audiencias jóvenes.",
+    "meshPrefix": "logo_instagram"
+  },
+  "logo_photoshop": {
+    "name": "Logo de Adobe Photoshop",
+    "description": "El editor de imágenes más famoso del mundo. Retoca fotos, crea composiciones digitales y prepara materiales gráficos para impresión y web.",
+    "meshPrefix": "logo_photoshop"
+  },
+  "logo_premiere": {
+    "name": "Logo de Adobe Premiere Pro",
+    "description": "Edición de video profesional usada en cine, TV y marketing digital. Edita, monta y produce videos de calidad industrial.",
+    "meshPrefix": "logo_premiere"
+  },
+  "logo_tiktok": {
+    "name": "Logo de TikTok",
+    "description": "Red social de videos cortos, fenómeno global. Ideal para llegar a audiencias jóvenes con contenido creativo, tendencias y desafíos virales.",
+    "meshPrefix": "logo_tiktok"
+  },
+  "logo_whatsapp": {
+    "name": "Logo de WhatsApp",
+    "description": "La app de mensajería más usada. Su versión empresarial permite comunicarte con clientes, enviar notificaciones y ofrecer atención personalizada.",
+    "meshPrefix": "logo_whatsapp"
+  },
+
+  "camara_tripode": {
+    "name": "Cámara Profesional con Trípode",
+    "description": "Equipo profesional de fotografía y video. Aprende técnicas de iluminación, composición y captura de imagen para campañas publicitarias.",
+    "meshPrefix": "camara_tripode"
+  },
+  "dron": {
+    "name": "Dron",
+    "description": "Vehículo aéreo con cámara para fotografía y video aéreo. Cada vez más usado en marketing para crear contenido impactante desde perspectivas únicas.",
+    "meshPrefix": "dron"
+  },
+  "luz_estudio": {
+    "name": "Luz de Estudio Profesional",
+    "description": "Iluminación profesional para fotografía y video. Esencial para lograr imágenes de alta calidad en campañas de marketing y producción de contenido.",
+    "meshPrefix": "luz_estudio"
+  },
+  "podcast": {
+    "name": "Equipo de Podcast",
+    "description": "Estación para grabar podcasts con micrófonos, cámaras y celulares. El podcasting conecta con audiencias a través de conversaciones y entrevistas.",
+    "meshPrefix": "podcast"
+  },
+  "vitrina_audio": {
+    "name": "Vitrina de Equipos de Audio",
+    "description": "Muestra equipos de audio profesionales: micrófonos, audífonos y accesorios. Fundamentales en la producción de contenido multimedia para marketing.",
+    "meshPrefix": "vitrina_audio"
+  },
+  "vitrina_camaras": {
+    "name": "Vitrina de Cámaras y Equipos",
+    "description": "Muestra cámaras, lentes y accesorios para producción audiovisual. Conoce el equipo que usa la industria para crear contenido visual de alto nivel.",
+    "meshPrefix": "vitrina_camaras"
   }
 }

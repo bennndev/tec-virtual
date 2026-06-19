@@ -185,6 +185,61 @@ const useStore = create((set) => ({
       controlsDisabled: true
     };
   }),
+
+  // --- INTERACCIÓN CON LA VITRINA DE SERVIDORES ---
+  vitrineProximity: false,
+  setVitrineProximity: (val) => set({ vitrineProximity: val }),
+
+  // --- INTERACCIÓN CON PC DE CIBERSEGURIDAD ---
+  hackerGameProximity: false,
+  setHackerGameProximity: (val) => set({ hackerGameProximity: val }),
+
+  // --- MINIJUEGO DE RED (CONEXIÓN INTERNET) ---
+  networkGameActive: false,
+  networkGameWon: false,
+  toggleNetworkGame: () => set((state) => {
+    // Si ya ganamos, no volvemos a abrir el juego a menos que se resetee
+    if (state.networkGameWon && !state.networkGameActive) return {};
+    const nextActive = !state.networkGameActive;
+    return {
+      networkGameActive: nextActive,
+      controlsDisabled: nextActive, // Desactiva WASD del avatar 3D
+    };
+  }),
+  setNetworkGameWon: (won) => set({ networkGameWon: won }),
+  resetNetworkGame: () => set({
+    networkGameWon: false,
+    networkGameActive: false,
+    controlsDisabled: false
+  }),
+
+  // --- MINIJUEGO DE CIBERSEGURIDAD (DEFENDER ATAQUE HACKER) ---
+  hackerGameActive: false,
+  hackerGameWon: false,
+  toggleHackerGame: () => set((state) => {
+    if (state.hackerGameWon && !state.hackerGameActive) return {};
+    const nextActive = !state.hackerGameActive;
+    return {
+      hackerGameActive: nextActive,
+      controlsDisabled: nextActive,
+    };
+  }),
+  setHackerGameWon: (won) => set({ hackerGameWon: won }),
+  resetHackerGame: () => set({
+    hackerGameWon: false,
+    hackerGameActive: false,
+    controlsDisabled: false
+  }),
+
+  // --- INTERACCIÓN CON TVS INFORMATIVOS ---
+  tvRedesProximity: false,
+  setTvRedesProximity: (val) => set({ tvRedesProximity: val }),
+  tvMarketingProximity: false,
+  setTvMarketingProximity: (val) => set({ tvMarketingProximity: val }),
+
+  // --- MODAL DE VIDEO YOUTUBE ---
+  tvVideoUrl: null,
+  setTvVideoUrl: (url) => set({ tvVideoUrl: url }),
 }));
 
 export default useStore;

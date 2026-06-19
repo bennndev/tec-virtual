@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import Ecctrl, { EcctrlAnimation } from 'ecctrl';
 import { KeyboardControls, useKeyboardControls } from '@react-three/drei';
@@ -22,6 +22,7 @@ const FLY_HORIZONTAL_SPEED = 3;
 
 function Character() {
   const ecctrlRef = useRef();
+  const [spawnPos, setSpawnPos] = useState(CHARACTER_INIT_POS);
   const posRef = useRef();
   const setPlayerPosition = useStore((s) => s.setPlayerPosition);
   const activeCharacter = useStore((s) => s.activeCharacter);
@@ -37,6 +38,7 @@ function Character() {
   const clearNavigation = useStore((s) => s.clearNavigation);
 
   const spawnFrames = useRef(0);
+  const postTeleportFrames = useRef(-1);
   const vec = useRef(new THREE.Vector3());
 
   // Estado en vivo de las teclas
@@ -70,20 +72,34 @@ function Character() {
       console.log(`[Player] Interceptación de teletransporte activa. Target en store: [${teleportTarget.map(n => n.toFixed(2)).join(', ')}]`);
       if (ecctrlRef.current?.group) {
         const rb = ecctrlRef.current.group;
-        console.log('[Player] RigidBody listo. Aplicando setTranslation...');
+        console.log('[Player] RigidBody listo. Despertando y aplicando setTranslation...');
+        rb.wakeUp();
         rb.setTranslation({ x: teleportTarget[0], y: teleportTarget[1], z: teleportTarget[2] }, true);
+        const trans = rb.translation();
+        console.log(`[Player Teleport Debug] Posición de Rapier inmediatamente después de setTranslation: [${trans.x.toFixed(2)}, ${trans.y.toFixed(2)}, ${trans.z.toFixed(2)}]`);
         rb.setLinvel({ x: 0, y: 0, z: 0 }, true);
         rb.setAngvel({ x: 0, y: 0, z: 0 }, true);
         if (posRef.current) {
           vec.current.set(teleportTarget[0], teleportTarget[1], teleportTarget[2]);
         }
         setPlayerPosition({ x: teleportTarget[0], y: teleportTarget[1], z: teleportTarget[2] });
+        setSpawnPos(teleportTarget); // Actualizar prop position del RigidBody para evitar reset en re-render
         useStore.setState({ teleportTarget: null });
         useStore.getState().setCameraMode('thirdPerson');
         skippedWorldPos = true;
+        postTeleportFrames.current = 0; // Iniciar trazado y bloqueo de sincronización
       } else {
         console.warn('[Player] RigidBody NO disponible para teletransporte. Reintentando en el próximo frame...');
       }
+    }
+
+    // Trazado de frames post-teletransporte para diagnóstico
+    if (postTeleportFrames.current >= 0 && postTeleportFrames.current < 15) {
+      if (posRef.current) {
+        posRef.current.getWorldPosition(vec.current);
+        console.log(`[Player Teleport Trace] Frame ${postTeleportFrames.current}: posRef = [${vec.current.x.toFixed(2)}, ${vec.current.y.toFixed(2)}, ${vec.current.z.toFixed(2)}]`);
+      }
+      postTeleportFrames.current++;
     }
 
     // Congelar físicas si los controles están deshabilitados (diálogos o modales activos)
@@ -102,8 +118,10 @@ function Character() {
         posRef.current.getWorldPosition(vec.current);
       }
 
+      const isPostTeleporting = postTeleportFrames.current >= 0 && postTeleportFrames.current < 10;
+
       // --- RESPAWNER DE SEGURIDAD (Red contra caídas al vacío) ---
-      if (vec.current.y < -15) {
+      if (!isPostTeleporting && vec.current.y < -15) {
         console.warn('¡Jugador fuera de límites! Reposicionando en zona segura...');
         if (ecctrlRef.current?.group) {
           const rb = ecctrlRef.current.group;
@@ -115,7 +133,7 @@ function Character() {
         }
       }
       
-      if (!skippedWorldPos) {
+      if (!skippedWorldPos && !isPostTeleporting) {
         setPlayerPosition({ x: vec.current.x, y: vec.current.y, z: vec.current.z });
       }
       
@@ -173,22 +191,22 @@ function Character() {
       animated
       characterInitDir={CHARACTER_INIT_DIR}
       camInitDir={CAM_INIT_DIR}
-      position={CHARACTER_INIT_POS}
+      position={spawnPos}
       disableFollowCam={disableFollowCam}
       disableControl={controlsDisabled}
       capsuleHalfHeight={0.35}
       capsuleRadius={0.3}
-      floatHeight={0.08}
+      floatHeight={0}
       maxVelLimit={flyMode ? FLY_HORIZONTAL_SPEED : 3}
       sprintMult={flyMode ? 1 : 1.8}
       jumpVel={flyMode ? 0 : 4}
       camInitDis={-5}
       camMaxDis={-7}
       camMinDis={-0.7}
-      camMoveSpeed={1}
-      camZoomSpeed={1}
-      camFollowMult={80}
-      camLerpMult={100}
+      camMoveSpeed={0.3}
+      camZoomSpeed={0.3}
+      camFollowMult={15}
+      camLerpMult={20}
     >
       <group ref={posRef}>
         <EcctrlAnimation
@@ -208,10 +226,19 @@ function Character() {
 export default function Player() {
   const setFlyMode = useStore((s) => s.setFlyMode);
 
-  // Teclas F y E
+  // Teclas F, E y X
   useEffect(() => {
     const handler = (e) => {
       const state = useStore.getState();
+
+      // Si el minijuego está activo, interceptamos el teclado
+      if (state.networkGameActive) {
+        if (e.code === 'Escape') {
+          e.preventDefault();
+          state.toggleNetworkGame();
+        }
+        return;
+      }
 
       if (e.code === 'KeyF') {
         e.preventDefault();
@@ -238,6 +265,31 @@ export default function Player() {
           return;
         }
       } else {
+        // E cerca de la vitrina de servidores → abre el minijuego
+        if (e.code === 'KeyE' && state.vitrineProximity && !state.networkGameWon) {
+          e.preventDefault();
+          state.toggleNetworkGame();
+          return;
+        }
+        // E cerca de la PC de ciberseguridad → abre Defender Ataque Hacker
+        if (e.code === 'KeyE' && state.hackerGameProximity && !state.hackerGameWon) {
+          e.preventDefault();
+          state.toggleHackerGame();
+          return;
+        }
+        // E cerca del TV de Redes → abre video
+        if (e.code === 'KeyE' && state.tvRedesProximity && !state.tvVideoUrl) {
+          e.preventDefault();
+          state.setTvVideoUrl('https://youtu.be/tRnq3EKHtG8');
+          return;
+        }
+        // E cerca del TV de Marketing → abre video
+        if (e.code === 'KeyE' && state.tvMarketingProximity && !state.tvVideoUrl) {
+          e.preventDefault();
+          state.setTvVideoUrl('https://youtu.be/dUHHnWRrJvc');
+          return;
+        }
+        // E sobre un NPC → inicia diálogo
         if (e.code === 'KeyE' && state.interactableNPC) {
           e.preventDefault();
           state.triggerNPCDialogue();
@@ -247,6 +299,7 @@ export default function Player() {
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
   }, [setFlyMode]);
+
 
   return (
     <KeyboardControls map={keyboardMap}>

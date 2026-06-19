@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import useStore from '../../store/useStore';
-import Laboratorio2Icon from '../../assets/icons/laboratorio-2.svg?react';
+import { getMarkerIcon } from '../../utils/markerIcons';
 import styles from './Minimap.module.css';
 
 export default function Minimap() {
@@ -14,6 +14,9 @@ export default function Minimap() {
   
   // Navigation State
   const navigationPath = useStore((s) => s.navigationPath);
+  const navigationTarget = useStore((s) => s.navigationTarget);
+  const isNavigating = useStore((s) => s.isNavigating);
+  const clearNavigation = useStore((s) => s.clearNavigation);
 
   // Agregar padding interno para que no corte en los bordes
   const PADDING = 10;
@@ -40,10 +43,6 @@ export default function Minimap() {
 
   // El rotationY de Three.js es en radianes. Convertir a grados.
   const rotationDeg = -(playerRotation * 180) / Math.PI;
-
-  // Navigation State
-  const navigationTarget = useStore((s) => s.navigationTarget);
-  const isNavigating = useStore((s) => s.isNavigating);
 
   // 1. Zoom dinámico: Se aleja si el destino está lejos, se acerca al aproximarse
   const zoom = useMemo(() => {
@@ -122,14 +121,21 @@ export default function Minimap() {
         {/* Puntos de interés (POI) */}
         {mapMarkers.map((marker) => {
           const pos = mapCoord(marker.x, marker.z);
+          const MarkerIcon = getMarkerIcon(marker.id);
           return (
             <g key={marker.id} transform={`translate(${pos.x}, ${pos.y})`}>
               <g
                 className={styles.poiMarker}
                 onMouseEnter={() => setHoveredObject({ id: marker.id, name: marker.name, description: 'Ubicado en el campus' })}
                 onMouseLeave={() => setHoveredObject(null)}
+                onDoubleClick={(e) => {
+                  e.stopPropagation();
+                  if (isNavigating && navigationTarget?.id === marker.id) {
+                    clearNavigation();
+                  }
+                }}
               >
-                <Laboratorio2Icon x="-4" y="-4" width="8" height="8" />
+                <MarkerIcon x="-5" y="-5" width="10" height="10" />
               </g>
             </g>
           );
@@ -138,7 +144,7 @@ export default function Minimap() {
         {/* Indicador del jugador (triángulo que apunta hacia su rotación) */}
         <g transform={`translate(${playerPos2D.x}, ${playerPos2D.y}) rotate(${rotationDeg})`}>
           <polygon
-            points="0,-6 4,4 0,2 -4,4"
+            points="0,-5 3.5,3.5 0,1.5 -3.5,3.5"
             fill="#0ea5e9"
             className={styles.playerMarker}
           />

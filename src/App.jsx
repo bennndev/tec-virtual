@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import * as THREE from 'three';
 import { Canvas } from '@react-three/fiber';
 import Scene from './components/world/Scene';
 import HUD from './components/ui/HUD';
@@ -7,8 +8,13 @@ import CharacterSelector from './components/ui/CharacterSelector';
 import StartScreen from './components/ui/StartScreen';
 import TutorialScreen from './components/ui/TutorialScreen';
 import TouchControls from './components/ui/TouchControls';
+import RotateDevice from './components/ui/RotateDevice';
 import EnExConfirmModal from './components/ui/EnExConfirmModal';
+import NetworkGame from './components/ui/NetworkGame';
+import HackerGame from './components/ui/HackerGame';
+import VideoModal from './components/ui/VideoModal';
 import useStore from './store/useStore';
+import { ensureResumed } from './services/audioContext';
 
 function App() {
   const gameState = useStore((s) => s.gameState);
@@ -16,7 +22,7 @@ function App() {
   const isSelectorOpen = useStore((s) => s.isSelectorOpen);
 
   const handleStart = useCallback(() => {
-    // Al hacer click en INICIAR, transicionamos a la fase de tutorial con PaquitoBot
+    ensureResumed();
     setGameState('tutorial');
   }, [setGameState]);
 
@@ -26,7 +32,7 @@ function App() {
       {gameState === 'game' && (
         <>
           <Canvas
-            shadows
+            shadows={{ type: THREE.PCFShadowMap }}
             camera={{ fov: 60, near: 0.1, far: 1000, position: [0, 2, -5] }}
             dpr={[1, 2]}
             gl={{ antialias: true }}
@@ -49,13 +55,25 @@ function App() {
       {/* Fase 2: Tutorial de PaquitoBot (2D completo) */}
       {gameState === 'tutorial' && <TutorialScreen />}
 
-      {/* Fase 3: Selección de personaje (Vista completa 2D con Canvas 3D aislado de preview) */}
-      {/* También se permite abrirlo en in-game desde el HUD mediante isSelectorOpen */}
-      {(gameState === 'character_select' || isSelectorOpen) && (
-        <CharacterSelector />
-      )}
+      {/* Fase 3: Selección de personaje */}
+      {/* Se monta desde el tutorial para precargar el Canvas 3D y los modelos en background.
+           El modal solo se muestra cuando isSelectorOpen es true. */}
+      {gameState !== 'loading' && <CharacterSelector />}
+
+      {/* Minijuego 2D overlay de reconexión de red */}
+      <NetworkGame />
+
+      {/* Minijuego 2D overlay de ciberseguridad */}
+      <HackerGame />
+
+      {/* Modal de video YouTube */}
+      <VideoModal />
+
+      {/* Overlay de orientación para móviles */}
+      <RotateDevice />
     </div>
   );
 }
 
 export default App;
+

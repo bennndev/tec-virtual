@@ -41,8 +41,6 @@ export default function HUD() {
   const musicMuted = useStore((s) => s.musicMuted);
   const toggleMusic = useStore((s) => s.toggleMusic);
   const flyMode = useStore((s) => s.flyMode);
-  const tpZones = useStore((s) => s.tpZones);
-  const setTeleportTarget = useStore((s) => s.setTeleportTarget);
 
   const [showStats, setShowStats] = useState(false);
 
@@ -62,6 +60,8 @@ export default function HUD() {
     window.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyM' }));
   }, []);
 
+  const isOverview = cameraMode === 'overview';
+
   return (
     <div
       style={{
@@ -72,84 +72,83 @@ export default function HUD() {
         height: '100%',
         pointerEvents: 'none',
         zIndex: 10,
-        fontFamily: 'ui-monospace, Consolas, monospace',
+        fontFamily: "'N27', system-ui, sans-serif",
         color: '#fff',
         fontSize: '14px',
       }}
     >
-      {/* Columna superior izquierda: FPS + coordenadas (solo si showStats está activo) */}
-      {showStats && (
-        <div className={styles.statsContainer}>
-          <div className={styles.fpsWidget}>
-            <FPS />
-          </div>
-          <div className={`${styles.coordsWidget} ${flyMode ? styles.coordsWidgetActive : ''}`.trim()}>
-            <div className={styles.coordLine}>
-              <span className={styles.coordLabel}>X:</span>
-              <span className={styles.coordValue}>{playerPosition.x.toFixed(2)}</span>
-            </div>
-            <div className={styles.coordLine}>
-              <span className={styles.coordLabel}>Y:</span>
-              <span className={styles.coordValue}>{playerPosition.y.toFixed(2)}</span>
-            </div>
-            <div className={styles.coordLine}>
-              <span className={styles.coordLabel}>Z:</span>
-              <span className={styles.coordValue}>{playerPosition.z.toFixed(2)}</span>
-            </div>
-            {flyMode && (
-              <div className={styles.flyModeHelp}>
-                ✈ VOLANDO — Space ↑ | Shift ↓ | F salir
+      {isOverview ? (
+        /* En modo panorámico solo se muestra el botón para volver */
+        <ClayButton
+          onClick={handleToggle}
+          variant="cyan-light"
+          className={styles.cameraBtn}
+        >
+          Tercera persona (M)
+        </ClayButton>
+      ) : (
+        <>
+          {/* Columna superior izquierda: FPS + coordenadas (solo si showStats está activo) */}
+          {showStats && (
+            <div className={styles.statsContainer}>
+              <div className={styles.fpsWidget}>
+                <FPS />
               </div>
-            )}
-          </div>
-        </div>
+              <div className={`${styles.coordsWidget} ${flyMode ? styles.coordsWidgetActive : ''}`.trim()}>
+                <div className={styles.coordLine}>
+                  <span className={styles.coordLabel}>X:</span>
+                  <span className={styles.coordValue}>{playerPosition.x.toFixed(2)}</span>
+                </div>
+                <div className={styles.coordLine}>
+                  <span className={styles.coordLabel}>Y:</span>
+                  <span className={styles.coordValue}>{playerPosition.y.toFixed(2)}</span>
+                </div>
+                <div className={styles.coordLine}>
+                  <span className={styles.coordLabel}>Z:</span>
+                  <span className={styles.coordValue}>{playerPosition.z.toFixed(2)}</span>
+                </div>
+                {flyMode && (
+                  <div className={styles.flyModeHelp}>
+                    ✈ VOLANDO — Space ↑ | Shift ↓ | F salir
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Minimapa Dinámico */}
+          <Minimap />
+          <FullMapModal />
+
+          {/* El atajo O para selector de personaje sigue activo via CharacterSwitcher */}
+          <CharacterSwitcher />
+
+          {/* Control de música */}
+          <ClayButton
+            onClick={toggleMusic}
+            variant="cyan-light"
+            className={styles.musicBtn}
+            title={musicMuted ? 'Activar música' : 'Silenciar música'}
+          >
+            <ClayIcon name={musicMuted ? 'volume_off' : 'volume_up'} />
+          </ClayButton>
+
+          {/* Botón panorámico — centro inferior */}
+          <ClayButton
+            onClick={handleToggle}
+            variant="cyan-solid"
+            className={styles.mapBtn}
+          >
+            <ClayIcon name="map" className={styles.icon} />
+            <span>(M)</span>
+          </ClayButton>
+
+          {/* Diálogos e Interacción */}
+          <InteractionPrompt />
+          <DialogHUD />
+        </>
       )}
-
-      {/* Minimapa Dinámico */}
-      <Minimap />
-      <FullMapModal />
-
-      {/* Selector de personaje */}
-      <CharacterSwitcher />
-
-      {/* Control de música */}
-      <ClayButton
-        onClick={toggleMusic}
-        variant="cyan-light"
-        className={styles.musicBtn}
-        title={musicMuted ? 'Activar música' : 'Silenciar música'}
-      >
-        <ClayIcon name={musicMuted ? 'volume_off' : 'volume_up'} />
-      </ClayButton>
-
-      {/* Botones de TP para zonas detectadas automáticamente */}
-      {Object.keys(tpZones).length > 0 && (
-        <div className={styles.tpBtnContainer}>
-          {Object.entries(tpZones).map(([name, pos]) => (
-            <ClayButton
-              key={name}
-              variant="cyan-solid"
-              className={styles.tpBtn}
-              onClick={() => setTeleportTarget(pos)}
-            >
-              ⚡ {name.replace(/^zona_/, '').replace(/_/g, ' ')}
-            </ClayButton>
-          ))}
-        </div>
-      )}
-
-      {/* Cambio de modo de camara — extremo derecho inferior */}
-      <ClayButton
-        onClick={handleToggle}
-        variant="cyan-light"
-        className={styles.cameraBtn}
-      >
-        {cameraMode === 'overview' ? 'Tercera persona (M)' : 'Vista general (M)'}
-      </ClayButton>
-
-      {/* Diálogos e Interacción */}
-      <InteractionPrompt />
-      <DialogHUD />
     </div>
   );
+
 }

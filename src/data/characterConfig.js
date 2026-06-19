@@ -83,4 +83,4 @@ export const CHARACTER_INIT_DIR = 1.65; // Ej: 0.8 para mirar hacia la izquierda
 export const CAM_INIT_DIR = { x: 0, y: 1.65 }; // y: debe ser igual a CHARACTER_INIT_DIR para alinear la cámara
 
 // Coordenadas de inicio [x, y, z] en el mapa.
-export const CHARACTER_INIT_POS = [65, 1.7, -99.45];
+export const CHARACTER_INIT_POS = [-74.48, 20.0, -5.67];

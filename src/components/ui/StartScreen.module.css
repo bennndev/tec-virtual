@@ -192,3 +192,50 @@
   50% { transform: translateY(-20px) rotate(5deg); }
   100% { transform: translateY(0) rotate(0deg); }
 }
+
+/* ========================================
+   Responsive: pantallas angostas
+   ======================================== */
+@media (max-width: 900px) {
+  .logo {
+    max-width: 85vw;
+  }
+
+  .bottomContent {
+    top: 58%;
+    gap: 16px;
+  }
+
+  .slogan {
+    font-size: clamp(16px, 4vw, 22px);
+  }
+
+  .progressBarContainer {
+    width: min(280px, 70vw);
+  }
+
+  .startBtn {
+    padding: 12px 36px;
+    font-size: 14px;
+  }
+
+  /* Ocultamos wireframes en mobile para no saturar */
+  .shape {
+    display: none;
+  }
+}
+
+@media (max-width: 500px) {
+  .bottomContent {
+    top: 55%;
+  }
+
+  .slogan {
+    font-size: 14px;
+  }
+
+  .startBtn {
+    padding: 10px 28px;
+    font-size: 13px;
+  }
+}

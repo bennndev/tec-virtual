@@ -5,38 +5,8 @@ import ClayButton from './ClayButton';
 import styles from './FullMapModal.module.css';
 import { pathfinder } from '../../services/pathfinding';
 
-// Importar SVG como componentes de React
-import AlmacenIcon from '../../assets/icons/almacen.svg?react';
-import AuditorioAIcon from '../../assets/icons/auditorio-a.svg?react';
-import AuditorioBIcon from '../../assets/icons/auditorio-b.svg?react';
-import BibliotecaIcon from '../../assets/icons/biblioteca.svg?react';
-import BicicletasIcon from '../../assets/icons/bicicletas.svg?react';
-import CafeteriaIcon from '../../assets/icons/cafeteria.svg?react';
-import EnfermeriaIcon from '../../assets/icons/enfermeria.svg?react';
-import EstacionamientoIcon from '../../assets/icons/estacionamiento.svg?react';
-import Laboratorio1Icon from '../../assets/icons/laboratorio-1.svg?react';
-import Laboratorio2Icon from '../../assets/icons/laboratorio-2.svg?react';
-import LockersIcon from '../../assets/icons/lockers.svg?react';
-
-// Lista estática de íconos que el usuario subió
-const LEGEND_ITEMS = [
-  // Hardcoded areas provistas por el usuario
-  { id: 'CarrerasAdmision', label: 'Carreras y Admisión', Icon: Laboratorio1Icon, x: 96.92, y: 2.37, z: -114.39 },
-  { id: 'Empresas', label: 'Empresas Participantes', Icon: EstacionamientoIcon, x: 103.98, y: 2.26, z: -107.10 },
-  { id: 'stand01', label: 'Stand Principal', Icon: Laboratorio2Icon, x: 101.84, y: 2.57, z: -116.95 },
-  // Resto de la leyenda
-  { id: 'almacen', label: 'Almacén', Icon: AlmacenIcon },
-  { id: 'auditorio-a', label: 'Auditorio A', Icon: AuditorioAIcon },
-  { id: 'auditorio-b', label: 'Auditorio B', Icon: AuditorioBIcon },
-  { id: 'biblioteca', label: 'Biblioteca', Icon: BibliotecaIcon },
-  { id: 'bicicletas', label: 'Bicicletas', Icon: BicicletasIcon },
-  { id: 'cafeteria', label: 'Cafetería', Icon: CafeteriaIcon },
-  { id: 'enfermeria', label: 'Enfermería', Icon: EnfermeriaIcon },
-  { id: 'estacionamiento', label: 'Estacionamiento', Icon: EstacionamientoIcon },
-  { id: 'laboratorio-1', label: 'Laboratorio 1', Icon: Laboratorio1Icon },
-  { id: 'laboratorio-2', label: 'Laboratorio 2', Icon: Laboratorio2Icon },
-  { id: 'lockers', label: 'Lockers', Icon: LockersIcon },
-];
+import objectsData from '../../data/objects.json';
+import { getMarkerIcon } from '../../utils/markerIcons';
 
 export default function FullMapModal() {
   const isMapModalOpen = useStore((s) => s.isMapModalOpen);
@@ -50,9 +20,15 @@ export default function FullMapModal() {
   
   // Navigation State
   const navigationTarget = useStore((s) => s.navigationTarget);
-  const setNavigationTarget = useStore((s) => s.setNavigationTarget);
+  const isNavigating = useStore((s) => s.isNavigating);
   const clearNavigation = useStore((s) => s.clearNavigation);
   const navigationPath = useStore((s) => s.navigationPath);
+  const setNavigationTarget = useStore((s) => s.setNavigationTarget);
+
+  // Lista dinámica ordenada alfabéticamente para la leyenda
+  const sortedMarkers = useMemo(() => {
+    return [...mapMarkers].sort((a, b) => a.name.localeCompare(b.name));
+  }, [mapMarkers]);
 
   // Zoom & Pan State para el mapa expandido (estilo GTA V)
   const [zoom, setZoom] = useState(1);
@@ -92,19 +68,22 @@ export default function FullMapModal() {
     });
   };
 
-  const startNavigation = (target) => {
-    if (target.x !== undefined && target.z !== undefined) {
-      // Si ya estábamos navegando a este mismo lugar, lo desactivamos (Toggle)
-      if (navigationTarget && navigationTarget.id === target.id) {
-        clearNavigation();
-        return;
-      }
-
-      const path = pathfinder.calculatePath(playerPosition, target);
-      setNavigationTarget({ id: target.id, name: target.label || target.name, x: target.x, y: target.y || 0, z: target.z }, path);
-    } else {
-      console.warn('Esta área no tiene coordenadas asignadas todavía.');
+  const handleZoneClick = (marker) => {
+    if (!marker.teleportPos) {
+      console.warn('Esta área no tiene coordenadas asignadas para la ruta.');
+      return;
     }
+
+    // Toggle: si ya es el destino activo, lo desmarca
+    if (isNavigating && navigationTarget?.id === marker.id) {
+      clearNavigation();
+      return;
+    }
+
+    // Si no, marca la ruta hacia este destino
+    const targetPos = { x: marker.x, y: marker.y || 0, z: marker.z };
+    const path = pathfinder.calculatePath(playerPosition, targetPos);
+    setNavigationTarget({ id: marker.id, name: marker.name, ...targetPos }, path);
   };
 
   // Manejadores de eventos de zoom y arrastre (Pan)
@@ -152,6 +131,39 @@ export default function FullMapModal() {
   };
 
   const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  // Touch support para arrastre en móviles
+  const handleTouchStart = (e) => {
+    if (zoom > 1 && e.touches.length === 1) {
+      setIsDragging(true);
+      dragStart.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isDragging || zoom <= 1 || e.touches.length !== 1) return;
+
+    const dx = e.touches[0].clientX - dragStart.current.x;
+    const dy = e.touches[0].clientY - dragStart.current.y;
+
+    const svgSize = 100 / zoom;
+    const dragScale = svgSize / 400;
+
+    setPan(prev => {
+      let newX = prev.x - dx * dragScale;
+      let newY = prev.y - dy * dragScale;
+      const limit = (100 - svgSize) / 2;
+      newX = Math.max(-limit, Math.min(limit, newX));
+      newY = Math.max(-limit, Math.min(limit, newY));
+      return { x: newX, y: newY };
+    });
+
+    dragStart.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+  };
+
+  const handleTouchEnd = () => {
     setIsDragging(false);
   };
 
@@ -221,26 +233,29 @@ export default function FullMapModal() {
       <div className={styles.modal} ref={modalRef}>
         
         {/* Botón de cerrar */}
-        <button className={styles.closeButton} onClick={handleClose}>
+        <ClayButton className={styles.closeButton} onClick={handleClose}>
           ✕
-        </button>
+        </ClayButton>
 
         {/* Panel Izquierdo: Leyenda */}
         <div className={styles.legendPanel}>
           <h2 className={styles.legendTitle}>Leyenda del Mapa</h2>
-          {LEGEND_ITEMS.map((item) => (
-            <ClayButton 
-              key={item.id} 
-              variant="translucent" 
-              className={styles.legendItemButton}
-              onClick={() => startNavigation(item)}
-            >
-              <div className={styles.legendIcon}>
-                <item.Icon />
-              </div>
-              <span className={styles.legendLabel}>{item.label}</span>
-            </ClayButton>
-          ))}
+          {sortedMarkers.map((marker) => {
+            const IconComponent = getMarkerIcon(marker.id);
+            return (
+              <ClayButton 
+                key={marker.id} 
+                variant="translucent" 
+                className={styles.legendItemButton}
+                onClick={() => handleZoneClick(marker)}
+              >
+                <div className={styles.legendIcon}>
+                  <IconComponent />
+                </div>
+                <span className={styles.legendLabel}>{marker.name}</span>
+              </ClayButton>
+            );
+          })}
         </div>
 
         {/* Panel Derecho: Mapa Expandido */}
@@ -251,6 +266,9 @@ export default function FullMapModal() {
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseUp}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
           style={{ cursor: zoom > 1 ? (isDragging ? 'grabbing' : 'grab') : 'crosshair' }}
         >
           <svg viewBox={viewBox} className={styles.minimapSvg}>
@@ -265,18 +283,20 @@ export default function FullMapModal() {
             {/* Marcadores de POI */}
             {mapMarkers.map((marker) => {
               const pos = mapCoord(marker.x, marker.z);
+              const MarkerIcon = getMarkerIcon(marker.id);
+              const desc = objectsData[marker.id]?.description || 'Zona representativa del campus';
               return (
                 <g 
                   key={marker.id} 
                   transform={`translate(${pos.x}, ${pos.y})`}
-                  onClick={() => startNavigation(marker)}
+                  onClick={() => handleZoneClick(marker)}
                 >
                   <g
                     className={styles.poiMarker}
-                    onMouseEnter={() => setHoveredObject({ id: marker.id, name: marker.name, description: 'Ubicado en el campus' })}
+                    onMouseEnter={() => setHoveredObject({ id: marker.id, name: marker.name, description: desc })}
                     onMouseLeave={() => setHoveredObject(null)}
                   >
-                    <Laboratorio2Icon x="-3" y="-3" width="6" height="6" />
+                    <MarkerIcon x="-4" y="-4" width="8" height="8" />
                   </g>
                 </g>
               );
@@ -285,7 +305,7 @@ export default function FullMapModal() {
             {/* Indicador del Jugador */}
             <g transform={`translate(${playerPos2D.x}, ${playerPos2D.y}) rotate(${rotationDeg})`}>
               <polygon
-                points="0,-4 3,3 0,1 -3,3"
+                points="0,-3.5 2.5,2.5 0,0.8 -2.5,2.5"
                 fill="#0ea5e9"
                 className={styles.playerMarker}
               />

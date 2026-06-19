@@ -13,10 +13,7 @@ import styles from './CharacterSelector.module.css';
 function PreviewModel({ modelUrl }) {
   const [scene, setScene] = useState(null);
   const groupRef = useRef();
-  const loadedSceneRef = useRef(null);
 
-  // Cargar el GLB independientemente, sin usar el caché de useGLTF
-  // (que ecctrl modifica in-game con animaciones y transformaciones)
   useEffect(() => {
     let cancelled = false;
 
@@ -29,41 +26,21 @@ function PreviewModel({ modelUrl }) {
       modelUrl,
       (gltf) => {
         if (cancelled) return;
-        // Forzar el modelo a origen: crudo, sin modificaciones
         gltf.scene.position.set(0, 0, 0);
         gltf.scene.rotation.set(0, 0, 0);
         gltf.scene.scale.set(1, 1, 1);
         gltf.scene.updateMatrix();
-        loadedSceneRef.current = gltf.scene;
         setScene(gltf.scene);
       },
       undefined,
-      () => { /* ignore load errors silently */ },
+      () => { /* ignore silently */ },
     );
 
     return () => {
       cancelled = true;
-      if (loadedSceneRef.current) {
-        // Liberar recursos de WebGL para evitar memory leaks
-        loadedSceneRef.current.traverse((child) => {
-          if (child.isMesh) {
-            if (child.geometry) {
-              child.geometry.dispose();
-            }
-            if (child.material) {
-              if (Array.isArray(child.material)) {
-                child.material.forEach((mat) => mat.dispose());
-              } else {
-                child.material.dispose();
-              }
-            }
-          }
-        });
-      }
     };
   }, [modelUrl]);
 
-  // Calcular el centro del modelo mirando SOLO mallas visibles
   const centerY = useMemo(() => {
     if (!scene) return 0;
     const box = new THREE.Box3();
@@ -82,7 +59,6 @@ function PreviewModel({ modelUrl }) {
     }
   });
 
-  // No mostrar nada hasta que el modelo esté cargado
   if (!scene) return null;
 
   return (
@@ -96,6 +72,8 @@ function PreviewModel({ modelUrl }) {
 
 /** Mini Canvas de previsualización del personaje */
 function PreviewCanvas({ modelUrl }) {
+  if (!modelUrl) return null;
+
   return (
     <Canvas
       camera={{ position: [0, 0, 3.5], fov: 40 }}
@@ -176,35 +154,30 @@ export default function CharacterSelector() {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [isSelectorOpen, goPrev, goNext, selectAndClose, close, gameState]);
 
-  if (!isSelectorOpen) return null;
-
+  const charConfig = CHARACTERS[previewCharacter];
   const currentIdx = characterIds.indexOf(previewCharacter);
   const charInfo = CHAR_DATA[currentIdx] || CHAR_DATA[0];
-  const charConfig = CHARACTERS[previewCharacter];
 
   const isFullscreenView = gameState === 'character_select';
 
   return (
-    <div className={`${styles.overlay} ${isFullscreenView ? styles.fullscreenOverlay : ''}`.trim()}>
+    <div
+      className={`${styles.overlay} ${isFullscreenView ? styles.fullscreenOverlay : ''}`.trim()}
+      style={{ display: isSelectorOpen ? '' : 'none' }}
+    >
       <div className={`${styles.modal} ${isFullscreenView ? styles.fullscreenLayout : ''}`.trim()}>
-        {/* Preview 3D — responsive */}
+        {/* Preview 3D — siempre montado, incluso cuando display:none sobre el overlay */}
         <div className={styles.previewContainer}>
-          <PreviewCanvas modelUrl={charConfig.modelUrl} />
+          <PreviewCanvas modelUrl={charConfig?.modelUrl} />
         </div>
 
-        {/* Info: Nombre, descripción, navegación, acciones */}
+        {/* Info */}
         <div className={styles.infoContainer}>
-          {/* Bloque de texto con scroll interno si desborda */}
           <div className={styles.textBlock}>
-            <h2 className={styles.title}>
-              {charInfo.name}
-            </h2>
-            <p className={styles.desc}>
-              {charInfo.description}
-            </p>
+            <h2 className={styles.title}>{charInfo.name}</h2>
+            <p className={styles.desc}>{charInfo.description}</p>
           </div>
 
-          {/* Navegación: ◄  X / Y  ► */}
           <div className={styles.navRow}>
             <ClayButton
               onClick={goPrev}
@@ -227,7 +200,6 @@ export default function CharacterSelector() {
             </ClayButton>
           </div>
 
-          {/* Acciones */}
           <div className={styles.actionsRow}>
             <ClayButton
               onClick={selectAndClose}
