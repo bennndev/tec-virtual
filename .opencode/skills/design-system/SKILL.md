@@ -39,7 +39,7 @@ El proyecto cuenta con una identidad visual premium y moderna basada en **Claymo
 - **Color de Acento:** Cian brillante (`#0ea5e9` o `rgba(14, 165, 233)`).
 - **Texto principal/títulos:** `#0ea5e9` con `font-weight: 800`.
 - **Texto descriptivo/cuerpo:** `#475569` (slate-600) con `font-weight: 400`.
-- **Botones Interactivos:** Utilizan las clases globales `.clay-btn` de `index.css` combinadas con `.clay-cyan-light` o `.clay-cyan-solid`.
+- **Botones Interactivos:** SIEMPRE utiliza el componente React `ClayButton.jsx` en lugar de la etiqueta nativa `<button>`. Soporta las props `variant="cyan-solid" | "cyan-light" | "translucent"`. Tienen un padding global de `10px 24px` y fuente a `0.9rem`.
 
 ---
 

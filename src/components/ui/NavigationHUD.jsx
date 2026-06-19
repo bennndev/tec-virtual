@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import useStore from '../../store/useStore';
 import styles from './NavigationHUD.module.css';
+import ClayButton from './ClayButton';
 
 export default function NavigationHUD() {
   const isNavigating = useStore((s) => s.isNavigating);
@@ -53,9 +54,9 @@ export default function NavigationHUD() {
         <span className={styles.distance}>{navData.distance}m</span>
       </div>
 
-      <button className={styles.cancelBtn} onClick={clearNavigation}>
+      <ClayButton className={styles.cancelBtn} onClick={clearNavigation}>
         ✕
-      </button>
+      </ClayButton>
     </div>
   );
 }

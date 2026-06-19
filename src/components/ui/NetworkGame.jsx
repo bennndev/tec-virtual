@@ -241,9 +241,9 @@ export default function NetworkGame() {
             <ClayIcon name="settings_ethernet" />
             <span>Consola de Diagnóstico: Restaurar Conectividad</span>
           </div>
-          <button className={styles.closeBtn} onClick={toggleNetworkGame} title="Cerrar (Esc)">
+          <ClayButton className={styles.closeBtn} onClick={toggleNetworkGame} title="Cerrar (Esc)">
             ✕
-          </button>
+          </ClayButton>
         </div>
 
         {/* Cuerpo del minijuego */}

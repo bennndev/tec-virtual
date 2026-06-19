@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import * as THREE from 'three';
 import { Canvas } from '@react-three/fiber';
 import Scene from './components/world/Scene';
 import HUD from './components/ui/HUD';
@@ -27,7 +28,7 @@ function App() {
       {gameState === 'game' && (
         <>
           <Canvas
-            shadows
+            shadows={{ type: THREE.PCFShadowMap }}
             camera={{ fov: 60, near: 0.1, far: 1000, position: [0, 2, -5] }}
             dpr={[1, 2]}
             gl={{ antialias: true }}

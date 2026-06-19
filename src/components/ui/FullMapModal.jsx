@@ -221,9 +221,9 @@ export default function FullMapModal() {
       <div className={styles.modal} ref={modalRef}>
         
         {/* Botón de cerrar */}
-        <button className={styles.closeButton} onClick={handleClose}>
+        <ClayButton className={styles.closeButton} onClick={handleClose}>
           ✕
-        </button>
+        </ClayButton>
 
         {/* Panel Izquierdo: Leyenda */}
         <div className={styles.legendPanel}>

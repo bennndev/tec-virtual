@@ -33,13 +33,13 @@ export default function DialogHUD() {
   return (
     <div className={styles.overlay} ref={containerRef}>
       {gameState !== 'tutorial' && (
-        <button 
+        <ClayButton 
           className={styles.closeButton} 
           onClick={endDialogue}
           aria-label="Cerrar diálogo"
         >
           ✕
-        </button>
+        </ClayButton>
       )}
 
       <div className={styles.body}>
