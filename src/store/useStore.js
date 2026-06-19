@@ -40,8 +40,11 @@ const useStore = create((set) => ({
 
   // EnEx confirmation modal: { label: string, target: [x,y,z] } | null
   pendingEnex: null,
-  setPendingEnex: (data) => set({ pendingEnex: data }),
-  clearPendingEnex: () => set({ pendingEnex: null }),
+
+  // Unix ms timestamp — EnEx detection is blocked until Date.now() > this value.
+  // Both EnExLights (open) and EnExConfirmModal (confirm) write to this field
+  // via a single atomic useStore.setState() call so there is no timing gap.
+  enexBlockedUntil: 0,
 
   // Estado de transición de la cámara
   isTransitioningCamera: false,
