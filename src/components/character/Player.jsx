@@ -208,10 +208,26 @@ function Character() {
 export default function Player() {
   const setFlyMode = useStore((s) => s.setFlyMode);
 
-  // Teclas F y E
+  // Teclas F, E y X
   useEffect(() => {
     const handler = (e) => {
       const state = useStore.getState();
+
+      // Tecla X para alternar el minijuego de red
+      if (e.code === 'KeyX') {
+        e.preventDefault();
+        state.toggleNetworkGame();
+        return;
+      }
+
+      // Si el minijuego está activo, interceptamos el teclado
+      if (state.networkGameActive) {
+        if (e.code === 'Escape') {
+          e.preventDefault();
+          state.toggleNetworkGame();
+        }
+        return;
+      }
 
       if (e.code === 'KeyF') {
         e.preventDefault();
@@ -247,6 +263,7 @@ export default function Player() {
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
   }, [setFlyMode]);
+
 
   return (
     <KeyboardControls map={keyboardMap}>

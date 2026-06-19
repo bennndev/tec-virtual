@@ -185,6 +185,25 @@ const useStore = create((set) => ({
       controlsDisabled: true
     };
   }),
+
+  // --- MINIJUEGO DE RED (CONEXIÓN INTERNET) ---
+  networkGameActive: false,
+  networkGameWon: false,
+  toggleNetworkGame: () => set((state) => {
+    // Si ya ganamos, no volvemos a abrir el juego a menos que se resetee
+    if (state.networkGameWon && !state.networkGameActive) return {};
+    const nextActive = !state.networkGameActive;
+    return {
+      networkGameActive: nextActive,
+      controlsDisabled: nextActive, // Desactiva WASD del avatar 3D
+    };
+  }),
+  setNetworkGameWon: (won) => set({ networkGameWon: won }),
+  resetNetworkGame: () => set({
+    networkGameWon: false,
+    networkGameActive: false,
+    controlsDisabled: false
+  })
 }));
 
 export default useStore;
