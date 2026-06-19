@@ -30,6 +30,7 @@ src/
 │   │   ├── Scene.jsx    # Composición raíz: luces + Physics + todos los elementos
 │   │   ├── SceneEnvironment.jsx # Carga de GLB como escenario con física + hover + BVH
 │   │   ├── Ground.jsx   # (deprecated — reemplazado por SceneEnvironment)
+│   │   ├── VitrineInteraction.jsx # Zona de interacción por proximidad con minijuego
 │   │   └── Obstacles.jsx# (deprecated — reemplazado por SceneEnvironment)
 │   ├── character/       # Personaje y cámara
 │   │   ├── Player.jsx   # Cápsula controlable con ecctrl + WASD + fly mode (F)
@@ -152,6 +153,7 @@ useEffect(() => {
 | Cargar modelos GLB con Draco, animaciones, useGLTF, useAnimations, integrar con ecctrl | character-model |
 | Cargar escenarios GLB con física Rapier, transformación de coordenadas CAD, hover detection con R3F events, BVH | scene-model |
 | Agregar mecánicas de movimiento (vuelo, dash, etc.) usando useKeyboardControls + ecctrlRef + setLinvel | game-mechanics |
+| Crear zonas de interacción por proximidad que disparan un minijuego al acercarse (vitrina-style), con detección distancia, prompt [E] y enlace al juego | vitrine-interaction |
 
 ---
 
