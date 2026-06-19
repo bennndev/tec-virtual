@@ -13,7 +13,16 @@ const MODELS = [
   '/models/Sofia.glb',
 ];
 
-const AUDIO_PATH = '/audio/background.ogg';
+const AUDIO_PATHS = [
+  '/audio/background.ogg',
+  '/audio/voices/paquito/01-bienvenida.ogg',
+  '/audio/voices/paquito/02-movimiento.ogg',
+  '/audio/voices/paquito/03-salto.ogg',
+  '/audio/voices/paquito/04-correr.ogg',
+  '/audio/voices/paquito/05-mapa.ogg',
+  '/audio/voices/paquito/06-interactuar.ogg',
+  '/audio/voices/paquito/07-despedida.ogg',
+];
 
 export default function StartScreen({ onStart }) {
   const [progress, setProgress] = useState(0);
@@ -21,45 +30,47 @@ export default function StartScreen({ onStart }) {
   const rafRef = useRef(null);
 
   useEffect(() => {
-    let audioLoaded = false;
+    let audiosLoaded = 0;
+    const totalAudios = AUDIO_PATHS.length;
     const startTime = Date.now();
     const MIN_LOAD_MS = 2000;
 
-    // Animación suave de progreso: acelera al inicio, frena al acercarse a 90%
     const tick = () => {
       const elapsed = Date.now() - startTime;
-      // Curva ease-out: rápida al inicio, lenta al final
       const t = Math.min(elapsed / MIN_LOAD_MS, 1);
       const simulated = t < 1 ? 90 * (1 - Math.pow(1 - t, 3)) : 90;
 
-      setProgress(Math.round(audioLoaded ? 100 : simulated));
+      setProgress(Math.round(audiosLoaded === totalAudios ? 100 : simulated));
 
-      if (!audioLoaded) {
+      if (audiosLoaded < totalAudios) {
         rafRef.current = requestAnimationFrame(tick);
       }
     };
     rafRef.current = requestAnimationFrame(tick);
 
-    // 1. Precargar modelos en el caché de useGLTF (el mismo que usa la escena 3D)
     MODELS.forEach((url) => useGLTF.preload(url));
 
-    // 2. Cargar audio (trackeable)
     const audioLoader = new THREE.AudioLoader();
-    audioLoader.load(
-      AUDIO_PATH,
-      () => {
-        audioLoaded = true;
-        setProgress(100);
-        setTimeout(() => setReady(true), 400);
-      },
-      undefined,
-      () => {
-        // Error: igual mostramos el botón para no bloquear
-        audioLoaded = true;
-        setProgress(100);
-        setTimeout(() => setReady(true), 400);
-      },
-    );
+    AUDIO_PATHS.forEach((path) => {
+      audioLoader.load(
+        path,
+        () => {
+          audiosLoaded++;
+          if (audiosLoaded === totalAudios) {
+            setProgress(100);
+            setTimeout(() => setReady(true), 400);
+          }
+        },
+        undefined,
+        () => {
+          audiosLoaded++;
+          if (audiosLoaded === totalAudios) {
+            setProgress(100);
+            setTimeout(() => setReady(true), 400);
+          }
+        },
+      );
+    });
 
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
