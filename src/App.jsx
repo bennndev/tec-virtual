@@ -14,6 +14,7 @@ import NetworkGame from './components/ui/NetworkGame';
 import HackerGame from './components/ui/HackerGame';
 import VideoModal from './components/ui/VideoModal';
 import useStore from './store/useStore';
+import { ensureResumed } from './services/audioContext';
 
 function App() {
   const gameState = useStore((s) => s.gameState);
@@ -21,7 +22,7 @@ function App() {
   const isSelectorOpen = useStore((s) => s.isSelectorOpen);
 
   const handleStart = useCallback(() => {
-    // Al hacer click en INICIAR, transicionamos a la fase de tutorial con PaquitoBot
+    ensureResumed();
     setGameState('tutorial');
   }, [setGameState]);
 

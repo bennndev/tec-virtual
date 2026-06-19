@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import useStore from '../../store/useStore';
 import DialogHUD from './DialogHUD';
+import VoicePlayer from '../audio/VoicePlayer';
 import styles from './TutorialScreen.module.css';
 
 const TUTORIAL_DIALOGUES = [
@@ -75,6 +76,9 @@ export default function TutorialScreen() {
         />
         <div className={styles.robotShadow} />
       </div>
+
+      {/* Reproduce voz de PaquitoBot según el diálogo actual */}
+      <VoicePlayer />
 
       {/* HUD de diálogos overlayed abajo */}
       <DialogHUD />
