@@ -136,16 +136,30 @@ const useStore = create((set) => ({
         nextState.controlsDisabled = true;
         nextState.gameState = 'character_select';
       }
-      // Si hablamos con PaquitoBot, activar navegación al laboratorio de marketing
+      // Si hablamos con PaquitoBot, activar navegación
       if (state.activeDialogueNPC?.id === 'paquito-bot') {
-        const marketingZone = state.tpZones?.zona_laboratorio_marketing;
-        if (marketingZone) {
-          const targetPos = { x: marketingZone[0], y: marketingZone[1], z: marketingZone[2] };
-          const startPos = state.playerPosition;
-          const path = pathfinder.calculatePath(startPos, targetPos);
-          nextState.navigationTarget = { id: 'zona_laboratorio_marketing', name: 'Laboratorio de Marketing', ...targetPos };
-          nextState.navigationPath = path;
-          nextState.isNavigating = true;
+        if (state.npcPositionOverrides?.['paquito-bot']) {
+          // Ya fue teletransportado → segundo diálogo: navegar a redes
+          const redesZone = state.tpZones?.zona_laboratorio_redes;
+          if (redesZone) {
+            const targetPos = { x: redesZone[0], y: redesZone[1], z: redesZone[2] };
+            const startPos = state.playerPosition;
+            const path = pathfinder.calculatePath(startPos, targetPos);
+            nextState.navigationTarget = { id: 'zona_laboratorio_redes', name: 'Laboratorio de Redes', ...targetPos };
+            nextState.navigationPath = path;
+            nextState.isNavigating = true;
+          }
+        } else {
+          // Primer diálogo: navegar a marketing
+          const marketingZone = state.tpZones?.zona_laboratorio_marketing;
+          if (marketingZone) {
+            const targetPos = { x: marketingZone[0], y: marketingZone[1], z: marketingZone[2] };
+            const startPos = state.playerPosition;
+            const path = pathfinder.calculatePath(startPos, targetPos);
+            nextState.navigationTarget = { id: 'zona_laboratorio_marketing', name: 'Laboratorio de Marketing', ...targetPos };
+            nextState.navigationPath = path;
+            nextState.isNavigating = true;
+          }
         }
       }
       return nextState;
