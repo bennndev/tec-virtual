@@ -310,6 +310,11 @@ export default function Player() {
           e.preventDefault();
           state.triggerNPCDialogue();
         }
+        // E cerca del ajedrez → abre podio
+        if (e.code === 'KeyE' && state.chessProximity) {
+          e.preventDefault();
+          state.setLeaderboardOpen(true);
+        }
       }
     };
     window.addEventListener('keydown', handler);

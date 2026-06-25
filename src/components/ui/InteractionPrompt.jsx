@@ -15,6 +15,7 @@ export default function InteractionPrompt() {
   const marketingGameProximity = useStore((s) => s.marketingGameProximity);
   const marketingGameActive = useStore((s) => s.marketingGameActive);
   const marketingGameWon = useStore((s) => s.marketingGameWon);
+  const chessProximity = useStore((s) => s.chessProximity);
   const tvRedesProximity = useStore((s) => s.tvRedesProximity);
   const tvMarketingProximity = useStore((s) => s.tvMarketingProximity);
   const tvVideoUrl = useStore((s) => s.tvVideoUrl);
@@ -26,7 +27,7 @@ export default function InteractionPrompt() {
   const showTvRedesPrompt = tvRedesProximity && !tvVideoUrl;
   const showTvMarketingPrompt = tvMarketingProximity && !tvVideoUrl;
 
-  const shouldShow = interactableNPC || showVitrinePrompt || showHackerPrompt || showMarketingPrompt || showTvRedesPrompt || showTvMarketingPrompt;
+  const shouldShow = interactableNPC || showVitrinePrompt || showHackerPrompt || showMarketingPrompt || showTvRedesPrompt || showTvMarketingPrompt || chessProximity;
 
   useEffect(() => {
     if (containerRef.current && shouldShow && !isDialogueActive) {
@@ -85,6 +86,15 @@ export default function InteractionPrompt() {
       <div className={styles.prompt} ref={containerRef} onClick={handleTap} onTouchEnd={(e) => { e.preventDefault(); handleTap(); }}>
         <span className={styles.key}>E</span>
         <span>Ver video — Marketing</span>
+      </div>
+    );
+  }
+
+  if (chessProximity) {
+    return (
+      <div className={styles.prompt} ref={containerRef} onClick={handleTap} onTouchEnd={(e) => { e.preventDefault(); handleTap(); }}>
+        <span className={styles.key}>E</span>
+        <span>Ver Podio</span>
       </div>
     );
   }

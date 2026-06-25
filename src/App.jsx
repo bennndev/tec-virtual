@@ -13,6 +13,8 @@ import EnExConfirmModal from './components/ui/EnExConfirmModal';
 import NetworkGame from './components/ui/NetworkGame';
 import HackerGame from './components/ui/HackerGame';
 import MarketingGame from './components/ui/MarketingGame';
+import NameEntryModal from './components/ui/NameEntryModal';
+import LeaderboardModal from './components/ui/LeaderboardModal';
 import VideoModal from './components/ui/VideoModal';
 import useStore from './store/useStore';
 import { ensureResumed } from './services/audioContext';
@@ -69,6 +71,10 @@ function App() {
 
       {/* Minijuego 2D overlay de marketing */}
       <MarketingGame />
+
+      {/* Modales de score y podio */}
+      <NameEntryModal />
+      <LeaderboardModal />
 
       {/* Modal de video YouTube */}
       <VideoModal />

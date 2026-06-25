@@ -123,6 +123,7 @@ export default function MarketingGame() {
   const handleComplete = () => {
     setMarketingGameWon(true);
     toggleMarketingGame();
+    useStore.getState().completeChallenge();
   };
 
   const handleRestart = () => {

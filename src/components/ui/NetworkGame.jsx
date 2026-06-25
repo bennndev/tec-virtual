@@ -194,6 +194,7 @@ export default function NetworkGame() {
   const handleComplete = () => {
     setNetworkGameWon(true);
     toggleNetworkGame(); // Cierra
+    useStore.getState().completeChallenge();
   };
 
   // Calcular el progreso porcentual (3 conexiones correctas = 100%)

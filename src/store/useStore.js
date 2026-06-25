@@ -169,6 +169,11 @@ const useStore = create((set) => ({
             nextState.navigationPath = path;
             nextState.isNavigating = true;
           }
+        } else if (state.paquitoStep === 3) {
+          // Paso 3 (cierre) → finalizar run y abrir modal de nombre
+          nextState.hasFinished = true;
+          nextState.finalTime = state.gameStartTime ? Math.round((Date.now() - state.gameStartTime) / 1000) : 0;
+          nextState.nameEntryOpen = true;
         }
       }
       return nextState;
@@ -261,13 +266,18 @@ const useStore = create((set) => ({
         ];
     }
 
-    return {
+    const result = {
       dialogueQueue: dialogues,
       currentDialogueIndex: 0,
       isDialogueActive: true,
       activeDialogueNPC: targetNPC,
       controlsDisabled: true
     };
+    // Iniciar cronometro al primer dialogo con PaquitoBot
+    if (targetNPC?.id === 'paquito-bot' && state.paquitoStep === 0 && !state.gameStartTime) {
+      result.gameStartTime = Date.now();
+    }
+    return result;
   }),
 
   // --- INTERACCIÓN CON LA VITRINA DE SERVIDORES ---
@@ -356,6 +366,46 @@ const useStore = create((set) => ({
   // 0=entrada, 1=marketing (saludo), 2=redes-guia, 3=redes-cierre
   paquitoStep: 0,
   advancePaquitoStep: () => set((state) => ({ paquitoStep: state.paquitoStep + 1 })),
+
+  // --- SCORE / CRONOMETRO ---
+  gameStartTime: null,  // timestamp cuando se habla con PaquitoBot x primera vez
+  coinsCollected: 0,
+  totalCoins: 3,
+  challengesCompleted: 0, // 0-3 (network, hacker, marketing)
+  finalTime: null, // segundos totales al terminar
+  hasFinished: false, // true cuando se completa todo
+  addCoin: () => set((state) => ({ coinsCollected: state.coinsCollected + 1 })),
+  completeChallenge: () => set((state) => ({ challengesCompleted: state.challengesCompleted + 1 })),
+  setGameStartTime: (t) => set({ gameStartTime: t }),
+  setFinalTime: (t) => set({ finalTime: t }),
+  finishRun: () => set((state) => ({
+    hasFinished: true,
+    finalTime: state.gameStartTime ? Math.round((Date.now() - state.gameStartTime) / 1000) : 0,
+  })),
+
+  // --- MODAL DE NOMBRE ---
+  nameEntryOpen: false,
+  playerName: '',
+  setNameEntryOpen: (open) => set({ nameEntryOpen: open }),
+  setPlayerName: (name) => set({ playerName: name }),
+
+  // --- PODIO / TABLA DE POSICIONES ---
+  leaderboardOpen: false,
+  setLeaderboardOpen: (open) => set({ leaderboardOpen: open }),
+  chessProximity: false,
+  setChessProximity: (val) => set({ chessProximity: val }),
+  leaderboard: [],
+  saveScore: () => set((state) => {
+    const entry = {
+      name: state.playerName || 'Anonimo',
+      time: state.finalTime,
+      coins: state.coinsCollected,
+      challenges: state.challengesCompleted,
+      date: new Date().toLocaleDateString(),
+    };
+    const updated = [...state.leaderboard, entry].sort((a, b) => a.time - b.time).slice(0, 10);
+    return { leaderboard: updated, nameEntryOpen: false, playerName: '' };
+  }),
 }));
 
 export default useStore;

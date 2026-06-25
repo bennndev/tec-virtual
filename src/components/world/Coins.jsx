@@ -59,6 +59,7 @@ export default function Coins() {
       const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
       if (dist < COLLECT_DIST) {
         setCollected((prev) => ({ ...prev, [i]: true }));
+        useStore.getState().addCoin();
       }
     });
   });

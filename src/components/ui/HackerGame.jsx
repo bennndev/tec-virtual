@@ -163,6 +163,7 @@ export default function HackerGame() {
   const handleComplete = () => {
     setHackerGameWon(true);
     toggleHackerGame();
+    useStore.getState().completeChallenge();
   };
 
   // Reiniciar

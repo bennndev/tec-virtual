@@ -8,6 +8,7 @@ import Coins from './Coins';
 import VitrineInteraction from './VitrineInteraction';
 import HackerGameInteraction from './HackerGameInteraction';
 import MarketingGameInteraction from './MarketingGameInteraction';
+import ChessLeaderboard from './ChessLeaderboard';
 import TvInteraction from './TvInteraction';
 import PointerLock from '../controls/PointerLock';
 import BackgroundMusic from '../audio/BackgroundMusic';
@@ -50,6 +51,7 @@ export default function Scene() {
       <VitrineInteraction />
       <HackerGameInteraction />
       <MarketingGameInteraction />
+      <ChessLeaderboard />
       <TvInteraction />
       <PointerLock />
       <BackgroundMusic />
