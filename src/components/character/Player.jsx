@@ -135,6 +135,10 @@ function Character() {
       
       if (!skippedWorldPos && !isPostTeleporting) {
         setPlayerPosition({ x: vec.current.x, y: vec.current.y, z: vec.current.z });
+        // Guardar posición segura cada ~2s si no está cayendo (evita bug con tecla Q)
+        if (Math.abs(vec.current.y - CHARACTER_INIT_POS[1]) < 5) {
+          useStore.getState().setLastSafePosition([vec.current.x, vec.current.y, vec.current.z]);
+        }
       }
       
       // Obtener la rotación física real del modelo (orientación de WASD)
@@ -257,6 +261,15 @@ export default function Player() {
         const next = !state.flyMode;
         setFlyMode(next);
         console.log(`[Fly] Modo ${next ? 'vuelo' : 'normal'} — F para alternar`);
+        return;
+      }
+
+      // Q → reubicar al jugador en la última posición segura
+      if (e.code === 'KeyQ') {
+        e.preventDefault();
+        const safePos = state.lastSafePosition || CHARACTER_INIT_POS;
+        state.setTeleportTarget(safePos);
+        console.log(`[Safety] Teletransportando a posición segura:`, safePos);
         return;
       }
 

@@ -10,6 +10,8 @@ const savedLeaderboard = (() => {
 const useStore = create((set) => ({
   playerPosition: { x: 0, y: 0, z: 0 },
   setPlayerPosition: (pos) => set({ playerPosition: pos }),
+  lastSafePosition: [-74.48, 20.0, -5.67],
+  setLastSafePosition: (pos) => set({ lastSafePosition: pos }),
 
   // Dirección de la cámara del jugador (yaw) para rotar el ícono en el minimapa
   playerRotation: 0,
