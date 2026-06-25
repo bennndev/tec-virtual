@@ -66,6 +66,9 @@ export default function PointerLock() {
     const handleMouseDown = (e) => {
       // Solo botón izquierdo (primary) y en modo tercera persona
       if (e.button !== 0 || useStore.getState().cameraMode !== 'thirdPerson') return;
+      // No pedir pointer lock si hay un minijuego activo (el click va al overlay)
+      const state = useStore.getState();
+      if (state.networkGameActive || state.hackerGameActive || state.marketingGameActive) return;
       canvas.requestPointerLock();
     };
 

@@ -1,6 +1,12 @@
 import { create } from 'zustand';
 import { pathfinder } from '../services/pathfinding';
 
+// Cargar leaderboard guardado
+const savedLeaderboard = (() => {
+  try { return JSON.parse(localStorage.getItem('tec-virtual-leaderboard') || '[]'); }
+  catch { return []; }
+})();
+
 const useStore = create((set) => ({
   playerPosition: { x: 0, y: 0, z: 0 },
   setPlayerPosition: (pos) => set({ playerPosition: pos }),
@@ -394,7 +400,7 @@ const useStore = create((set) => ({
   setLeaderboardOpen: (open) => set({ leaderboardOpen: open }),
   chessProximity: false,
   setChessProximity: (val) => set({ chessProximity: val }),
-  leaderboard: [],
+  leaderboard: savedLeaderboard,
   saveScore: () => set((state) => {
     const entry = {
       name: state.playerName || 'Anonimo',
@@ -404,6 +410,7 @@ const useStore = create((set) => ({
       date: new Date().toLocaleDateString(),
     };
     const updated = [...state.leaderboard, entry].sort((a, b) => a.time - b.time).slice(0, 10);
+    try { localStorage.setItem('tec-virtual-leaderboard', JSON.stringify(updated)); } catch {}
     return { leaderboard: updated, nameEntryOpen: false, playerName: '' };
   }),
 }));
