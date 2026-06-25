@@ -181,6 +181,7 @@ const useStore = create((set) => ({
           nextState.hasFinished = true;
           nextState.finalTime = state.gameStartTime ? Math.round((Date.now() - state.gameStartTime) / 1000) : 0;
           nextState.nameEntryOpen = true;
+          nextState.controlsDisabled = true;
         }
       }
       return nextState;
@@ -410,7 +411,10 @@ const useStore = create((set) => ({
 
   // --- PODIO / TABLA DE POSICIONES ---
   leaderboardOpen: false,
-  setLeaderboardOpen: (open) => set({ leaderboardOpen: open }),
+  setLeaderboardOpen: (open) => set((state) => ({
+    leaderboardOpen: open,
+    controlsDisabled: open ? state.controlsDisabled : false, // al cerrar, reanudar controles
+  })),
   chessProximity: false,
   setChessProximity: (val) => set({ chessProximity: val }),
   leaderboard: savedLeaderboard,
@@ -424,7 +428,7 @@ const useStore = create((set) => ({
     };
     const updated = [...state.leaderboard, entry].sort((a, b) => a.time - b.time).slice(0, 10);
     try { localStorage.setItem('tec-virtual-leaderboard', JSON.stringify(updated)); } catch {}
-    return { leaderboard: updated, nameEntryOpen: false, playerName: '' };
+    return { leaderboard: updated, nameEntryOpen: false, playerName: '', leaderboardOpen: true };
   }),
 }));
 
