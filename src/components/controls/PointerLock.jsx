@@ -26,12 +26,17 @@ export default function PointerLock() {
   const isTransitioningLock = useRef(false);
   const cameraMode = useStore((s) => s.cameraMode);
 
-  // Liberar el cursor automáticamente si salimos de tercera persona
+  // Liberar el cursor si salimos de tercera persona o se abre un minijuego
+  const networkGameActive = useStore((s) => s.networkGameActive);
+  const hackerGameActive = useStore((s) => s.hackerGameActive);
+  const marketingGameActive = useStore((s) => s.marketingGameActive);
+  const anyGameActive = networkGameActive || hackerGameActive || marketingGameActive;
+
   useEffect(() => {
-    if (cameraMode !== 'thirdPerson' && document.pointerLockElement) {
+    if ((cameraMode !== 'thirdPerson' || anyGameActive) && document.pointerLockElement) {
       document.exitPointerLock();
     }
-  }, [cameraMode]);
+  }, [cameraMode, anyGameActive]);
 
   useEffect(() => {
     // No activar pointer lock en dispositivos táctiles
@@ -66,9 +71,9 @@ export default function PointerLock() {
     const handleMouseDown = (e) => {
       // Solo botón izquierdo (primary) y en modo tercera persona
       if (e.button !== 0 || useStore.getState().cameraMode !== 'thirdPerson') return;
-      // No pedir pointer lock si hay un minijuego activo (el click va al overlay)
-      const state = useStore.getState();
-      if (state.networkGameActive || state.hackerGameActive || state.marketingGameActive) return;
+      // No pedir pointer lock si hay un minijuego activo
+      const s = useStore.getState();
+      if (s.networkGameActive || s.hackerGameActive || s.marketingGameActive) return;
       canvas.requestPointerLock();
     };
 

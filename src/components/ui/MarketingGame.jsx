@@ -6,7 +6,7 @@ import styles from './MarketingGame.module.css';
 
 const GAME_DURATION = 30000;
 const ASSETS_MAX = 100;
-const GRAVITY = 1.8; // cuanto baja por segundo
+const GRAVITY = 27; // cuanto baja por segundo
 const CLICK_BOOST = 12; // cuanto sube por click
 const CRISIS_INTERVAL = 6000; // cada 6s una crisis que acelera la caida
 
@@ -39,6 +39,7 @@ export default function MarketingGame() {
   const [crisisText, setCrisisText] = useState('');
   const [showCrisis, setShowCrisis] = useState(false);
   const [combo, setCombo] = useState(0);
+  const [gameKey, setGameKey] = useState(0);
 
   const animFrameRef = useRef(null);
   const lastTimeRef = useRef(0);
@@ -46,6 +47,8 @@ export default function MarketingGame() {
   const gameOverRef = useRef(false);
   const isWonRef = useRef(false);
   const crisisTimerRef = useRef(null);
+  const accumulatedRef = useRef(0);
+  const lossAccum = useRef(0);
 
   assetRef.current = assetHealth;
 
@@ -54,25 +57,32 @@ export default function MarketingGame() {
     const delta = (timestamp - lastTimeRef.current) / 1000;
     lastTimeRef.current = timestamp;
 
-    setAssetHealth((prev) => {
-      const newVal = prev - GRAVITY * delta;
-      if (newVal <= 0) {
-        gameOverRef.current = true;
-        setGameOver(true);
-        return 0;
-      }
-      return newVal;
-    });
-
-    setTimeLeft((prev) => {
-      const remaining = prev - delta * 1000;
-      if (remaining <= 0) {
-        isWonRef.current = true;
-        setIsWon(true);
-        return 0;
-      }
-      return remaining;
-    });
+    // Acumular pérdida y actualizar cada ~100ms para no saturar React
+    lossAccum.current += GRAVITY * delta;
+    accumulatedRef.current += delta;
+    if (accumulatedRef.current >= 0.1) {
+      accumulatedRef.current = 0;
+      const totalLoss = lossAccum.current;
+      lossAccum.current = 0;
+      setAssetHealth((prev) => {
+        const newVal = prev - totalLoss;
+        if (newVal <= 0) {
+          gameOverRef.current = true;
+          setGameOver(true);
+          return 0;
+        }
+        return newVal;
+      });
+      setTimeLeft((prev) => {
+        const remaining = prev - 100; // ~100ms por tick
+        if (remaining <= 0) {
+          isWonRef.current = true;
+          setIsWon(true);
+          return 0;
+        }
+        return remaining;
+      });
+    }
 
     if (!gameOverRef.current && !isWonRef.current) {
       animFrameRef.current = requestAnimationFrame(gameLoop);
@@ -111,9 +121,10 @@ export default function MarketingGame() {
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
       clearInterval(crisisTimerRef.current);
     };
-  }, [marketingGameActive, gameLoop]);
+  }, [marketingGameActive, gameKey, gameLoop]);
 
-  const handleClick = () => {
+  const handleClick = (e) => {
+    if (e) { e.stopPropagation(); e.preventDefault(); }
     if (gameOver || isWon) return;
     setAssetHealth((prev) => Math.min(ASSETS_MAX, prev + CLICK_BOOST));
     setScore((s) => s + 1);
@@ -136,6 +147,7 @@ export default function MarketingGame() {
     setIsWon(false);
     setScore(0);
     setCombo(0);
+    setGameKey((k) => k + 1);
   };
 
   if (!marketingGameActive) return null;
