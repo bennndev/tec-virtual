@@ -4,6 +4,7 @@ import SceneEnvironment from './SceneEnvironment';
 import Player from '../character/Player';
 import NPCs from '../character/NPCs';
 import CameraRig from '../character/CameraRig';
+import Coins from './Coins';
 import VitrineInteraction from './VitrineInteraction';
 import HackerGameInteraction from './HackerGameInteraction';
 import TvInteraction from './TvInteraction';
@@ -39,6 +40,7 @@ export default function Scene() {
           <Player />
           <NPCs />
         </Physics>
+        <Coins />
       </Suspense>
 
       <CameraRig />
