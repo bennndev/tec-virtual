@@ -109,6 +109,7 @@ const useStore = create((set) => ({
   // --- DIÁLOGOS E INTERACCIÓN ---
   interactableNPC: null,
   setInteractableNPC: (npc) => set({ interactableNPC: npc }),
+  npcDialogueBlockedUntil: 0, // cooldown para evitar re-hablar con NPCs
 
   dialogueQueue: [],
   currentDialogueIndex: 0,
@@ -213,6 +214,14 @@ const useStore = create((set) => ({
     const targetNPC = npc || state.interactableNPC;
     if (!targetNPC) return {};
 
+    // Cooldown de 10s para PaquitoBot (solo entre diálogos del mismo paso)
+    if (targetNPC.id === 'paquito-bot' && Date.now() < state.npcDialogueBlockedUntil) {
+      if (state.npcDialogueBlockedStep === state.paquitoStep) return {};
+    }
+
+    // Si ya terminó el recorrido, no se puede hablar más con PaquitoBot
+    if (targetNPC.id === 'paquito-bot' && state.hasFinished) return {};
+
     let dialogues;
     switch (targetNPC.id) {
       case 'guardia_tecsup':
@@ -282,6 +291,10 @@ const useStore = create((set) => ({
     // Iniciar cronometro al primer dialogo con PaquitoBot
     if (targetNPC?.id === 'paquito-bot' && state.paquitoStep === 0 && !state.gameStartTime) {
       result.gameStartTime = Date.now();
+    }
+    // Cooldown de 10s para PaquitoBot
+    if (targetNPC?.id === 'paquito-bot') {
+      result.npcDialogueBlockedUntil = Date.now() + 10000;
     }
     return result;
   }),

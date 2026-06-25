@@ -4,7 +4,7 @@ import ClayButton from './ClayButton';
 import ClayIcon from './ClayIcon';
 import styles from './MarketingGame.module.css';
 
-const GAME_DURATION = 30000;
+const GAME_DURATION = 10000;
 const ASSETS_MAX = 100;
 const GRAVITY = 27; // cuanto baja por segundo
 const CLICK_BOOST = 12; // cuanto sube por click
