@@ -40,10 +40,18 @@ const DOCENTE_MARKETING = [
   '/audio/voices/teacher/marketing/04-estacion-mision.ogg',
 ];
 
+const DOCENTE_REDES = [
+  '/audio/voices/teacher/redes/01-bienvenida.ogg',
+  '/audio/voices/teacher/redes/02-disenar-redes.ogg',
+  '/audio/voices/teacher/redes/03-ciberseguridad.ogg',
+  '/audio/voices/teacher/redes/04-dos-misiones.ogg',
+];
+
 const VOICE_CONFIG = {
   'paquito-bot': { game: PAQUITO_GAME },
   'guardia_tecsup': { game: GUARDIA },
   'docente_marketing': { game: DOCENTE_MARKETING },
+  'docente_redes': { game: DOCENTE_REDES },
 };
 
 function resolvePaths(npcId, gameState) {
