@@ -207,6 +207,8 @@ function Character() {
       capsuleHalfHeight={0.35}
       capsuleRadius={0.3}
       floatHeight={0}
+      springK={10}
+      damping={0.9}
       maxVelLimit={flyMode ? FLY_HORIZONTAL_SPEED : 3}
       sprintMult={flyMode ? 1 : 1.8}
       jumpVel={flyMode ? 0 : 4}

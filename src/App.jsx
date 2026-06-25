@@ -37,7 +37,7 @@ function App() {
           <Canvas
             shadows={{ type: THREE.PCFShadowMap }}
             camera={{ fov: 60, near: 0.1, far: 1000, position: [0, 2, -5] }}
-            dpr={[1, 2]}
+            dpr={[1, Math.min(1.5, window.devicePixelRatio)]}
             gl={{ antialias: true }}
             style={{ background: '#7ec8e3' }}
           >
