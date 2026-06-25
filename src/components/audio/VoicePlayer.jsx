@@ -33,9 +33,17 @@ const GUARDIA = [
   '/audio/voices/guardia/04-bienvenido.ogg',
 ];
 
+const DOCENTE_MARKETING = [
+  '/audio/voices/teacher/marketing/01-bienvenida.ogg',
+  '/audio/voices/teacher/marketing/02-anuncios-campanas.ogg',
+  '/audio/voices/teacher/marketing/03-marketing-hoy.ogg',
+  '/audio/voices/teacher/marketing/04-estacion-mision.ogg',
+];
+
 const VOICE_CONFIG = {
   'paquito-bot': { game: PAQUITO_GAME },
   'guardia_tecsup': { game: GUARDIA },
+  'docente_marketing': { game: DOCENTE_MARKETING },
 };
 
 function resolvePaths(npcId, gameState) {
