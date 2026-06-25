@@ -12,6 +12,9 @@ export default function InteractionPrompt() {
   const hackerGameProximity = useStore((s) => s.hackerGameProximity);
   const hackerGameActive = useStore((s) => s.hackerGameActive);
   const hackerGameWon = useStore((s) => s.hackerGameWon);
+  const marketingGameProximity = useStore((s) => s.marketingGameProximity);
+  const marketingGameActive = useStore((s) => s.marketingGameActive);
+  const marketingGameWon = useStore((s) => s.marketingGameWon);
   const tvRedesProximity = useStore((s) => s.tvRedesProximity);
   const tvMarketingProximity = useStore((s) => s.tvMarketingProximity);
   const tvVideoUrl = useStore((s) => s.tvVideoUrl);
@@ -19,10 +22,11 @@ export default function InteractionPrompt() {
 
   const showVitrinePrompt = vitrineProximity && !networkGameWon && !networkGameActive;
   const showHackerPrompt = hackerGameProximity && !hackerGameWon && !hackerGameActive;
+  const showMarketingPrompt = marketingGameProximity && !marketingGameWon && !marketingGameActive;
   const showTvRedesPrompt = tvRedesProximity && !tvVideoUrl;
   const showTvMarketingPrompt = tvMarketingProximity && !tvVideoUrl;
 
-  const shouldShow = interactableNPC || showVitrinePrompt || showHackerPrompt || showTvRedesPrompt || showTvMarketingPrompt;
+  const shouldShow = interactableNPC || showVitrinePrompt || showHackerPrompt || showMarketingPrompt || showTvRedesPrompt || showTvMarketingPrompt;
 
   useEffect(() => {
     if (containerRef.current && shouldShow && !isDialogueActive) {
@@ -54,6 +58,15 @@ export default function InteractionPrompt() {
       <div className={styles.prompt} ref={containerRef} onClick={handleTap} onTouchEnd={(e) => { e.preventDefault(); handleTap(); }}>
         <span className={styles.key}>E</span>
         <span>Defender Ataque Hacker</span>
+      </div>
+    );
+  }
+
+  if (showMarketingPrompt) {
+    return (
+      <div className={styles.prompt} ref={containerRef} onClick={handleTap} onTouchEnd={(e) => { e.preventDefault(); handleTap(); }}>
+        <span className={styles.key}>E</span>
+        <span>Gestionar Crisis — Marketing</span>
       </div>
     );
   }

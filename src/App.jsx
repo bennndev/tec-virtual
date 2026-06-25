@@ -12,6 +12,7 @@ import RotateDevice from './components/ui/RotateDevice';
 import EnExConfirmModal from './components/ui/EnExConfirmModal';
 import NetworkGame from './components/ui/NetworkGame';
 import HackerGame from './components/ui/HackerGame';
+import MarketingGame from './components/ui/MarketingGame';
 import VideoModal from './components/ui/VideoModal';
 import useStore from './store/useStore';
 import { ensureResumed } from './services/audioContext';
@@ -65,6 +66,9 @@ function App() {
 
       {/* Minijuego 2D overlay de ciberseguridad */}
       <HackerGame />
+
+      {/* Minijuego 2D overlay de marketing */}
+      <MarketingGame />
 
       {/* Modal de video YouTube */}
       <VideoModal />

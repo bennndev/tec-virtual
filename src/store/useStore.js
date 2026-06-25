@@ -315,6 +315,26 @@ const useStore = create((set) => ({
     controlsDisabled: false
   }),
 
+  // --- MINIJUEGO DE MARKETING (TUG OF ASSETS) ---
+  marketingGameProximity: false,
+  setMarketingGameProximity: (val) => set({ marketingGameProximity: val }),
+  marketingGameActive: false,
+  marketingGameWon: false,
+  toggleMarketingGame: () => set((state) => {
+    if (state.marketingGameWon && !state.marketingGameActive) return {};
+    const nextActive = !state.marketingGameActive;
+    return {
+      marketingGameActive: nextActive,
+      controlsDisabled: nextActive,
+    };
+  }),
+  setMarketingGameWon: (won) => set({ marketingGameWon: won }),
+  resetMarketingGame: () => set({
+    marketingGameWon: false,
+    marketingGameActive: false,
+    controlsDisabled: false
+  }),
+
   // --- INTERACCIÓN CON TVS INFORMATIVOS ---
   tvRedesProximity: false,
   setTvRedesProximity: (val) => set({ tvRedesProximity: val }),

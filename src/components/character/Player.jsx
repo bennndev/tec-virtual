@@ -287,6 +287,12 @@ export default function Player() {
           state.toggleHackerGame();
           return;
         }
+        // E cerca de la PC de marketing → abre Tug of Assets
+        if (e.code === 'KeyE' && state.marketingGameProximity && !state.marketingGameWon) {
+          e.preventDefault();
+          state.toggleMarketingGame();
+          return;
+        }
         // E cerca del TV de Redes → abre video
         if (e.code === 'KeyE' && state.tvRedesProximity && !state.tvVideoUrl) {
           e.preventDefault();

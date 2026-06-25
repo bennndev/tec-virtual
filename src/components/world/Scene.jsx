@@ -7,6 +7,7 @@ import CameraRig from '../character/CameraRig';
 import Coins from './Coins';
 import VitrineInteraction from './VitrineInteraction';
 import HackerGameInteraction from './HackerGameInteraction';
+import MarketingGameInteraction from './MarketingGameInteraction';
 import TvInteraction from './TvInteraction';
 import PointerLock from '../controls/PointerLock';
 import BackgroundMusic from '../audio/BackgroundMusic';
@@ -48,6 +49,7 @@ export default function Scene() {
       <EnExLights />
       <VitrineInteraction />
       <HackerGameInteraction />
+      <MarketingGameInteraction />
       <TvInteraction />
       <PointerLock />
       <BackgroundMusic />
