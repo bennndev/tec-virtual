@@ -389,7 +389,7 @@ const useStore = create((set) => ({
   // --- SCORE / CRONOMETRO ---
   gameStartTime: null,  // timestamp cuando se habla con PaquitoBot x primera vez
   coinsCollected: 0,
-  totalCoins: 3,
+  totalCoins: 13,
   challengesCompleted: 0, // 0-3 (network, hacker, marketing)
   finalTime: null, // segundos totales al terminar
   hasFinished: false, // true cuando se completa todo
