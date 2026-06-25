@@ -297,8 +297,21 @@ export default function NetworkGame() {
           <div 
             className={styles.gameArea}
             ref={workspaceRef}
+            onMouseDown={(e) => e.stopPropagation()}
             onMouseMove={handleMouseMove}
             onTouchMove={handleMouseMove}
+            onTouchEnd={(e) => {
+              // Detectar puerto destino con elementFromPoint
+              const touch = e.changedTouches?.[0];
+              if (touch) {
+                const el = document.elementFromPoint(touch.clientX, touch.clientY);
+                const portId = el?.getAttribute?.('data-port-id');
+                if (portId && dragStart && dragStart.id !== portId) {
+                  attemptConnection(dragStart.id, portId);
+                }
+              }
+              handleDragCancel();
+            }}
           >
             {/* Rejilla de Fondo */}
             <div className={styles.gridBackground} />
@@ -381,10 +394,7 @@ export default function NetworkGame() {
                       e.stopPropagation();
                       handlePortMouseDown(e, port.id);
                     }}
-                    onTouchEnd={(e) => {
-                      e.stopPropagation();
-                      handlePortMouseUp(port.id);
-                    }}
+                    data-port-id={port.id}
                     title={`${port.name}`}
                   />
                 );

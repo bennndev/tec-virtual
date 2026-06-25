@@ -22,7 +22,7 @@ const CYBER_TIPS = [
 ];
 
 // Tiempo en milisegundos
-const GAME_DURATION = 30000; // 30 segundos
+const GAME_DURATION = 20000; // 20 segundos
 const SPAWN_INTERVAL = 600; // ms entre spawns
 const BUG_SPEED = 0.4; // px por frame
 const FIREWALL_MAX = 100;
@@ -154,7 +154,8 @@ export default function HackerGame() {
   }, [hackerGameActive, gameLoop]);
 
   // Click para eliminar un bicho
-  const handleBugClick = (bugId) => {
+  const handleBugClick = (e, bugId) => {
+    e.stopPropagation();
     setBugs((prev) => prev.filter((b) => b.id !== bugId));
     setScore((s) => s + 10);
   };
@@ -251,7 +252,7 @@ export default function HackerGame() {
           </div>
 
           {/* Área de juego */}
-          <div className={styles.gameArea}>
+            <div className={styles.gameArea} onMouseDown={(e) => e.stopPropagation()}>
             <div className={styles.gridBackground} />
 
             {/* Game area */}
@@ -262,10 +263,11 @@ export default function HackerGame() {
                   key={bug.id}
                   className={styles.bug}
                   style={{ left: `${bug.x}%`, top: `${bug.y}%` }}
-                  onClick={() => handleBugClick(bug.id)}
+                  onClick={(e) => handleBugClick(e, bug.id)}
                   onTouchStart={(e) => {
                     e.preventDefault();
-                    handleBugClick(bug.id);
+                    e.stopPropagation();
+                    handleBugClick(e, bug.id);
                   }}
                   title="¡Haz clic para neutralizar!"
                 >
