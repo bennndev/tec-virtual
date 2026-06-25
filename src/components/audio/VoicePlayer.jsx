@@ -26,8 +26,16 @@ const PAQUITO_GAME = [
   '/audio/voices/paquito/16-despedida-final.ogg',
 ];
 
+const GUARDIA = [
+  '/audio/voices/guardia/01-buenos-dias.ogg',
+  '/audio/voices/guardia/02-identificacion.ogg',
+  '/audio/voices/guardia/03-todo-en-orden.ogg',
+  '/audio/voices/guardia/04-bienvenido.ogg',
+];
+
 const VOICE_CONFIG = {
   'paquito-bot': { game: PAQUITO_GAME },
+  'guardia_tecsup': { game: GUARDIA },
 };
 
 function resolvePaths(npcId, gameState) {
