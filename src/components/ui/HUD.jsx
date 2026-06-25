@@ -7,6 +7,7 @@ import Minimap from './Minimap';
 import FullMapModal from './FullMapModal';
 import NavigationHUD from './NavigationHUD';
 import DialogHUD from './DialogHUD';
+import VoicePlayer from '../audio/VoicePlayer';
 import InteractionPrompt from './InteractionPrompt';
 import styles from './HUD.module.css';
 
@@ -148,6 +149,7 @@ export default function HUD() {
 
           {/* Diálogos e Interacción */}
           <InteractionPrompt />
+          <VoicePlayer />
           <DialogHUD />
         </>
       )}
