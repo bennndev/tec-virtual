@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { pathfinder } from '../services/pathfinding';
+import { isMovementLocked } from './overlayLock';
 
 const useStore = create((set) => ({
   playerPosition: { x: 0, y: 0, z: 0 },
@@ -53,7 +54,11 @@ const useStore = create((set) => ({
 
   // Character selector overlay
   isSelectorOpen: false,
-  setSelectorOpen: (open) => set({ isSelectorOpen: open, controlsDisabled: open }),
+  setSelectorOpen: (open) =>
+    set((state) => ({
+      isSelectorOpen: open,
+      controlsDisabled: isMovementLocked({ ...state, isSelectorOpen: open }),
+    })),
 
   // Personaje seleccionado actualmente en el selector (no necesariamente el activo)
   previewCharacter: 'alejandro',
@@ -123,12 +128,11 @@ const useStore = create((set) => ({
       return { currentDialogueIndex: state.currentDialogueIndex + 1 };
     } else {
       // Fin del diálogo — cerrar limpiamente
-      const nextState = { 
-        isDialogueActive: false, 
-        dialogueQueue: [], 
+      const nextState = {
+        isDialogueActive: false,
+        dialogueQueue: [],
         currentDialogueIndex: 0,
         activeDialogueNPC: null,
-        controlsDisabled: false,
       };
       // Solo en el tutorial se abre el selector al terminar
       if (state.gameState === 'tutorial') {
@@ -171,6 +175,7 @@ const useStore = create((set) => ({
           }
         }
       }
+      nextState.controlsDisabled = isMovementLocked({ ...state, ...nextState });
       return nextState;
     }
   }),
@@ -190,12 +195,17 @@ const useStore = create((set) => ({
     return {};
   }),
   
-  endDialogue: () => set({ 
-    isDialogueActive: false, 
-    dialogueQueue: [], 
-    currentDialogueIndex: 0,
-    activeDialogueNPC: null,
-    controlsDisabled: false
+  endDialogue: () => set((state) => {
+    const next = {
+      isDialogueActive: false,
+      dialogueQueue: [],
+      currentDialogueIndex: 0,
+      activeDialogueNPC: null,
+    };
+    return {
+      ...next,
+      controlsDisabled: isMovementLocked({ ...state, ...next }),
+    };
   }),
 
   triggerNPCDialogue: (npc) => set((state) => {
@@ -287,14 +297,13 @@ const useStore = create((set) => ({
     const nextActive = !state.networkGameActive;
     return {
       networkGameActive: nextActive,
-      controlsDisabled: nextActive, // Desactiva WASD del avatar 3D
+      controlsDisabled: isMovementLocked({ ...state, networkGameActive: nextActive }),
     };
   }),
   setNetworkGameWon: (won) => set({ networkGameWon: won }),
-  resetNetworkGame: () => set({
-    networkGameWon: false,
-    networkGameActive: false,
-    controlsDisabled: false
+  resetNetworkGame: () => set((state) => {
+    const next = { networkGameWon: false, networkGameActive: false };
+    return { ...next, controlsDisabled: isMovementLocked({ ...state, ...next }) };
   }),
 
   // --- MINIJUEGO DE CIBERSEGURIDAD (DEFENDER ATAQUE HACKER) ---
@@ -305,14 +314,13 @@ const useStore = create((set) => ({
     const nextActive = !state.hackerGameActive;
     return {
       hackerGameActive: nextActive,
-      controlsDisabled: nextActive,
+      controlsDisabled: isMovementLocked({ ...state, hackerGameActive: nextActive }),
     };
   }),
   setHackerGameWon: (won) => set({ hackerGameWon: won }),
-  resetHackerGame: () => set({
-    hackerGameWon: false,
-    hackerGameActive: false,
-    controlsDisabled: false
+  resetHackerGame: () => set((state) => {
+    const next = { hackerGameWon: false, hackerGameActive: false };
+    return { ...next, controlsDisabled: isMovementLocked({ ...state, ...next }) };
   }),
 
   // --- MINIJUEGO DE MARKETING (TUG OF ASSETS) ---
@@ -325,14 +333,13 @@ const useStore = create((set) => ({
     const nextActive = !state.marketingGameActive;
     return {
       marketingGameActive: nextActive,
-      controlsDisabled: nextActive,
+      controlsDisabled: isMovementLocked({ ...state, marketingGameActive: nextActive }),
     };
   }),
   setMarketingGameWon: (won) => set({ marketingGameWon: won }),
-  resetMarketingGame: () => set({
-    marketingGameWon: false,
-    marketingGameActive: false,
-    controlsDisabled: false
+  resetMarketingGame: () => set((state) => {
+    const next = { marketingGameWon: false, marketingGameActive: false };
+    return { ...next, controlsDisabled: isMovementLocked({ ...state, ...next }) };
   }),
 
   // --- INTERACCIÓN CON TVS INFORMATIVOS ---
@@ -343,7 +350,33 @@ const useStore = create((set) => ({
 
   // --- MODAL DE VIDEO YOUTUBE ---
   tvVideoUrl: null,
-  setTvVideoUrl: (url) => set({ tvVideoUrl: url }),
+  setTvVideoUrl: (url) =>
+    set((state) => ({
+      tvVideoUrl: url,
+      controlsDisabled: isMovementLocked({ ...state, tvVideoUrl: url }),
+    })),
+
+  // --- MONEDAS COLECCIONABLES ---
+  collectedCoinIds: [],
+  coinPopup: null, // { title, body } | null
+  collectCoin: (coin) =>
+    set((state) => {
+      if (state.collectedCoinIds.includes(coin.id) || state.coinPopup) return {};
+      if (isMovementLocked(state)) return {};
+      return {
+        collectedCoinIds: [...state.collectedCoinIds, coin.id],
+        coinPopup: { title: coin.title, body: coin.body },
+        controlsDisabled: true,
+      };
+    }),
+  closeCoinPopup: () =>
+    set((state) => {
+      const next = { coinPopup: null };
+      return {
+        ...next,
+        controlsDisabled: isMovementLocked({ ...state, ...next }),
+      };
+    }),
 
   // --- OVERRIDE DE POSICIONES DE NPCS ---
   // Permite teletransportar un NPC cambiando su posicion en runtime

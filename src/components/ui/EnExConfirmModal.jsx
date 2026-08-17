@@ -1,16 +1,27 @@
 import { useEffect } from 'react';
 import useStore from '../../store/useStore';
+import { isMovementLocked } from '../../store/overlayLock';
 import styles from './EnExConfirmModal.module.css';
 import ClayButton from './ClayButton';
 
 export default function EnExConfirmModal() {
   const pendingEnex = useStore((s) => s.pendingEnex);
 
-  // Close on Escape key
+  const closeEnex = (extra = {}) => {
+    const state = useStore.getState();
+    const next = { pendingEnex: null, ...extra };
+    useStore.setState({
+      ...next,
+      controlsDisabled: isMovementLocked({ ...state, ...next }),
+    });
+  };
+
   useEffect(() => {
     if (!pendingEnex) return;
     const handleKey = (e) => {
-      if (e.key === 'Escape') useStore.setState({ pendingEnex: null, controlsDisabled: false });
+      if (e.key === 'Escape') {
+        closeEnex({ enexBlockedUntil: Date.now() + 5000 });
+      }
     };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
@@ -18,7 +29,7 @@ export default function EnExConfirmModal() {
 
   if (!pendingEnex) return null;
 
-  const handleCancel = () => useStore.setState({ pendingEnex: null, controlsDisabled: false });
+  const handleCancel = () => closeEnex({ enexBlockedUntil: Date.now() + 5000 });
 
   const handleConfirm = () => {
     // One atomic write: teleport + close modal + reset cooldown for a fresh 5s
@@ -29,7 +40,10 @@ export default function EnExConfirmModal() {
       teleportTarget: pendingEnex.target,
       pendingEnex: null,
       enexBlockedUntil: Date.now() + 5000,
-      controlsDisabled: false,
+      controlsDisabled: isMovementLocked({
+        ...useStore.getState(),
+        pendingEnex: null,
+      }),
     });
   };
 

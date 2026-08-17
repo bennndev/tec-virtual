@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { EcctrlJoystick } from 'ecctrl';
 import * as THREE from 'three';
+import useStore from '../../store/useStore';
 
 /**
  * TouchControls — Joystick táctil + botones para mobile.
@@ -32,7 +33,10 @@ export default function TouchControls() {
     []
   );
 
+  const controlsDisabled = useStore((s) => s.controlsDisabled);
+
   if (!isTouchDevice) return null;
+  if (controlsDisabled) return null;
 
   return (
     <EcctrlJoystick

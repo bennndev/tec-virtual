@@ -1,20 +1,14 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { useGLTF, useEnvironment } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import useStore from '../../store/useStore';
-
-const COIN_POSITIONS = [
-  [33.39, 20.00, -41.32],
-  [39.51, 20.03, -41.75],
-  [42.30, 20.04, -43.72],
-];
+import coinsData from '../../data/coins.json';
 
 const COLLECT_DIST = 1.2;
 
-function Coin({ position, collected, envMap }) {
+function Coin({ coin, collected, envMap }) {
   const { scene } = useGLTF('/models/coin-tec.glb');
   const ref = useRef();
-  const clonedRef = useRef(null);
 
   useEffect(() => {
     if (!envMap) return;
@@ -39,7 +33,7 @@ function Coin({ position, collected, envMap }) {
     <primitive
       ref={ref}
       object={scene.clone()}
-      position={position}
+      position={coin.position}
       scale={[1, 1, 1]}
     />
   );
@@ -47,32 +41,38 @@ function Coin({ position, collected, envMap }) {
 
 export default function Coins() {
   const playerPosition = useStore((s) => s.playerPosition);
-  const [collected, setCollected] = useState({});
+  const collectedCoinIds = useStore((s) => s.collectedCoinIds);
+  const coinPopup = useStore((s) => s.coinPopup);
+  const collectCoin = useStore((s) => s.collectCoin);
   const envMap = useEnvironment({ preset: 'studio' });
 
   useFrame(() => {
-    COIN_POSITIONS.forEach((pos, i) => {
-      if (collected[i]) return;
-      const dx = playerPosition.x - pos[0];
-      const dy = playerPosition.y - pos[1];
-      const dz = playerPosition.z - pos[2];
+    if (coinPopup) return;
+    coinsData.forEach((coin) => {
+      if (collectedCoinIds.includes(coin.id)) return;
+      const [x, y, z] = coin.position;
+      const dx = playerPosition.x - x;
+      const dy = playerPosition.y - y;
+      const dz = playerPosition.z - z;
       const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
       if (dist < COLLECT_DIST) {
-        setCollected((prev) => ({ ...prev, [i]: true }));
+        collectCoin(coin);
       }
     });
   });
 
   return (
     <>
-      {COIN_POSITIONS.map((pos, i) => (
+      {coinsData.map((coin) => (
         <Coin
-          key={i}
-          position={pos}
-          collected={collected[i]}
+          key={coin.id}
+          coin={coin}
+          collected={collectedCoinIds.includes(coin.id)}
           envMap={envMap}
         />
       ))}
     </>
   );
 }
+
+useGLTF.preload('/models/coin-tec.glb');

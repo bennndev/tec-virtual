@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
-import Ecctrl, { EcctrlAnimation } from 'ecctrl';
+import Ecctrl, { EcctrlAnimation, useGame, useJoystickControls } from 'ecctrl';
 import { KeyboardControls, useKeyboardControls } from '@react-three/drei';
 import * as THREE from 'three';
 import useStore from '../../store/useStore';
@@ -53,6 +53,16 @@ function Character() {
   const quat = useRef(new THREE.Quaternion());
   const euler = useRef(new THREE.Euler(0, 0, 0, 'YXZ'));
 
+  // disableControl sale del useFrame de ecctrl ANTES de elegir idle/walk,
+  // así que hay que forzar Idle al abrir cualquier overlay.
+  useEffect(() => {
+    if (!controlsDisabled) return;
+    useGame.getState().reset();
+    const joystick = useJoystickControls.getState();
+    joystick.resetJoystick();
+    joystick.releaseAllButtons();
+  }, [controlsDisabled]);
+
   useFrame(() => {
     // Estabilizar el RigidBody al inicio para dar tiempo a cargar el trimesh físico del campus
     if (spawnFrames.current < 60) {
@@ -75,10 +85,18 @@ function Character() {
         console.log('[Player] RigidBody listo. Despertando y aplicando setTranslation...');
         rb.wakeUp();
         rb.setTranslation({ x: teleportTarget[0], y: teleportTarget[1], z: teleportTarget[2] }, true);
-        const trans = rb.translation();
-        console.log(`[Player Teleport Debug] Posición de Rapier inmediatamente después de setTranslation: [${trans.x.toFixed(2)}, ${trans.y.toFixed(2)}, ${trans.z.toFixed(2)}]`);
         rb.setLinvel({ x: 0, y: 0, z: 0 }, true);
         rb.setAngvel({ x: 0, y: 0, z: 0 }, true);
+        const rot = rb.rotation();
+        quat.current.set(rot.x, rot.y, rot.z, rot.w);
+        euler.current.setFromQuaternion(quat.current, 'YXZ');
+        euler.current.x = 0;
+        euler.current.z = 0;
+        quat.current.setFromEuler(euler.current);
+        rb.setRotation(
+          { x: quat.current.x, y: quat.current.y, z: quat.current.z, w: quat.current.w },
+          true,
+        );
         if (posRef.current) {
           vec.current.set(teleportTarget[0], teleportTarget[1], teleportTarget[2]);
         }
@@ -109,6 +127,18 @@ function Character() {
         const rb = ecctrlRef.current.group;
         rb.setLinvel({ x: 0, y: 0, z: 0 }, true);
         rb.setAngvel({ x: 0, y: 0, z: 0 }, true);
+        // disableControl apaga el spring de ecctrl: sin esto el trimesh (puertas)
+        // tumba la cápsula y al cerrar el modal el personaje queda boca abajo.
+        const rot = rb.rotation();
+        quat.current.set(rot.x, rot.y, rot.z, rot.w);
+        euler.current.setFromQuaternion(quat.current, 'YXZ');
+        euler.current.x = 0;
+        euler.current.z = 0;
+        quat.current.setFromEuler(euler.current);
+        rb.setRotation(
+          { x: quat.current.x, y: quat.current.y, z: quat.current.z, w: quat.current.w },
+          true,
+        );
       }
     }
 

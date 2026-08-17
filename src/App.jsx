@@ -14,6 +14,7 @@ import NetworkGame from './components/ui/NetworkGame';
 import HackerGame from './components/ui/HackerGame';
 import MarketingGame from './components/ui/MarketingGame';
 import VideoModal from './components/ui/VideoModal';
+import CoinPopup from './components/ui/CoinPopup';
 import useStore from './store/useStore';
 import { ensureResumed } from './services/audioContext';
 
@@ -72,6 +73,9 @@ function App() {
 
       {/* Modal de video YouTube */}
       <VideoModal />
+
+      {/* Popup al recoger una moneda */}
+      <CoinPopup />
 
       {/* Overlay de orientación para móviles */}
       <RotateDevice />

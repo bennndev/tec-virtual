@@ -15,12 +15,14 @@ export default function ClayButton({
   className = '',
   onClick,
   children,
+  type = 'button',
   ...rest
 }) {
   const variantClass = variant !== 'translucent' ? `clay-${variant}` : '';
 
   return (
     <button
+      type={type}
       onClick={onClick}
       className={`clay-btn ${variantClass} ${className}`.trim()}
       {...rest}

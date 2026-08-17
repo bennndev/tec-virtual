@@ -1,0 +1,20 @@
+[
+  {
+    "id": "coin-1",
+    "position": [33.39, 20.00, -41.32],
+    "title": "¿Sabías que…?",
+    "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+  },
+  {
+    "id": "coin-2",
+    "position": [39.51, 20.03, -41.75],
+    "title": "¿Sabías que…?",
+    "body": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+  },
+  {
+    "id": "coin-3",
+    "position": [42.30, 20.04, -43.72],
+    "title": "¿Sabías que…?",
+    "body": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident."
+  }
+]

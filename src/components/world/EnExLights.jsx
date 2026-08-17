@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import useStore from '../../store/useStore';
+import { isMovementLocked } from '../../store/overlayLock';
 import { ENEX_ZONES } from '../../data/enexZones';
 
 const ENEX_COLOR = '#d8bafc';
@@ -34,11 +35,14 @@ function EnExArrow({ position }) {
 // ----- EnEx detection loop + all markers -----
 export default function EnExLights() {
   useFrame(() => {
-    const { enexBlockedUntil, pendingEnex, playerPosition, tpZones } = useStore.getState();
+    const state = useStore.getState();
+    const { enexBlockedUntil, pendingEnex, playerPosition, tpZones } = state;
 
     // Single fast-path check — covers both cooldown and open modal
     if (Date.now() < enexBlockedUntil) return;
     if (pendingEnex) return;
+    // No abrir EnEx encima de otro overlay (moneda, video, minijuegos, diálogo)
+    if (isMovementLocked(state)) return;
 
     const px = playerPosition.x;
     const pz = playerPosition.z;
