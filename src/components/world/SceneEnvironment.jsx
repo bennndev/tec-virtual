@@ -50,6 +50,28 @@ export default function SceneEnvironment() {
         meshes.push(child);
       }
 
+      // Ancla de moneda: stand05 = pista delante del kiosco (teleportPos), no encima
+      if (child.name && objectsData[child.name]?.coinAnchor) {
+        const objConf = objectsData[child.name];
+        const worldPos = new THREE.Vector3();
+        child.getWorldPosition(worldPos);
+        const box = new THREE.Box3().setFromObject(child);
+        const groundY = box.isEmpty() ? worldPos.y : box.min.y;
+
+        if (objConf.coinAnchor === 'front' && objConf.teleportPos) {
+          zones[child.name] = [objConf.teleportPos[0], groundY, objConf.teleportPos[2]];
+        } else if (!box.isEmpty()) {
+          const center = box.getCenter(new THREE.Vector3());
+          const height = box.max.y - box.min.y;
+          const topY = height > 0 && height < 3 ? box.max.y : worldPos.y + 1.2;
+          zones[child.name] = [center.x, topY, center.z];
+        } else {
+          zones[child.name] = [worldPos.x, worldPos.y, worldPos.z];
+        }
+        const p = zones[child.name];
+        console.log(`[CoinAnchor] ${child.name} → (${p[0].toFixed(2)}, ${p[1].toFixed(2)}, ${p[2].toFixed(2)})`);
+      }
+
       // Extraer marcadores si están en objects.json y son Zonas Principales
       if (child.isMesh && child.name && objectsData[child.name]) {
         const objConf = objectsData[child.name];

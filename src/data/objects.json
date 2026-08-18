@@ -3,6 +3,7 @@
     "name": "Stand de Información",
     "description": "Punto de información del evento. Aquí puedes encontrar mapas, horarios y resolver dudas sobre las actividades.",
     "category": "Zona Principal",
+    "coinAnchor": "front",
     "teleportPos": [
       104.54,
       1.8,

@@ -4,6 +4,7 @@ import CharacterSwitcher from './CharacterSwitcher';
 import ClayButton from './ClayButton';
 import ClayIcon from './ClayIcon';
 import Minimap from './Minimap';
+import CoinCounter from './CoinCounter';
 import FullMapModal from './FullMapModal';
 import NavigationHUD from './NavigationHUD';
 import DialogHUD from './DialogHUD';
@@ -119,8 +120,11 @@ export default function HUD() {
             </div>
           )}
 
-          {/* Minimapa Dinámico */}
-          <Minimap />
+          {/* Minimapa + contador de monedas */}
+          <div className={styles.minimapColumn}>
+            <Minimap />
+            <CoinCounter />
+          </div>
           <FullMapModal />
 
           {/* El atajo O para selector de personaje sigue activo via CharacterSwitcher */}

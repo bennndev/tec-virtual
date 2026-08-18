@@ -1,20 +1,45 @@
 [
   {
-    "id": "coin-1",
-    "position": [33.39, 20.00, -41.32],
+    "id": "coin-entrada",
+    "zoneId": "stand05",
+    "yOffset": 0.22,
     "title": "¿Sabías que…?",
     "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
   },
   {
-    "id": "coin-2",
-    "position": [39.51, 20.03, -41.75],
+    "id": "coin-marketing",
+    "zoneId": "zona_laboratorio_marketing",
     "title": "¿Sabías que…?",
     "body": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
   },
   {
-    "id": "coin-3",
-    "position": [42.30, 20.04, -43.72],
+    "id": "coin-redes",
+    "zoneId": "zona_laboratorio_redes",
     "title": "¿Sabías que…?",
     "body": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident."
+  },
+  {
+    "id": "coin-cafeteria",
+    "zoneId": "zona_cafeteria_01",
+    "title": "¿Sabías que…?",
+    "body": "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+  },
+  {
+    "id": "coin-enfermeria",
+    "zoneId": "zona_enfermeria",
+    "title": "¿Sabías que…?",
+    "body": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam."
+  },
+  {
+    "id": "coin-pabellon-r",
+    "zoneId": "zona_pabellon_R",
+    "title": "¿Sabías que…?",
+    "body": "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos."
+  },
+  {
+    "id": "coin-estacionamiento",
+    "zoneId": "zona_estacionamiento",
+    "title": "¿Sabías que…?",
+    "body": "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit."
   }
 ]
