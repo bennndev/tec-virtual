@@ -85,6 +85,16 @@ const useStore = create((set) => ({
   flyMode: false,
   setFlyMode: (mode) => set({ flyMode: mode }),
 
+  // Calidad de render adaptativa (PerformanceMonitor)
+  renderQuality: {
+    factor: 1,
+    dpr: 1.5,
+    shadows: true,
+    shadowSize: 1024,
+    aa: true,
+  },
+  setRenderQuality: (quality) => set({ renderQuality: quality }),
+
   // --- NAVEGACIÓN 3D ---
   navigationTarget: null, // { id, name, x, y, z }
   navigationPath: [], // [Vector3, Vector3, ...]

@@ -13,20 +13,23 @@ import PointerLock from '../controls/PointerLock';
 import BackgroundMusic from '../audio/BackgroundMusic';
 import TeleportOverlays from './TeleportOverlays';
 import EnExLights from './EnExLights';
+import useStore from '../../store/useStore';
 
 export default function Scene() {
+  const shadows = useStore((s) => s.renderQuality.shadows);
+  const shadowSize = useStore((s) => s.renderQuality.shadowSize);
+
   return (
     <>
-      {/* Iluminación de día */}
       <hemisphereLight
         args={['#87ceeb', '#98d8a0', 1.2]}
       />
       <directionalLight
         position={[15, 20, 10]}
         intensity={2.5}
-        castShadow
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
+        castShadow={shadows}
+        shadow-mapSize-width={shadowSize}
+        shadow-mapSize-height={shadowSize}
         shadow-camera-far={50}
         shadow-camera-left={-15}
         shadow-camera-right={15}
@@ -36,7 +39,7 @@ export default function Scene() {
       <ambientLight intensity={0.5} />
 
       <Suspense fallback={null}>
-        <Physics gravity={[0, -9.81, 0]} timeStep="vary">
+        <Physics gravity={[0, -9.81, 0]} timeStep={1 / 60} interpolate>
           <SceneEnvironment />
           <Player />
           <NPCs />

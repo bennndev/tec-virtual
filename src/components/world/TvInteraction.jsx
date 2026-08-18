@@ -9,7 +9,6 @@ const TV_MARKETING_POS = new THREE.Vector3(38.31, 20.07, -46.13);
 const DETECTION_RADIUS = 0.80;
 
 export default function TvInteraction() {
-  const playerPosition = useStore((s) => s.playerPosition);
   const setTvRedesProximity = useStore((s) => s.setTvRedesProximity);
   const setTvMarketingProximity = useStore((s) => s.setTvMarketingProximity);
 
@@ -17,6 +16,7 @@ export default function TvInteraction() {
   const wasMarketingRef = useRef(false);
 
   useFrame(() => {
+    const { playerPosition } = useStore.getState();
     // TV Redes
     const dRx = playerPosition.x - TV_REDES_POS.x;
     const dRy = playerPosition.y - TV_REDES_POS.y;

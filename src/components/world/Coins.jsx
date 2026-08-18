@@ -1,25 +1,14 @@
-import { useRef, useEffect } from 'react';
-import { useGLTF, useEnvironment } from '@react-three/drei';
+import { useRef } from 'react';
+import { useGLTF } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import useStore from '../../store/useStore';
 import coinsData from '../../data/coins.json';
 
 const COLLECT_DIST = 1.2;
 
-function Coin({ coin, collected, envMap }) {
+function Coin({ coin, collected }) {
   const { scene } = useGLTF('/models/coin-tec.glb');
   const ref = useRef();
-
-  useEffect(() => {
-    if (!envMap) return;
-    scene.traverse((child) => {
-      if (child.isMesh && child.material) {
-        child.material.envMap = envMap;
-        child.material.envMapIntensity = 1.0;
-        child.material.needsUpdate = true;
-      }
-    });
-  }, [scene, envMap]);
 
   useFrame((_, delta) => {
     if (ref.current) {
@@ -40,13 +29,11 @@ function Coin({ coin, collected, envMap }) {
 }
 
 export default function Coins() {
-  const playerPosition = useStore((s) => s.playerPosition);
   const collectedCoinIds = useStore((s) => s.collectedCoinIds);
-  const coinPopup = useStore((s) => s.coinPopup);
   const collectCoin = useStore((s) => s.collectCoin);
-  const envMap = useEnvironment({ preset: 'studio' });
 
   useFrame(() => {
+    const { coinPopup, playerPosition } = useStore.getState();
     if (coinPopup) return;
     coinsData.forEach((coin) => {
       if (collectedCoinIds.includes(coin.id)) return;
@@ -54,8 +41,7 @@ export default function Coins() {
       const dx = playerPosition.x - x;
       const dy = playerPosition.y - y;
       const dz = playerPosition.z - z;
-      const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-      if (dist < COLLECT_DIST) {
+      if (dx * dx + dy * dy + dz * dz < COLLECT_DIST * COLLECT_DIST) {
         collectCoin(coin);
       }
     });
@@ -68,7 +54,6 @@ export default function Coins() {
           key={coin.id}
           coin={coin}
           collected={collectedCoinIds.includes(coin.id)}
-          envMap={envMap}
         />
       ))}
     </>

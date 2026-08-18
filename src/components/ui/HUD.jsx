@@ -36,13 +36,14 @@ function FPS() {
 }
 
 export default function HUD() {
-  const playerPosition = useStore((s) => s.playerPosition);
   const cameraMode = useStore((s) => s.cameraMode);
   const musicMuted = useStore((s) => s.musicMuted);
   const toggleMusic = useStore((s) => s.toggleMusic);
   const flyMode = useStore((s) => s.flyMode);
+  const renderQuality = useStore((s) => s.renderQuality);
 
   const [showStats, setShowStats] = useState(false);
+  const playerPosition = useStore((s) => (showStats ? s.playerPosition : null));
   const [isTouchDevice] = useState(
     () => 'ontouchstart' in window || navigator.maxTouchPoints > 0
   );
@@ -115,6 +116,14 @@ export default function HUD() {
                     ✈ VOLANDO — Space ↑ | Shift ↓ | F salir
                   </div>
                 )}
+                <div className={styles.coordLine}>
+                  <span className={styles.coordLabel}>Q:</span>
+                  <span className={styles.coordValue}>
+                    {renderQuality.dpr.toFixed(2)}x
+                    {renderQuality.shadows ? ` sh${renderQuality.shadowSize}` : ' no-sh'}
+                    {renderQuality.aa ? ' aa' : ''}
+                  </span>
+                </div>
               </div>
             </div>
           )}

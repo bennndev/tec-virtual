@@ -18,6 +18,7 @@ function NPC({ data, positionOverride, visualPosRef, hoveredIdRef }) {
   const group = useRef();
   const meshBox = useRef(new THREE.Box3());
   const meshSize = useRef(new THREE.Vector3());
+  const cached = useRef(false);
   const npcPosition = positionOverride || data.position;
 
   const { actions, names } = useAnimations(animations, group);
@@ -36,7 +37,7 @@ function NPC({ data, positionOverride, visualPosRef, hoveredIdRef }) {
   }, [actions, names]);
 
   useFrame(() => {
-    if (!group.current) return;
+    if (!group.current || cached.current) return;
     if (!visualPosRef.current[data.id]) {
       visualPosRef.current[data.id] = new THREE.Vector3();
     }
@@ -55,6 +56,7 @@ function NPC({ data, positionOverride, visualPosRef, hoveredIdRef }) {
       }
     });
     if (!found) group.current.getWorldPosition(target);
+    if (found || group.current) cached.current = true;
   });
 
   const handlePointerOver = (e) => {

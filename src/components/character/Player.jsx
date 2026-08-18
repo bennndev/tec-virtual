@@ -52,6 +52,7 @@ function Character() {
   const setPlayerRotation = useStore((s) => s.setPlayerRotation);
   const quat = useRef(new THREE.Quaternion());
   const euler = useRef(new THREE.Euler(0, 0, 0, 'YXZ'));
+  const lastPub = useRef({ t: 0, x: 0, y: 0, z: 0, rot: 0 });
 
   // disableControl sale del useFrame de ecctrl ANTES de elegir idle/walk,
   // así que hay que forzar Idle al abrir cualquier overlay.
@@ -164,7 +165,18 @@ function Character() {
       }
       
       if (!skippedWorldPos && !isPostTeleporting) {
-        setPlayerPosition({ x: vec.current.x, y: vec.current.y, z: vec.current.z });
+        const now = performance.now();
+        const pub = lastPub.current;
+        const dx = vec.current.x - pub.x;
+        const dy = vec.current.y - pub.y;
+        const dz = vec.current.z - pub.z;
+        if (now - pub.t > 80 || dx * dx + dy * dy + dz * dz > 0.02) {
+          pub.t = now;
+          pub.x = vec.current.x;
+          pub.y = vec.current.y;
+          pub.z = vec.current.z;
+          setPlayerPosition({ x: vec.current.x, y: vec.current.y, z: vec.current.z });
+        }
       }
       
       // Obtener la rotación física real del modelo (orientación de WASD)
@@ -173,7 +185,11 @@ function Character() {
       
       // Ajuste de offset: el modelo en ecctrl suele tener la cara apuntando a +Z local,
       // y Math.PI lo alinea correctamente con la flecha del minimapa.
-      setPlayerRotation(euler.current.y + Math.PI);
+      const yaw = euler.current.y + Math.PI;
+      if (Math.abs(yaw - lastPub.current.rot) > 0.04) {
+        lastPub.current.rot = yaw;
+        setPlayerRotation(yaw);
+      }
 
       // Detección de llegada al destino
       if (isNavigating && navigationTarget) {

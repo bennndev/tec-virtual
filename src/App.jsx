@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import * as THREE from 'three';
 import { Canvas } from '@react-three/fiber';
 import Scene from './components/world/Scene';
+import AdaptivePerformance from './components/world/AdaptivePerformance';
 import HUD from './components/ui/HUD';
 import InfoCard from './components/ui/InfoCard';
 import CharacterSelector from './components/ui/CharacterSelector';
@@ -21,7 +22,7 @@ import { ensureResumed } from './services/audioContext';
 function App() {
   const gameState = useStore((s) => s.gameState);
   const setGameState = useStore((s) => s.setGameState);
-  const isSelectorOpen = useStore((s) => s.isSelectorOpen);
+  const renderQuality = useStore((s) => s.renderQuality);
 
   const handleStart = useCallback(() => {
     ensureResumed();
@@ -34,12 +35,17 @@ function App() {
       {gameState === 'game' && (
         <>
           <Canvas
-            shadows={{ type: THREE.PCFShadowMap }}
+            shadows={renderQuality.shadows ? { type: THREE.PCFShadowMap } : false}
             camera={{ fov: 60, near: 0.1, far: 1000, position: [0, 2, -5] }}
-            dpr={[1, 2]}
-            gl={{ antialias: true }}
+            dpr={renderQuality.dpr}
+            gl={{
+              antialias: renderQuality.aa,
+              powerPreference: 'high-performance',
+              stencil: false,
+            }}
             style={{ background: '#7ec8e3' }}
           >
+            <AdaptivePerformance />
             <Scene />
           </Canvas>
 

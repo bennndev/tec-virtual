@@ -8,11 +8,11 @@ const VITRINE_POS = new THREE.Vector3(35.73, 19.6, -30.86);
 const DETECTION_RADIUS = 1.0; // unidades — cuán cerca hay que estar
 
 export default function VitrineInteraction() {
-  const playerPosition = useStore((s) => s.playerPosition);
   const setVitrineProximity = useStore((s) => s.setVitrineProximity);
   const wasCloseRef = useRef(false);
 
   useFrame(() => {
+    const { playerPosition } = useStore.getState();
     const dx = playerPosition.x - VITRINE_POS.x;
     const dy = playerPosition.y - VITRINE_POS.y;
     const dz = playerPosition.z - VITRINE_POS.z;

@@ -46,8 +46,14 @@ export default function SceneEnvironment() {
 
     scene.traverse((child) => {
       if (child.isMesh && child.geometry) {
-        child.geometry.computeBoundsTree();
-        meshes.push(child);
+        const interactive =
+          (child.name && objectsData[child.name]) ||
+          PREFIX_ENTRIES.some(([, entry]) => child.name?.startsWith(entry.meshPrefix));
+        if (interactive) {
+          child.geometry.computeBoundsTree();
+          meshes.push(child);
+        }
+        child.frustumCulled = true;
       }
 
       // Extraer marcadores si están en objects.json y son Zonas Principales
