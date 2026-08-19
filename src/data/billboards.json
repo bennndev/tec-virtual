@@ -1,0 +1,11 @@
+[
+  {
+    "id": "ad-cafeteria",
+    "src": "/ads/placeholder-horizontal.png",
+    "zoneId": "zona_cafeteria_01",
+    "offset": [0, 3.7, -4.5],
+    "rotationY": 0,
+    "width": 5,
+    "height": 2.8
+  }
+]
