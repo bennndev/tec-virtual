@@ -4,7 +4,8 @@ import { useFrame } from '@react-three/fiber';
 import useStore from '../../store/useStore';
 import coinsData from '../../data/coins.json';
 
-const COLLECT_DIST = 2.0;
+const COLLECT_DIST = 0.7;
+const COLLECT_DIST_SQ = COLLECT_DIST * COLLECT_DIST;
 const COIN_SCALE = [2.2, 2.2, 2.2];
 const DEFAULT_Y_OFFSET = 0.18;
 
@@ -64,9 +65,8 @@ export default function Coins() {
       if (!pos) return;
       const [x, y, z] = pos;
       const dx = playerPosition.x - x;
-      const dy = playerPosition.y - y;
       const dz = playerPosition.z - z;
-      if (dx * dx + dy * dy + dz * dz < COLLECT_DIST * COLLECT_DIST) {
+      if (dx * dx + dz * dz < COLLECT_DIST_SQ) {
         collectCoin(coin);
       }
     });

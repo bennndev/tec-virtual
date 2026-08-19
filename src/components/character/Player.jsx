@@ -102,7 +102,7 @@ function Character() {
         }
         setPlayerPosition({ x: teleportTarget[0], y: teleportTarget[1], z: teleportTarget[2] });
         setSpawnPos(teleportTarget); // Actualizar prop position del RigidBody para evitar reset en re-render
-        useStore.setState({ teleportTarget: null });
+        useStore.setState({ teleportTarget: null, enexBlockedUntil: Date.now() + 5000 });
         useStore.getState().setCameraMode('thirdPerson');
         skippedWorldPos = true;
         postTeleportFrames.current = 0; // Iniciar trazado y bloqueo de sincronización

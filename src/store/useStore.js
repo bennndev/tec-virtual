@@ -34,7 +34,10 @@ const useStore = create((set) => ({
 
   // Teletransporte del jugador (coordinado con Rapier)
   teleportTarget: null, // [x, y, z] | null
-  setTeleportTarget: (pos) => set({ teleportTarget: pos }),
+  setTeleportTarget: (pos) => set({
+    teleportTarget: pos,
+    enexBlockedUntil: Date.now() + 5000,
+  }),
 
   // Zonas de TP detectadas automáticamente del GLB: { [meshName]: [x, y, z] }
   tpZones: {},
@@ -371,7 +374,7 @@ const useStore = create((set) => ({
     }),
   closeCoinPopup: () =>
     set((state) => {
-      const next = { coinPopup: null };
+      const next = { coinPopup: null, enexBlockedUntil: Date.now() + 5000 };
       return {
         ...next,
         controlsDisabled: isMovementLocked({ ...state, ...next }),
