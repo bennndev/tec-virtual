@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useMemo } from 'react';
 import { useGLTF, useEnvironment } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import useStore from '../../store/useStore';
@@ -20,18 +20,19 @@ function resolveCoinPosition(coin, tpZones) {
 
 function Coin({ coin, position, collected, envMap }) {
   const { scene } = useGLTF('/models/coin-tec.glb');
+  const model = useMemo(() => scene.clone(true), [scene]);
   const ref = useRef();
 
   useEffect(() => {
     if (!envMap) return;
-    scene.traverse((child) => {
+    model.traverse((child) => {
       if (child.isMesh && child.material) {
         child.material.envMap = envMap;
         child.material.envMapIntensity = 1.0;
         child.material.needsUpdate = true;
       }
     });
-  }, [scene, envMap]);
+  }, [model, envMap]);
 
   useFrame((_, delta) => {
     if (ref.current) {
@@ -42,24 +43,20 @@ function Coin({ coin, position, collected, envMap }) {
   if (collected || !position) return null;
 
   return (
-    <primitive
-      ref={ref}
-      object={scene.clone()}
-      position={position}
-      scale={COIN_SCALE}
-    />
+    <group ref={ref} position={position} scale={COIN_SCALE}>
+      <primitive object={model} />
+    </group>
   );
 }
 
 export default function Coins() {
-  const playerPosition = useStore((s) => s.playerPosition);
   const collectedCoinIds = useStore((s) => s.collectedCoinIds);
-  const coinPopup = useStore((s) => s.coinPopup);
   const collectCoin = useStore((s) => s.collectCoin);
   const tpZones = useStore((s) => s.tpZones);
   const envMap = useEnvironment({ preset: 'studio' });
 
   useFrame(() => {
+    const { coinPopup, playerPosition } = useStore.getState();
     if (coinPopup) return;
     coinsData.forEach((coin) => {
       if (collectedCoinIds.includes(coin.id)) return;
@@ -69,8 +66,7 @@ export default function Coins() {
       const dx = playerPosition.x - x;
       const dy = playerPosition.y - y;
       const dz = playerPosition.z - z;
-      const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-      if (dist < COLLECT_DIST) {
+      if (dx * dx + dy * dy + dz * dz < COLLECT_DIST * COLLECT_DIST) {
         collectCoin(coin);
       }
     });

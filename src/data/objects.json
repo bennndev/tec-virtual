@@ -126,7 +126,7 @@
   },
   "zona_pabellon_A": {
     "name": "Pabellón A",
-    "description": "Pabellón principal de aulas.",
+    "description": "Pabellón de la carrera de Software.",
     "category": "Zona General"
   },
   "zona_pabellon_R": {
@@ -136,7 +136,7 @@
   },
   "zona_pabellon_B": {
     "name": "Pabellón B",
-    "description": "Pabellón de aulas.",
+    "description": "Pabellón de la carrera de Administración.",
     "category": "Zona General"
   },
   "zona_cafeteria_01": {
@@ -183,6 +183,26 @@
     "name": "Entrada Lab. Redes",
     "description": "Acceso al laboratorio de redes.",
     "category": "Oculto"
+  },
+  "zona_entrada": {
+    "name": "Entrada",
+    "description": "Acceso principal al campus Tecsup Arequipa.",
+    "category": "Zona General"
+  },
+  "zona_pabellon_M": {
+    "name": "Pabellón M",
+    "description": "Pabellón de la carrera de Mecánica.",
+    "category": "Zona General"
+  },
+  "zona_pabellon_G": {
+    "name": "Pabellón G",
+    "description": "Pabellón de la carrera de Mecatrónica.",
+    "category": "Zona General"
+  },
+  "zona_pabellon_E": {
+    "name": "Pabellón E",
+    "description": "Pabellón de la carrera de Electricidad.",
+    "category": "Zona General"
   },
 
   "obj_cable_1": {

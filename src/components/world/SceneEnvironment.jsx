@@ -3,6 +3,7 @@ import { useGLTF } from '@react-three/drei';
 import { RigidBody } from '@react-three/rapier';
 import * as THREE from 'three';
 import objectsData from '../../data/objects.json';
+import { ZONE_OVERRIDES } from '../../data/zonePositions';
 import useStore from '../../store/useStore';
 
 // Construir lookup de prefijos para objetos agrupados (ej: monitores con sub-meshes)
@@ -132,6 +133,30 @@ export default function SceneEnvironment() {
       // Remover luces y cámaras del GLB para usar las nuestras
       if (child.isLight || child.isCamera) {
         child.removeFromParent();
+      }
+    });
+
+    Object.entries(ZONE_OVERRIDES).forEach(([id, conf]) => {
+      zones[id] = conf.position;
+      const [x, y, z] = conf.position;
+      const existing = markers.find((m) => m.id === id);
+      if (existing) {
+        existing.x = x;
+        existing.y = y;
+        existing.z = z;
+        existing.name = conf.name;
+        existing.teleportPos = conf.position;
+      } else if (conf.category !== 'Oculto') {
+        markers.push({
+          id,
+          name: conf.name,
+          x,
+          y,
+          z,
+          isZone: true,
+          teleportPos: conf.position,
+          showInPanorama: conf.showInPanorama !== false,
+        });
       }
     });
 
