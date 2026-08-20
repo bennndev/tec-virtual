@@ -17,8 +17,11 @@ const keyboardMap = [
 ];
 
 const FLY_SPEED = 3;
-
 const FLY_HORIZONTAL_SPEED = 3;
+const JUMP_VEL = 4;
+const MAX_JUMPS = 2;
+const JUMP_COOLDOWN_MS = 1400;
+const MAX_UPWARD_VEL = 5;
 
 function Character() {
   const ecctrlRef = useRef();
@@ -40,6 +43,11 @@ function Character() {
   const spawnFrames = useRef(0);
   const postTeleportFrames = useRef(-1);
   const vec = useRef(new THREE.Vector3());
+  const jumpHeldRef = useRef(false);
+  const jumpsUsedRef = useRef(0);
+  const lastJumpAtRef = useRef(0);
+  const cooldownUntilRef = useRef(0);
+  const fallingAfterJumpRef = useRef(false);
 
   // Estado en vivo de las teclas
   const jumpPressed = useKeyboardControls((state) => state.jump);
@@ -196,6 +204,49 @@ function Character() {
       }
 
       rb.setLinvel(vel, true);
+    } else if (ecctrlRef.current?.group) {
+      // Hasta 2 saltos (suelo + aire). Al gastar ambos, cooldown antes de volver a saltar.
+      const rb = ecctrlRef.current.group;
+      const vel = rb.linvel();
+      const now = performance.now();
+      const risingEdge = jumpPressed && !jumpHeldRef.current;
+      jumpHeldRef.current = jumpPressed;
+
+      if (vel.y < -0.5) fallingAfterJumpRef.current = true;
+
+      const landed = fallingAfterJumpRef.current && vel.y >= -0.3 && vel.y <= 0.45;
+      if (landed && now >= cooldownUntilRef.current) {
+        jumpsUsedRef.current = 0;
+        fallingAfterJumpRef.current = false;
+      }
+
+      const canJump =
+        risingEdge &&
+        !controlsDisabled &&
+        now >= cooldownUntilRef.current &&
+        jumpsUsedRef.current < MAX_JUMPS;
+
+      if (canJump) {
+        fallingAfterJumpRef.current = false;
+        rb.setLinvel({ x: vel.x, y: JUMP_VEL, z: vel.z }, true);
+        jumpsUsedRef.current += 1;
+        lastJumpAtRef.current = now;
+        if (jumpsUsedRef.current >= MAX_JUMPS) {
+          cooldownUntilRef.current = now + JUMP_COOLDOWN_MS;
+        }
+      } else {
+        let clamped = false;
+        if (vel.y > MAX_UPWARD_VEL) {
+          vel.y = MAX_UPWARD_VEL;
+          clamped = true;
+        }
+        const safeY = useStore.getState().lastSafePosition?.[1];
+        if (typeof safeY === 'number' && vec.current.y > safeY + 8 && vel.y > 0) {
+          vel.y = 0;
+          clamped = true;
+        }
+        if (clamped) rb.setLinvel(vel, true);
+      }
     }
   });
 
@@ -215,7 +266,7 @@ function Character() {
       damping={0.9}
       maxVelLimit={flyMode ? FLY_HORIZONTAL_SPEED : 3}
       sprintMult={flyMode ? 1 : 1.8}
-      jumpVel={flyMode ? 0 : 4}
+      jumpVel={0}
       camInitDis={-5}
       camMaxDis={-7}
       camMinDis={-0.7}
