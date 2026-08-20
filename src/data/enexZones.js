@@ -29,26 +29,8 @@ export const ENEX_ZONES = [
   },
   {
     id: 'zona_pabellon_B',
-    label: 'Entrada',
-    destination: 'zona_entrada',
-    radius: 1.8,
-  },
-  {
-    id: 'zona_pabellon_M',
-    label: 'Entrada',
-    destination: 'zona_entrada',
-    radius: 1.8,
-  },
-  {
-    id: 'zona_pabellon_G',
-    label: 'Entrada',
-    destination: 'zona_entrada',
-    radius: 1.8,
-  },
-  {
-    id: 'zona_pabellon_E',
-    label: 'Entrada',
-    destination: 'zona_entrada',
+    label: 'Pabellón B',
+    destination: null,
     radius: 1.8,
   },
   {

@@ -35,7 +35,7 @@
   {
     "id": "ad-pabellon-e",
     "src": "/ads/tecsup_banner_4.png",
-    "position": [136.77, 22, -103.73],
+    "position": [136.74, 22.8, -103.73],
     "rotationY": 0,
     "width": 5,
     "height": 2.8
@@ -43,7 +43,7 @@
   {
     "id": "ad-pabellon-c",
     "src": "/ads/tecsup_banner_5.png",
-    "position": [120.47, 22, -103.72],
+    "position": [119.99, 23.5, -103.72],
     "rotationY": 0,
     "width": 5,
     "height": 2.8
@@ -52,24 +52,24 @@
     "id": "ad-pabellon-m",
     "src": "/ads/tecsup_banner.jpg",
     "position": [132.82, 22, -38.18],
-    "rotationY": 0,
+    "rotationY": 3.1416,
     "width": 5,
     "height": 2.8
   },
   {
     "id": "ad-lab-redes",
     "src": "/ads/tecsup_banner_2.jpg",
-    "position": [34.05, 21, -48.56],
-    "rotationY": 0,
-    "width": 5,
-    "height": 2.8
+    "position": [34.05, 20.6, -48.56],
+    "rotationY": 1.5708,
+    "width": 1.5,
+    "height": 1.75
   },
   {
     "id": "ad-lab-marketing",
     "src": "/ads/tecsup_banner_3.jpeg",
-    "position": [46.3, 21.06, -48.5],
-    "rotationY": 0,
-    "width": 5,
-    "height": 2.8
+    "position": [46.5, 20.6, -48.5],
+    "rotationY": 4.7124,
+    "width": 2.2,
+    "height": 1.4
   }
 ]

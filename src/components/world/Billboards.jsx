@@ -27,7 +27,7 @@ function BillboardSign({ ad, position }) {
         map={texture}
         transparent
         toneMapped={false}
-        side={THREE.DoubleSide}
+        side={THREE.FrontSide}
       />
     </mesh>
   );

@@ -3,80 +3,80 @@
     "id": "coin-entrada",
     "zoneId": "stand05",
     "yOffset": 0.22,
-    "title": "33 años",
-    "body": "¿Cuántos años tiene Tecsup Arequipa? 15, 25, 33 o 50. Abrió en 1993: saca tus cálculos."
+    "title": "Tecsup Arequipa tiene 33 años",
+    "body": "¿15, 25, 33 o 50? Si abrió en 1993, saca tus cálculos."
   },
   {
     "id": "coin-campus-entrada",
     "zoneId": "zona_entrada",
     "yOffset": 0.22,
-    "title": "EE.UU. y Alemania",
-    "body": "¿Quién acredita las carreras de Tecsup además del Perú? ABET (gringo) y ASIIN (alemán). Tecsup fue el primero de su tipo en el Perú en tener ABET."
+    "title": "EE.UU. y Alemania acreditan las carreras",
+    "body": "ABET (gringo) y ASIIN (alemán). Tecsup fue el primero de su tipo en el Perú en tener ABET. No es nadie, ni España, ni la ONU."
   },
   {
     "id": "coin-marketing",
     "zoneId": "zona_laboratorio_marketing",
-    "title": "Más de 200 empresas",
-    "body": "¿Cuántas empresas pusieron plata para que Tecsup exista? 5, 20, más de 200 o 1. No es del Estado ni de un dueño: lo armaron industriales peruanos."
+    "title": "Más de 200 empresas pusieron para que exista",
+    "body": "¿5, 20, más de 200 o 1? No es del Estado ni de un dueño. Lo armaron industriales peruanos."
   },
   {
     "id": "coin-redes",
     "zoneId": "zona_laboratorio_redes",
-    "title": "Campus virtual en 1999",
-    "body": "En 1999 Tecsup fue el primero del Perú en abrir un campus virtual — no wifi, ni PowerPoint, ni robots. Cuando casi nadie tenía internet en casa. Siempre un paso adelante."
+    "title": "En 1999 Tecsup abrió un campus virtual",
+    "body": "Fue el primero del Perú en hacerlo — no wifi, ni PowerPoint, ni robots. Cuando casi nadie tenía internet en casa. ¡Siempre un paso adelante!"
   },
   {
     "id": "coin-cafeteria",
     "zoneId": "zona_cafeteria_01",
-    "title": "Alemania",
-    "body": "¿Qué país ayudó a crear Tecsup? Japón, Alemania, EE.UU. o Chile. El estado de Baden-Württemberg. Por eso el modelo es tan de taller."
+    "title": "Alemania ayudó a crear Tecsup",
+    "body": "¿Japón, Alemania, EE.UU. o Chile? El estado de Baden-Württemberg. Por eso el modelo es tan de taller."
   },
   {
     "id": "coin-enfermeria",
     "zoneId": "zona_enfermeria",
-    "title": "2 a 3 años",
-    "body": "¿Cuánto dura una carrera acá? 2–3 años, no 5 ni 6. Seis ciclos. Sales a trabajar mientras otros siguen llevando cursos generales."
+    "title": "Una carrera acá dura 2 a 3 años",
+    "body": "No 5 ni 6. Seis ciclos. Sales a trabajar mientras otros siguen llevando cursos generales."
   },
   {
     "id": "coin-pabellon-r",
     "zoneId": "zona_pabellon_R",
-    "title": "Sí: una planta a escala",
-    "body": "¿Es verdad que dentro del campus hay una mina? Sí, una planta a escala — no es maqueta ni solo Lima. Procesa 20 kg de mineral por hora: cobre, zinc y molibdeno de verdad."
+    "title": "Dentro del campus hay una planta a escala",
+    "body": "No es pura maqueta ni solo Lima. Procesa 20 kg de mineral por hora: cobre, zinc y molibdeno de verdad."
   },
   {
     "id": "coin-estacionamiento",
     "zoneId": "zona_estacionamiento",
-    "title": "Operar una planta sin ir a la mina",
-    "body": "Hay un simulador de sala de control de mina. No es videojuego, ni solo para exámenes, ni decoración: es el mismo tipo de sala desde donde se controla una operación de gran minería."
+    "title": "El simulador sirve para operar una planta sin ir a la mina",
+    "body": "No es un videojuego, ni solo para exámenes, ni decoración. Es el mismo tipo de sala desde donde se controla una operación de gran minería."
   },
   {
     "id": "coin-pabellon-a",
     "zoneId": "zona_pabellon_A",
-    "title": "Software",
-    "body": "¿De qué va el pabellón A? Software. Apps, web y sistemas en seis ciclos: sales a producir código, no a memorizar teoría suelta."
+    "title": "Tecsup Arequipa tiene 33 años",
+    "body": "¿15, 25, 33 o 50? Si abrió en 1993, saca tus cálculos."
   },
   {
     "id": "coin-pabellon-b",
     "zoneId": "zona_pabellon_B",
-    "title": "Administración",
-    "body": "¿De qué va el pabellón B? Administración. Procesos, costos y gente: para que una planta o un taller no se caiga por el Excel."
+    "title": "Dentro del campus hay una planta a escala",
+    "body": "No es pura maqueta ni solo Lima. Procesa 20 kg de mineral por hora: cobre, zinc y molibdeno de verdad."
   },
   {
     "id": "coin-pabellon-m",
     "zoneId": "zona_pabellon_M",
-    "title": "Mecánica",
-    "body": "¿Qué se arma en el pabellón M? Máquinas. Mecánica: motores, mantenimiento y taller. El modelo alemán se siente acá."
+    "title": "Alemania ayudó a crear Tecsup",
+    "body": "¿Japón, Alemania, EE.UU. o Chile? El estado de Baden-Württemberg. Por eso el modelo es tan de taller."
   },
   {
     "id": "coin-pabellon-g",
     "zoneId": "zona_pabellon_G",
-    "title": "Mecatrónica",
-    "body": "¿Mecánica + electrónica + software? Mecatrónica. Robots, sensores y control: el pabellón G es donde las tres se juntan."
+    "title": "En 1999 Tecsup abrió un campus virtual",
+    "body": "Fue el primero del Perú en hacerlo — no wifi, ni PowerPoint, ni robots. Cuando casi nadie tenía internet en casa. ¡Siempre un paso adelante!"
   },
   {
     "id": "coin-pabellon-e",
     "zoneId": "zona_pabellon_E",
-    "title": "Electricidad",
-    "body": "¿Qué corre por el pabellón E? Corriente. Electricidad industrial: tableros, potencia y que la planta no se quede a oscuras."
+    "title": "Una carrera acá dura 2 a 3 años",
+    "body": "No 5 ni 6. Seis ciclos. Sales a trabajar mientras otros siguen llevando cursos generales."
   }
 ]
