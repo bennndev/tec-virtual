@@ -17,7 +17,7 @@
   border: 2px solid rgba(255, 255, 255, 0.4);
   border-radius: 40px;
   padding: 2.5rem;
-  width: min(400px, calc(100vw - 40px));
+  width: min(440px, calc(100vw - 40px));
   text-align: center;
   box-shadow:
     12px 12px 24px rgba(166, 180, 200, 0.3),
@@ -70,7 +70,7 @@
 .title {
   margin: 0.4rem 0 0.8rem;
   font-family: 'N27', system-ui, sans-serif;
-  font-size: 1.65rem;
+  font-size: 1.45rem;
   font-weight: 800;
   color: #0ea5e9;
   letter-spacing: -0.01em;

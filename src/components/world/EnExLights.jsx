@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import useStore from '../../store/useStore';
 import { isMovementLocked } from '../../store/overlayLock';
 import { ENEX_ZONES } from '../../data/enexZones';
+import { STANDING_ZONE_IDS } from '../../data/zonePositions';
 
 const ENEX_COLOR = '#d8bafc';
 const ENEX_COLOR_THREE = new THREE.Color(ENEX_COLOR);
@@ -64,7 +65,8 @@ export default function EnExLights() {
             console.warn(`[EnEx] Destination "${zone.destination}" not in GLB. Skipping.`);
             continue;
           }
-          target = [destPos[0], destPos[1] + 1.5, destPos[2]];
+          const yLift = STANDING_ZONE_IDS.has(zone.destination) ? 0 : 1.5;
+          target = [destPos[0], destPos[1] + yLift, destPos[2]];
         } else {
           target = zone.destination;
         }

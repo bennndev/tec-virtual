@@ -32,7 +32,7 @@ export default function CoinPopup() {
 
         <ClayIcon name="monetization_on" className={styles.icon} />
 
-        <p className={styles.kicker}>Dato interesante</p>
+        <p className={styles.kicker}>¿Sabías que…?</p>
         <h2 className={styles.title}>{coinPopup.title}</h2>
         <p className={styles.body}>{coinPopup.body}</p>
 

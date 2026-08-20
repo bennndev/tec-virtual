@@ -1,20 +1,81 @@
 [
   {
-    "id": "coin-1",
-    "position": [33.39, 20.00, -41.32],
-    "title": "¿Sabías que…?",
-    "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    "id": "coin-campus-entrada",
+    "zoneId": "zona_entrada",
+    "yOffset": 0.22,
+    "title": "EE.UU. y Alemania acreditan las carreras",
+    "body": "ABET (gringo) y ASIIN (alemán). Tecsup fue el primero de su tipo en el Perú en tener ABET. No es nadie, ni España, ni la ONU."
   },
   {
-    "id": "coin-2",
-    "position": [39.51, 20.03, -41.75],
-    "title": "¿Sabías que…?",
-    "body": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    "id": "coin-marketing",
+    "zoneId": "zona_laboratorio_marketing",
+    "title": "Más de 200 empresas pusieron para que exista",
+    "body": "¿5, 20, más de 200 o 1? No es del Estado ni de un dueño. Lo armaron industriales peruanos."
   },
   {
-    "id": "coin-3",
-    "position": [42.30, 20.04, -43.72],
-    "title": "¿Sabías que…?",
-    "body": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident."
+    "id": "coin-redes",
+    "zoneId": "zona_laboratorio_redes",
+    "title": "En 1999 Tecsup abrió un campus virtual",
+    "body": "Fue el primero del Perú en hacerlo — no wifi, ni PowerPoint, ni robots. Cuando casi nadie tenía internet en casa. ¡Siempre un paso adelante!"
+  },
+  {
+    "id": "coin-cafeteria",
+    "zoneId": "zona_cafeteria_01",
+    "title": "Alemania ayudó a crear Tecsup",
+    "body": "¿Japón, Alemania, EE.UU. o Chile? El estado de Baden-Württemberg. Por eso el modelo es tan de taller."
+  },
+  {
+    "id": "coin-enfermeria",
+    "zoneId": "zona_enfermeria",
+    "title": "Una carrera acá dura 2 a 3 años",
+    "body": "No 5 ni 6. Seis ciclos. Sales a trabajar mientras otros siguen llevando cursos generales."
+  },
+  {
+    "id": "coin-pabellon-r",
+    "zoneId": "zona_pabellon_R",
+    "title": "Dentro del campus hay una planta a escala",
+    "body": "No es pura maqueta ni solo Lima. Procesa 20 kg de mineral por hora: cobre, zinc y molibdeno de verdad."
+  },
+  {
+    "id": "coin-estacionamiento",
+    "zoneId": "zona_estacionamiento",
+    "title": "El simulador sirve para operar una planta sin ir a la mina",
+    "body": "No es un videojuego, ni solo para exámenes, ni decoración. Es el mismo tipo de sala desde donde se controla una operación de gran minería."
+  },
+  {
+    "id": "coin-pabellon-a",
+    "zoneId": "zona_pabellon_A",
+    "title": "Tecsup Arequipa tiene 33 años",
+    "body": "¿15, 25, 33 o 50? Si abrió en 1993, saca tus cálculos."
+  },
+  {
+    "id": "coin-pabellon-b",
+    "zoneId": "zona_pabellon_B",
+    "title": "Dentro del campus hay una planta a escala",
+    "body": "No es pura maqueta ni solo Lima. Procesa 20 kg de mineral por hora: cobre, zinc y molibdeno de verdad."
+  },
+  {
+    "id": "coin-pabellon-m",
+    "zoneId": "zona_pabellon_M",
+    "title": "Alemania ayudó a crear Tecsup",
+    "body": "¿Japón, Alemania, EE.UU. o Chile? El estado de Baden-Württemberg. Por eso el modelo es tan de taller."
+  },
+  {
+    "id": "coin-pabellon-g",
+    "zoneId": "zona_pabellon_G",
+    "title": "En 1999 Tecsup abrió un campus virtual",
+    "body": "Fue el primero del Perú en hacerlo — no wifi, ni PowerPoint, ni robots. Cuando casi nadie tenía internet en casa. ¡Siempre un paso adelante!"
+  },
+  {
+    "id": "coin-pabellon-e",
+    "zoneId": "zona_pabellon_E",
+    "title": "Una carrera acá dura 2 a 3 años",
+    "body": "No 5 ni 6. Seis ciclos. Sales a trabajar mientras otros siguen llevando cursos generales."
+  },
+  {
+    "id": "coin-pabellon-c",
+    "zoneId": "zona_pabellon_C",
+    "title": "Más de 200 empresas pusieron para que exista",
+    "body": "¿5, 20, más de 200 o 1? No es del Estado ni de un dueño. Lo armaron industriales peruanos."
   }
 ]

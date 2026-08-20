@@ -5,6 +5,7 @@ import Player from '../character/Player';
 import NPCs from '../character/NPCs';
 import CameraRig from '../character/CameraRig';
 import Coins from './Coins';
+import Billboards from './Billboards';
 import VitrineInteraction from './VitrineInteraction';
 import HackerGameInteraction from './HackerGameInteraction';
 import MarketingGameInteraction from './MarketingGameInteraction';
@@ -45,6 +46,7 @@ export default function Scene() {
           <NPCs />
         </Physics>
         <Coins />
+        <Billboards />
       </Suspense>
 
       <CameraRig />

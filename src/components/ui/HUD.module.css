@@ -1,3 +1,16 @@
+.minimapColumn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  width: 200px;
+  pointer-events: auto;
+  z-index: 11;
+}
+
 .musicBtn {
   position: absolute;
   top: 20px;
@@ -177,6 +190,13 @@
    Responsive: pantallas angostas (mobile)
    ======================================== */
 @media (max-width: 900px) {
+  .minimapColumn {
+    top: 12px;
+    right: 12px;
+    width: 130px;
+    gap: 8px;
+  }
+
   .musicBtn {
     top: 12px;
     left: 12px;

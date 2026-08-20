@@ -3,6 +3,7 @@ import { useGLTF } from '@react-three/drei';
 import { RigidBody } from '@react-three/rapier';
 import * as THREE from 'three';
 import objectsData from '../../data/objects.json';
+import { ZONE_OVERRIDES } from '../../data/zonePositions';
 import useStore from '../../store/useStore';
 
 // Construir lookup de prefijos para objetos agrupados (ej: monitores con sub-meshes)
@@ -54,6 +55,28 @@ export default function SceneEnvironment() {
           meshes.push(child);
         }
         child.frustumCulled = true;
+      }
+
+      // Ancla de moneda: stand05 = pista delante del kiosco (teleportPos), no encima
+      if (child.name && objectsData[child.name]?.coinAnchor) {
+        const objConf = objectsData[child.name];
+        const worldPos = new THREE.Vector3();
+        child.getWorldPosition(worldPos);
+        const box = new THREE.Box3().setFromObject(child);
+        const groundY = box.isEmpty() ? worldPos.y : box.min.y;
+
+        if (objConf.coinAnchor === 'front' && objConf.teleportPos) {
+          zones[child.name] = [objConf.teleportPos[0], groundY, objConf.teleportPos[2]];
+        } else if (!box.isEmpty()) {
+          const center = box.getCenter(new THREE.Vector3());
+          const height = box.max.y - box.min.y;
+          const topY = height > 0 && height < 3 ? box.max.y : worldPos.y + 1.2;
+          zones[child.name] = [center.x, topY, center.z];
+        } else {
+          zones[child.name] = [worldPos.x, worldPos.y, worldPos.z];
+        }
+        const p = zones[child.name];
+        console.log(`[CoinAnchor] ${child.name} → (${p[0].toFixed(2)}, ${p[1].toFixed(2)}, ${p[2].toFixed(2)})`);
       }
 
       // Extraer marcadores si están en objects.json y son Zonas Principales
@@ -116,6 +139,30 @@ export default function SceneEnvironment() {
       // Remover luces y cámaras del GLB para usar las nuestras
       if (child.isLight || child.isCamera) {
         child.removeFromParent();
+      }
+    });
+
+    Object.entries(ZONE_OVERRIDES).forEach(([id, conf]) => {
+      zones[id] = conf.position;
+      const [x, y, z] = conf.position;
+      const existing = markers.find((m) => m.id === id);
+      if (existing) {
+        existing.x = x;
+        existing.y = y;
+        existing.z = z;
+        existing.name = conf.name;
+        existing.teleportPos = conf.position;
+      } else if (conf.category !== 'Oculto') {
+        markers.push({
+          id,
+          name: conf.name,
+          x,
+          y,
+          z,
+          isZone: true,
+          teleportPos: conf.position,
+          showInPanorama: conf.showInPanorama !== false,
+        });
       }
     });
 

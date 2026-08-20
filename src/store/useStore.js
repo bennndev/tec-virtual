@@ -1,8 +1,9 @@
 import { create } from 'zustand';
 import { pathfinder } from '../services/pathfinding';
 import { isMovementLocked } from './overlayLock';
+import { playCoinPickup } from '../services/coinSfx';
 
-const useStore = create((set) => ({
+const useStore = create((set, get) => ({
   playerPosition: { x: 0, y: 0, z: 0 },
   setPlayerPosition: (pos) => set({ playerPosition: pos }),
 
@@ -34,7 +35,10 @@ const useStore = create((set) => ({
 
   // Teletransporte del jugador (coordinado con Rapier)
   teleportTarget: null, // [x, y, z] | null
-  setTeleportTarget: (pos) => set({ teleportTarget: pos }),
+  setTeleportTarget: (pos) => set({
+    teleportTarget: pos,
+    enexBlockedUntil: Date.now() + 5000,
+  }),
 
   // Zonas de TP detectadas automáticamente del GLB: { [meshName]: [x, y, z] }
   tpZones: {},
@@ -373,6 +377,7 @@ const useStore = create((set) => ({
     set((state) => {
       if (state.collectedCoinIds.includes(coin.id) || state.coinPopup) return {};
       if (isMovementLocked(state)) return {};
+      if (!state.musicMuted) playCoinPickup();
       return {
         collectedCoinIds: [...state.collectedCoinIds, coin.id],
         coinPopup: { title: coin.title, body: coin.body },
@@ -381,7 +386,7 @@ const useStore = create((set) => ({
     }),
   closeCoinPopup: () =>
     set((state) => {
-      const next = { coinPopup: null };
+      const next = { coinPopup: null, enexBlockedUntil: Date.now() + 5000 };
       return {
         ...next,
         controlsDisabled: isMovementLocked({ ...state, ...next }),
