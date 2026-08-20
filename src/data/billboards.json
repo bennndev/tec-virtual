@@ -1,7 +1,7 @@
 [
   {
     "id": "ad-cafeteria",
-    "src": "/ads/placeholder-horizontal.png",
+    "src": "/ads/ad-examen-simulacro.png",
     "zoneId": "zona_cafeteria_01",
     "offset": [0, 3.7, -4.5],
     "rotationY": 0,
@@ -9,67 +9,35 @@
     "height": 2.8
   },
   {
-    "id": "ad-pabellon-b",
-    "src": "/ads/tecsup_banner.jpg",
-    "position": [-17.47, 22, -67.53],
-    "rotationY": 0,
-    "width": 5,
-    "height": 2.8
-  },
-  {
     "id": "ad-pabellon-a",
-    "src": "/ads/tecsup_banner_2.jpg",
+    "src": "/ads/ad-como-postular.png",
     "position": [16.71, 22, -47.03],
     "rotationY": 0,
     "width": 5,
     "height": 2.8
   },
   {
+    "id": "ad-pabellon-b",
+    "src": "/ads/ad-alumno-talento-tour.png",
+    "position": [-17.47, 22, -67.53],
+    "rotationY": 0,
+    "width": 5,
+    "height": 2.8
+  },
+  {
     "id": "ad-pabellon-r",
-    "src": "/ads/tecsup_banner_3.jpeg",
+    "src": "/ads/ad-charla-virtual.png",
     "position": [181.17, 27.61, -141.87],
     "rotationY": 0,
     "width": 5,
     "height": 2.8
   },
   {
-    "id": "ad-pabellon-e",
-    "src": "/ads/tecsup_banner_4.png",
-    "position": [136.74, 22.8, -103.73],
-    "rotationY": 0,
-    "width": 5,
-    "height": 2.8
-  },
-  {
-    "id": "ad-pabellon-c",
-    "src": "/ads/tecsup_banner_5.png",
-    "position": [119.99, 23.5, -103.72],
-    "rotationY": 0,
-    "width": 5,
-    "height": 2.8
-  },
-  {
     "id": "ad-pabellon-m",
-    "src": "/ads/tecsup_banner.jpg",
+    "src": "/ads/ad-examen-admision.png",
     "position": [132.82, 22, -38.18],
     "rotationY": 3.1416,
     "width": 5,
     "height": 2.8
-  },
-  {
-    "id": "ad-lab-redes",
-    "src": "/ads/tecsup_banner_2.jpg",
-    "position": [34.05, 20.6, -48.56],
-    "rotationY": 1.5708,
-    "width": 1.5,
-    "height": 1.75
-  },
-  {
-    "id": "ad-lab-marketing",
-    "src": "/ads/tecsup_banner_3.jpeg",
-    "position": [46.5, 20.6, -48.5],
-    "rotationY": 4.7124,
-    "width": 2.2,
-    "height": 1.4
   }
 ]
