@@ -7,5 +7,69 @@
     "rotationY": 0,
     "width": 5,
     "height": 2.8
+  },
+  {
+    "id": "ad-pabellon-b",
+    "src": "/ads/tecsup_banner.jpg",
+    "position": [-17.47, 22, -67.53],
+    "rotationY": 0,
+    "width": 5,
+    "height": 2.8
+  },
+  {
+    "id": "ad-pabellon-a",
+    "src": "/ads/tecsup_banner_2.jpg",
+    "position": [16.71, 22, -47.03],
+    "rotationY": 0,
+    "width": 5,
+    "height": 2.8
+  },
+  {
+    "id": "ad-pabellon-r",
+    "src": "/ads/tecsup_banner_3.jpeg",
+    "position": [181.17, 27.61, -141.87],
+    "rotationY": 0,
+    "width": 5,
+    "height": 2.8
+  },
+  {
+    "id": "ad-pabellon-e",
+    "src": "/ads/tecsup_banner_4.png",
+    "position": [136.77, 22, -103.73],
+    "rotationY": 0,
+    "width": 5,
+    "height": 2.8
+  },
+  {
+    "id": "ad-pabellon-c",
+    "src": "/ads/tecsup_banner_5.png",
+    "position": [120.47, 22, -103.72],
+    "rotationY": 0,
+    "width": 5,
+    "height": 2.8
+  },
+  {
+    "id": "ad-pabellon-m",
+    "src": "/ads/tecsup_banner.jpg",
+    "position": [132.82, 22, -38.18],
+    "rotationY": 0,
+    "width": 5,
+    "height": 2.8
+  },
+  {
+    "id": "ad-lab-redes",
+    "src": "/ads/tecsup_banner_2.jpg",
+    "position": [34.05, 21, -48.56],
+    "rotationY": 0,
+    "width": 5,
+    "height": 2.8
+  },
+  {
+    "id": "ad-lab-marketing",
+    "src": "/ads/tecsup_banner_3.jpeg",
+    "position": [46.3, 21.06, -48.5],
+    "rotationY": 0,
+    "width": 5,
+    "height": 2.8
   }
 ]
