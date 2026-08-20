@@ -1,12 +1,5 @@
 [
   {
-    "id": "coin-entrada",
-    "zoneId": "stand05",
-    "yOffset": 0.22,
-    "title": "Tecsup Arequipa tiene 33 años",
-    "body": "¿15, 25, 33 o 50? Si abrió en 1993, saca tus cálculos."
-  },
-  {
     "id": "coin-campus-entrada",
     "zoneId": "zona_entrada",
     "yOffset": 0.22,
@@ -78,5 +71,11 @@
     "zoneId": "zona_pabellon_E",
     "title": "Una carrera acá dura 2 a 3 años",
     "body": "No 5 ni 6. Seis ciclos. Sales a trabajar mientras otros siguen llevando cursos generales."
+  },
+  {
+    "id": "coin-pabellon-c",
+    "zoneId": "zona_pabellon_C",
+    "title": "Más de 200 empresas pusieron para que exista",
+    "body": "¿5, 20, más de 200 o 1? No es del Estado ni de un dueño. Lo armaron industriales peruanos."
   }
 ]

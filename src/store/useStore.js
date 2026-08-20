@@ -1,8 +1,9 @@
 import { create } from 'zustand';
 import { pathfinder } from '../services/pathfinding';
 import { isMovementLocked } from './overlayLock';
+import { playCoinPickup } from '../services/coinSfx';
 
-const useStore = create((set) => ({
+const useStore = create((set, get) => ({
   playerPosition: { x: 0, y: 0, z: 0 },
   setPlayerPosition: (pos) => set({ playerPosition: pos }),
 
@@ -366,6 +367,7 @@ const useStore = create((set) => ({
     set((state) => {
       if (state.collectedCoinIds.includes(coin.id) || state.coinPopup) return {};
       if (isMovementLocked(state)) return {};
+      if (!state.musicMuted) playCoinPickup();
       return {
         collectedCoinIds: [...state.collectedCoinIds, coin.id],
         coinPopup: { title: coin.title, body: coin.body },

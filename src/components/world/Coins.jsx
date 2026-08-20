@@ -2,6 +2,7 @@ import { useRef, useEffect, useMemo } from 'react';
 import { useGLTF, useEnvironment } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import useStore from '../../store/useStore';
+import { preloadCoinPickup } from '../../services/coinSfx';
 import coinsData from '../../data/coins.json';
 
 const COLLECT_DIST = 0.7;
@@ -55,6 +56,10 @@ export default function Coins() {
   const collectCoin = useStore((s) => s.collectCoin);
   const tpZones = useStore((s) => s.tpZones);
   const envMap = useEnvironment({ preset: 'studio' });
+
+  useEffect(() => {
+    preloadCoinPickup();
+  }, []);
 
   useFrame(() => {
     const { coinPopup, playerPosition } = useStore.getState();
