@@ -161,10 +161,15 @@ export default function HackerGame() {
   };
 
   // Cerrar y guardar victoria
+  const challengeCountedRef = useRef(false);
+
   const handleComplete = () => {
     setHackerGameWon(true);
     toggleHackerGame();
-    useStore.getState().completeChallenge();
+    if (!challengeCountedRef.current) {
+      challengeCountedRef.current = true;
+      useStore.getState().completeChallenge();
+    }
   };
 
   // Reiniciar

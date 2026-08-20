@@ -131,10 +131,15 @@ export default function MarketingGame() {
     setCombo((c) => c + 1);
   };
 
+  const challengeCountedRef = useRef(false);
+
   const handleComplete = () => {
     setMarketingGameWon(true);
     toggleMarketingGame();
-    useStore.getState().completeChallenge();
+    if (!challengeCountedRef.current) {
+      challengeCountedRef.current = true;
+      useStore.getState().completeChallenge();
+    }
   };
 
   const handleRestart = () => {

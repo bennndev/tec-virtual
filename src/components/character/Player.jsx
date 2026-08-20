@@ -82,16 +82,31 @@ function Character() {
         const rb = ecctrlRef.current.group;
         console.log('[Player] RigidBody listo. Despertando y aplicando setTranslation...');
         rb.wakeUp();
-        rb.setTranslation({ x: teleportTarget[0], y: teleportTarget[1], z: teleportTarget[2] }, true);
-        const trans = rb.translation();
-        console.log(`[Player Teleport Debug] Posición de Rapier inmediatamente después de setTranslation: [${trans.x.toFixed(2)}, ${trans.y.toFixed(2)}, ${trans.z.toFixed(2)}]`);
+        const standY = teleportTarget[1] + 0.7;
+        rb.setTranslation(
+          { x: teleportTarget[0], y: standY, z: teleportTarget[2] },
+          true,
+        );
+        const rot = rb.rotation();
+        quat.current.set(rot.x, rot.y, rot.z, rot.w);
+        euler.current.setFromQuaternion(quat.current, 'YXZ');
+        euler.current.x = 0;
+        euler.current.z = 0;
+        quat.current.setFromEuler(euler.current);
+        rb.setRotation(
+          { x: quat.current.x, y: quat.current.y, z: quat.current.z, w: quat.current.w },
+          true,
+        );
         rb.setLinvel({ x: 0, y: 0, z: 0 }, true);
         rb.setAngvel({ x: 0, y: 0, z: 0 }, true);
+        jumpsUsedRef.current = 0;
+        cooldownUntilRef.current = 0;
+        fallingAfterJumpRef.current = false;
         if (posRef.current) {
-          vec.current.set(teleportTarget[0], teleportTarget[1], teleportTarget[2]);
+          vec.current.set(teleportTarget[0], standY, teleportTarget[2]);
         }
-        setPlayerPosition({ x: teleportTarget[0], y: teleportTarget[1], z: teleportTarget[2] });
-        setSpawnPos(teleportTarget); // Actualizar prop position del RigidBody para evitar reset en re-render
+        setPlayerPosition({ x: teleportTarget[0], y: standY, z: teleportTarget[2] });
+        setSpawnPos([teleportTarget[0], standY, teleportTarget[2]]);
         useStore.setState({ teleportTarget: null });
         useStore.getState().setCameraMode('thirdPerson');
         skippedWorldPos = true;
@@ -143,8 +158,9 @@ function Character() {
       
       if (!skippedWorldPos && !isPostTeleporting) {
         setPlayerPosition({ x: vec.current.x, y: vec.current.y, z: vec.current.z });
-        // Guardar posición segura cada ~2s si no está cayendo (evita bug con tecla Q)
-        if (Math.abs(vec.current.y - CHARACTER_INIT_POS[1]) < 5) {
+        const rb = ecctrlRef.current?.group;
+        const vy = rb ? rb.linvel().y : 0;
+        if (Math.abs(vec.current.y - CHARACTER_INIT_POS[1]) < 5 && Math.abs(vy) < 1.2) {
           useStore.getState().setLastSafePosition([vec.current.x, vec.current.y, vec.current.z]);
         }
       }
@@ -298,6 +314,13 @@ export default function Player() {
     const handler = (e) => {
       const state = useStore.getState();
 
+      if (e.code === 'KeyQ') {
+        e.preventDefault();
+        const safePos = state.lastSafePosition || CHARACTER_INIT_POS;
+        state.setTeleportTarget(safePos);
+        return;
+      }
+
       // Si el minijuego está activo, interceptamos el teclado
       if (state.networkGameActive) {
         if (e.code === 'Escape') {
@@ -312,15 +335,6 @@ export default function Player() {
         const next = !state.flyMode;
         setFlyMode(next);
         console.log(`[Fly] Modo ${next ? 'vuelo' : 'normal'} — F para alternar`);
-        return;
-      }
-
-      // Q → reubicar al jugador en la última posición segura
-      if (e.code === 'KeyQ') {
-        e.preventDefault();
-        const safePos = state.lastSafePosition || CHARACTER_INIT_POS;
-        state.setTeleportTarget(safePos);
-        console.log(`[Safety] Teletransportando a posición segura:`, safePos);
         return;
       }
 
@@ -342,19 +356,19 @@ export default function Player() {
         }
       } else {
         // E cerca de la vitrina de servidores → abre el minijuego
-        if (e.code === 'KeyE' && state.vitrineProximity && !state.networkGameWon) {
+        if (e.code === 'KeyE' && state.vitrineProximity) {
           e.preventDefault();
           state.toggleNetworkGame();
           return;
         }
         // E cerca de la PC de ciberseguridad → abre Defender Ataque Hacker
-        if (e.code === 'KeyE' && state.hackerGameProximity && !state.hackerGameWon) {
+        if (e.code === 'KeyE' && state.hackerGameProximity) {
           e.preventDefault();
           state.toggleHackerGame();
           return;
         }
         // E cerca de la PC de marketing → abre Tug of Assets
-        if (e.code === 'KeyE' && state.marketingGameProximity && !state.marketingGameWon) {
+        if (e.code === 'KeyE' && state.marketingGameProximity) {
           e.preventDefault();
           state.toggleMarketingGame();
           return;

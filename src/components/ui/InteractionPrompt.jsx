@@ -8,22 +8,19 @@ export default function InteractionPrompt() {
   const isDialogueActive = useStore((s) => s.isDialogueActive);
   const vitrineProximity = useStore((s) => s.vitrineProximity);
   const networkGameActive = useStore((s) => s.networkGameActive);
-  const networkGameWon = useStore((s) => s.networkGameWon);
   const hackerGameProximity = useStore((s) => s.hackerGameProximity);
   const hackerGameActive = useStore((s) => s.hackerGameActive);
-  const hackerGameWon = useStore((s) => s.hackerGameWon);
   const marketingGameProximity = useStore((s) => s.marketingGameProximity);
   const marketingGameActive = useStore((s) => s.marketingGameActive);
-  const marketingGameWon = useStore((s) => s.marketingGameWon);
   const chessProximity = useStore((s) => s.chessProximity);
   const tvRedesProximity = useStore((s) => s.tvRedesProximity);
   const tvMarketingProximity = useStore((s) => s.tvMarketingProximity);
   const tvVideoUrl = useStore((s) => s.tvVideoUrl);
   const containerRef = useRef(null);
 
-  const showVitrinePrompt = vitrineProximity && !networkGameWon && !networkGameActive;
-  const showHackerPrompt = hackerGameProximity && !hackerGameWon && !hackerGameActive;
-  const showMarketingPrompt = marketingGameProximity && !marketingGameWon && !marketingGameActive;
+  const showVitrinePrompt = vitrineProximity && !networkGameActive;
+  const showHackerPrompt = hackerGameProximity && !hackerGameActive;
+  const showMarketingPrompt = marketingGameProximity && !marketingGameActive;
   const showTvRedesPrompt = tvRedesProximity && !tvVideoUrl;
   const showTvMarketingPrompt = tvMarketingProximity && !tvVideoUrl;
 

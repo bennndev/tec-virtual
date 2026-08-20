@@ -190,11 +190,16 @@ export default function NetworkGame() {
 
   };
 
+  const networkCountedRef = useRef(false);
+
   // Cerrar y guardar estado exitoso si corresponde
   const handleComplete = () => {
     setNetworkGameWon(true);
-    toggleNetworkGame(); // Cierra
-    useStore.getState().completeChallenge();
+    toggleNetworkGame();
+    if (!networkCountedRef.current) {
+      networkCountedRef.current = true;
+      useStore.getState().completeChallenge();
+    }
   };
 
   // Calcular el progreso porcentual (3 conexiones correctas = 100%)
@@ -208,6 +213,14 @@ export default function NetworkGame() {
       setNetworkGameWon(true);
     }
   }, [isWon, setNetworkGameWon]);
+
+  useEffect(() => {
+    setConnections([]);
+    setErrorsCount(0);
+    setActivePortId(null);
+    setDragStart(null);
+    setDragEnd(null);
+  }, [networkGameActive]);
 
   // Manejar el movimiento del ratón global sobre el workspace durante el drag
   useEffect(() => {

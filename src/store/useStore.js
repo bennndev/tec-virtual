@@ -314,12 +314,11 @@ const useStore = create((set) => ({
   networkGameActive: false,
   networkGameWon: false,
   toggleNetworkGame: () => set((state) => {
-    // Si ya ganamos, no volvemos a abrir el juego a menos que se resetee
-    if (state.networkGameWon && !state.networkGameActive) return {};
     const nextActive = !state.networkGameActive;
     return {
       networkGameActive: nextActive,
-      controlsDisabled: nextActive, // Desactiva WASD del avatar 3D
+      networkGameWon: nextActive ? false : state.networkGameWon,
+      controlsDisabled: nextActive,
     };
   }),
   setNetworkGameWon: (won) => set({ networkGameWon: won }),
@@ -333,10 +332,10 @@ const useStore = create((set) => ({
   hackerGameActive: false,
   hackerGameWon: false,
   toggleHackerGame: () => set((state) => {
-    if (state.hackerGameWon && !state.hackerGameActive) return {};
     const nextActive = !state.hackerGameActive;
     return {
       hackerGameActive: nextActive,
+      hackerGameWon: nextActive ? false : state.hackerGameWon,
       controlsDisabled: nextActive,
     };
   }),
@@ -353,10 +352,10 @@ const useStore = create((set) => ({
   marketingGameActive: false,
   marketingGameWon: false,
   toggleMarketingGame: () => set((state) => {
-    if (state.marketingGameWon && !state.marketingGameActive) return {};
     const nextActive = !state.marketingGameActive;
     return {
       marketingGameActive: nextActive,
+      marketingGameWon: nextActive ? false : state.marketingGameWon,
       controlsDisabled: nextActive,
     };
   }),
